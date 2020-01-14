@@ -15,7 +15,7 @@ std::string QFileRead(const char *path) {
     std::string str;
     str.resize(std::ftell(f));
     std::fseek(f, 0, SEEK_SET);
-    std::fread(static_cast<char *>(str.data()), str.length(), 1, f);
+    std::fread(str.data(), str.length(), 1, f);
     std::fclose(f);
     return str;
 }
