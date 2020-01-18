@@ -1,5 +1,5 @@
-#ifndef _SRU_UTIL_
-#define _SRU_UTIL_
+#pragma once
+
 #include <optional>
 
 namespace sru::util {
@@ -21,6 +21,4 @@ class Color {
     constexpr Color(double r, double g, double b) : r{r}, g{g}, b{b} {};
 };
 std::optional<std::string> QFileRead(std::string path);
-};     // namespace sru::util
-#endif // !_SRU_UTIL_
-#include <optional>
+}; // namespace sru::util

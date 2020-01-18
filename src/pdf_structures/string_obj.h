@@ -1,5 +1,5 @@
-#ifndef _SRU_STRING_OBJ_
-#define _SRU_STRING_OBJ_
+#pragma once
+
 #include "../util/util.h"
 #include <iostream>
 #include <string>
@@ -31,5 +31,4 @@ class StringObject {
     bool &isModified();
 };
 
-};     // namespace sru::pdf
-#endif // !_SRU_STRING_OBJ_
+}; // namespace sru::pdf
