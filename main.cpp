@@ -42,17 +42,18 @@ int main(int argc, char **argv) {
     auto objs = std::vector<sru::pdf::StringObject>{};
     for (auto x : found) {
         objs.push_back(sru::pdf::StringObject{
+            sru::util::Color{0, 0, 0}, std::stoi(x.get<1>().to_string()),
+            std::stod(x.get<2>().to_string()), x.get<3>().to_string(),
             sru::util::Cordinate{std::stod(x.get<4>().to_string()),
                                  std::stod(x.get<5>().to_string())},
             x.get<6>().to_string()});
     }
 
-    std::for_each(objs.begin(), objs.end(), [](sru::pdf::StringObject ob) {
-        std::cout << "X: " << ob.getPosition().getX()
-                  << " Y: " << ob.getPosition().getY() << "\n";
-    });
-
     const auto end = std::chrono::steady_clock::now();
+
+    std::for_each(objs.begin(), objs.end(), [](sru::pdf::StringObject ob) {
+        std::cout << ob.toString();
+    });
     std::cout << "Time difference (sec) = "
               << (std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                                         start)

@@ -12,6 +12,14 @@ class Cordinate {
     const double &getX() const;
     const double &getY() const;
 };
+class Color {
+
+  public:
+    double r;
+    double g;
+    double b;
+    constexpr Color(double r, double g, double b) : r{r}, g{g}, b{b} {};
+};
 std::optional<std::string> QFileRead(std::string path);
 };     // namespace sru::util
 #endif // !_SRU_UTIL_
