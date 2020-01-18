@@ -1,69 +1,63 @@
+#include "src/pdf_structures/string_obj.h"
 #include <algorithm>
+#include <boost/program_options.hpp>
+#include <chrono>
 #include <cstdio>
+#include <ctll.hpp>
 #include <ctre.hpp>
 #include <fstream>
 #include <iostream>
-#include <optional>
 #include <string>
+#include <utility>
 #include <vector>
 
-class pdfObject {
-    double x;
-    double y;
-    std::string content;
-
-  public:
-    // omiting a lot of data for testing
-    pdfObject(double x, double y, std::string content) {
-        this->x = x;
-        this->y = y;
-        this->content = content;
-    }
-
-    std::string getContent() { return content; }
-};
-
-// Test pattern to capture uncompressed pdf objects
 static constexpr auto pattern = ctll::fixed_string{
-    "BT\\n/F(.*?) (.*?) Tf\\n(.*?) Tm\\n\\((.*?)\\)Tj\\nET\\n"};
-
-std::optional<std::string> QFileRead(const char *path) {
-    if (auto f = std::fopen(path, "r")) {
-        std::fseek(f, 0, SEEK_END);
-        std::string str;
-        str.resize(std::ftell(f));
-        std::fseek(f, 0, SEEK_SET);
-        std::fread(str.data(), str.length(), 1, f);
-        std::fclose(f);
-        return str;
-    } else {
-        return {};
-    }
-}
+    R"(BT\n/F([0-9]+?) ([0-9.]+?) Tf\n([0-9. ]+) ([0-9.]+?) ([0-9.]+?) Tm\n\((.+?)\)Tj\nET\n)"};
 
 int main(int argc, char **argv) {
-    const auto pdfdata = QFileRead("/home/ruthger/test.pdf");
-    std::vector<pdfObject> pdfObjects{};
+    const auto start = std::chrono::steady_clock::now();
 
-    if (!pdfdata.has_value()) {
-        std::cout << "File not found :)" << std::endl;
+    namespace po = boost::program_options;
+    po::variables_map vm;
+    po::options_description desc{"Options"};
+    desc.add_options()
+      ("help,h", "Help screen");
+
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    std::optional<std::string> pdfdata{};
+    if (vm.count("file")) {
+        pdfdata = sru::util::QFileRead(vm["file"].as<std::string>());
+        if (!pdfdata) {
+            std::cout << "File not found." << std::endl;
+            return 1;
+        }
+    } else {
         return 1;
     }
-    for (auto found : ctre::range<pattern>(pdfdata.value())) {
-        pdfObjects.push_back(pdfObject{1.0, 1.0, found.get<4>().to_string()});
-    }
-    // toying with "functional" programming
-    // std::for_each(pdfObjects.begin(), pdfObjects.end(),
-    //               [](pdfObject obb) { std::cout << obb.getContent() << "\n";
-    //               });
 
-    // same thing but very cool
-    std::vector<std::string> transformed{};
-    std::transform(pdfObjects.begin(), pdfObjects.end(),
-                   std::back_inserter(transformed),
-                   [](pdfObject obb) { return obb.getContent(); });
-    for (auto obb : transformed) {
-        std::cout << obb << "\n";
+    auto found = ctre::range<pattern>(pdfdata.value());
+
+    auto objs = std::vector<sru::pdf::StringObject>{};
+    for (auto x : found) {
+        objs.push_back(sru::pdf::StringObject{
+            sru::util::Cordinate{std::stod(x.get<4>().to_string()),
+                                 std::stod(x.get<5>().to_string())},
+            x.get<6>().to_string()});
     }
+
+    std::for_each(objs.begin(), objs.end(), [](sru::pdf::StringObject ob) {
+        std::cout << "X: " << ob.getPosition().getX()
+                  << " Y: " << ob.getPosition().getY() << "\n";
+    });
+
+    const auto end = std::chrono::steady_clock::now();
+    std::cout << "Time difference (sec) = "
+              << (std::chrono::duration_cast<std::chrono::microseconds>(end -
+                                                                        start)
+                      .count()) /
+                     1000000.0
+              << std::endl;
     return 0;
 }
