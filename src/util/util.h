@@ -1,7 +1,7 @@
 #ifndef _SRU_UTIL_
 #define _SRU_UTIL_
-
 #include <optional>
+
 namespace sru::util {
 class Cordinate {
     double x;

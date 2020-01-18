@@ -1,3 +1,5 @@
+#ifndef _SRU_STRING_OBJ_
+#define _SRU_STRING_OBJ_
 #include "../util/util.h"
 #include <string>
 
@@ -13,4 +15,5 @@ class StringObject {
     const sru::util::Cordinate &getPosition() const;
 };
 
-}; // namespace sru::pdf
+};     // namespace sru::pdf
+#endif // !_SRU_STRING_OBJ_

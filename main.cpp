@@ -1,4 +1,5 @@
 #include "src/pdf_structures/string_obj.h"
+#include "src/util/util.h"
 #include <algorithm>
 #include <boost/program_options.hpp>
 #include <chrono>
@@ -18,11 +19,10 @@ int main(int argc, char **argv) {
     const auto start = std::chrono::steady_clock::now();
 
     namespace po = boost::program_options;
+    po::options_description desc("Allowed options");
+    desc.add_options()("help,h", "Help screen")(
+        "file", po::value<std::string>(), "file path");
     po::variables_map vm;
-    po::options_description desc{"Options"};
-    desc.add_options()
-      ("help,h", "Help screen");
-
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
 
