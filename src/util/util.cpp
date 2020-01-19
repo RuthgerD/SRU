@@ -1,8 +1,8 @@
 #include "util.h"
 
 namespace sru::util {
-const double &Cordinate::getX() const { return x; }
-const double &Cordinate::getY() const { return y; }
+const float &Cordinate::getX() const { return x; }
+const float &Cordinate::getY() const { return y; }
 std::optional<std::string> QFileRead(std::string path) {
     if (auto f = std::fopen(path.data(), "r")) {
         std::fseek(f, 0, SEEK_END);

@@ -13,7 +13,7 @@
 #include <vector>
 
 static constexpr auto pattern = ctll::fixed_string{
-    R"(BT\n/F([0-9]+?) ([0-9.]+?) Tf\n([0-9. ]+) ([0-9.]+?) ([0-9.]+?) Tm\n\((.+?)\)Tj\nET\n)"};
+    R"((?:([0-9\.]*) ([0-9\.]*) ([0-9\.]*) rg\n)|(?:BT\n/F([0-9]+?) ([0-9.]+?) Tf\n([0-9. ]+) ([0-9.]+?) ([0-9.]+?) Tm\n\((.+?)\)Tj\nET\n))"};
 
 int main(int argc, char **argv) {
     const auto start = std::chrono::steady_clock::now();
@@ -40,13 +40,20 @@ int main(int argc, char **argv) {
     auto found = ctre::range<pattern>(pdfdata.value());
 
     auto objs = std::vector<sru::pdf::StringObject>{};
+    auto color = sru::util::Color{0, 0, 0};
     for (auto x : found) {
-        objs.push_back(sru::pdf::StringObject{
-            sru::util::Color{0, 0, 0}, std::stoi(x.get<1>().to_string()),
-            std::stod(x.get<2>().to_string()), x.get<3>().to_string(),
-            sru::util::Cordinate{std::stod(x.get<4>().to_string()),
-                                 std::stod(x.get<5>().to_string())},
-            x.get<6>().to_string()});
+        if (!x.get<1>() && !x.get<2>() && !x.get<3>()) {
+            objs.push_back(sru::pdf::StringObject{
+                color, std::stoi(x.get<4>().to_string()),
+                std::stod(x.get<5>().to_string()), x.get<6>().to_string(),
+                sru::util::Cordinate{std::stof(x.get<7>().to_string()),
+                                     std::stof(x.get<8>().to_string())},
+                x.get<6>().to_string()});
+        } else {
+            color.r = std::stof(x.get<1>().to_string());
+            color.g = std::stof(x.get<2>().to_string());
+            color.b = std::stof(x.get<3>().to_string());
+        }
     }
 
     const auto end = std::chrono::steady_clock::now();

@@ -4,21 +4,16 @@
 
 namespace sru::util {
 class Cordinate {
-    double x;
-    double y;
+    float x, y;
 
   public:
-    constexpr Cordinate(double x, double y) : x{x}, y{y} {};
-    const double &getX() const;
-    const double &getY() const;
+    constexpr Cordinate(float x, float y) : x{x}, y{y} {};
+    const float &getX() const;
+    const float &getY() const;
 };
-class Color {
-
-  public:
-    double r;
-    double g;
-    double b;
-    constexpr Color(double r, double g, double b) : r{r}, g{g}, b{b} {};
+struct Color {
+    float r, g, b;
+    constexpr Color(float r, float g, float b) : r{r}, g{g}, b{b} {};
 };
 std::optional<std::string> QFileRead(std::string path);
 }; // namespace sru::util
