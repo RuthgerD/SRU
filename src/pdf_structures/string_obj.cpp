@@ -8,6 +8,7 @@ const sru::util::Cordinate &StringObject::getPosition() const {
     return position;
 }
 const std::string StringObject::toString() const {
+    // TODO: strip out leading 0s to better conform to pdf standard
     return "BT\n/F" + std::to_string(text_type) + " " +
            std::to_string(font_size) + " Tf\n" + transform + " " +
            std::to_string(position.getX()) + " " +
