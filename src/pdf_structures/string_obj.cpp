@@ -1,4 +1,5 @@
 #include "string_obj.h"
+#include <string>
 namespace sru::pdf {
 const sru::util::Color &StringObject::getColor() const { return color; }
 const int &StringObject::getTextType() const { return text_type; }

@@ -22,7 +22,7 @@ class PdfPage {
   public:
     PdfPage(std::string raw, rapidjson::Value &config)
         : raw{raw}, config{config} {
-        const auto found = regex_accel["page_"](raw);
+        const auto found = regex_accel[obj_match_re](raw);
         if (found) {
             auto color = sru::util::Color{0, 0, 0};
             for (const auto &x : found.value()) {

@@ -1,7 +1,4 @@
 #include "config.h"
-#include "rapidjson/document.h"
-#include "rapidjson/stringbuffer.h"
-#include "rapidjson/writer.h"
 #include "src/pdf_structures/pdf_cluster.h"
 #include "src/pdf_structures/string_obj.h"
 #include "src/util/qpdf_binding.h"
@@ -38,7 +35,7 @@ int main(int argc, char **argv) {
     std::optional<std::string> json_config{};
     auto qpdf = sru::util::Qpdf{"import/cache"};
 
-    json_config = sru::util::QFileRead("/home/ruthger/config.json");
+    json_config = sru::util::QFileRead("/home/ruthgerd/config.json");
     if (!json_config) {
         std::cout << "Files not found." << std::endl;
         return 1;
@@ -49,7 +46,9 @@ int main(int argc, char **argv) {
     // }
 
     std::vector<std::filesystem::path> pdf_file_paths{};
+    // On unix based systems the binary isnt stored in a place where the user has easy access to, add a --in option or something
     for (auto &file : std::filesystem::directory_iterator{"./import"}) {
+        std::cout << file.path().lexically_normal().generic_string() << "/n";
         if (auto file_path = file.path(); file_path.extension() == ".pdf") {
             pdf_file_paths.push_back(file_path);
         }
@@ -57,16 +56,12 @@ int main(int argc, char **argv) {
     auto cluster =
         sru::pdf::PdfCluster{pdf_file_paths, qpdf, json_config.value()};
 
-    const auto &test = cluster.getConfig()["group_configs"]["End"]["time"];
-    for (auto &v : test.GetObject()) {
-        auto &thing = test[v.name.GetString()];
-        if (v.value.IsInt())
-            std::cout << test[v.name.GetString()].GetInt() << "\n";
-    }
-
-    // std::for_each(objs.begin(), objs.end(), [](sru::pdf::StringObject ob) {
-    //     std::cout << ob.toString();
-    // });
+    // const auto &test = cluster.getConfig()["group_configs"]["End"]["time"];
+    // for (auto &v : test.GetObject()) {
+    //     auto &thing = test[v.name.GetString()];
+    //     if (v.value.IsInt())
+    //         std::cout << test[v.name.GetString()].GetInt() << "\n";
+    // }
     const auto end = std::chrono::steady_clock::now();
     std::cout << "Time difference (sec) = "
               << (std::chrono::duration_cast<std::chrono::microseconds>(end -
