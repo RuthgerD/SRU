@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
     std::optional<std::string> json_config{};
     auto qpdf = sru::util::Qpdf{"import/cache"};
 
-    json_config = sru::util::QFileRead("/home/ruthgerd/config.json");
+    json_config = sru::util::QFileRead("/home/ruthger/config.json");
     if (!json_config) {
         std::cout << "Files not found." << std::endl;
         return 1;
@@ -46,7 +46,8 @@ int main(int argc, char **argv) {
     // }
 
     std::vector<std::filesystem::path> pdf_file_paths{};
-    // On unix based systems the binary isnt stored in a place where the user has easy access to, add a --in option or something
+    // On unix based systems the binary isnt stored in a place where the user
+    // has easy access to, add a --in option or something
     for (auto &file : std::filesystem::directory_iterator{"./import"}) {
         std::cout << file.path().lexically_normal().generic_string() << "/n";
         if (auto file_path = file.path(); file_path.extension() == ".pdf") {
