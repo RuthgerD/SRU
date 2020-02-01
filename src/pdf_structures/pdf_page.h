@@ -16,13 +16,12 @@ namespace sru::pdf {
 
 class PdfPage {
     std::string raw;
-    rapidjson::Value &config;
     std::vector<sru::pdf::StringObject> objs;
 
   public:
-    PdfPage(std::string raw, rapidjson::Value &config)
-        : raw{raw}, config{config} {
-        const auto found = sru::util::regex_accel[config["obj_regex"].GetString()](raw);
+    PdfPage(std::string raw)
+        : raw{raw} {
+        const auto found = sru::util::regex_accel[sru::util::default_obj_match_key](raw);
         if (found) {
             auto color = sru::util::Color{0, 0, 0};
             for (const auto &x : found.value()) {
