@@ -6,7 +6,7 @@
 #include <iostream>
 #include <map>
 #include <optional>
-#include <re2.h>
+#include <re2/re2.h>
 #include <string>
 #include <string_view>
 #include <tuple>
@@ -46,6 +46,16 @@ static constexpr auto page_match_key =
 static constexpr auto page_match = ctll::fixed_string{
     R"(([0-9]*?) . obj\n<< /BBox.*?>>\nstream\n((\n|.)*?)\nendstream\nendobj)"};
 
+static constexpr auto page_1_id_key =
+    R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page 1)\)Tj\nET)";
+static constexpr auto page_1_id = ctll::fixed_string{
+    R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page 1)\)Tj\nET)"};
+
+static constexpr auto page_any_id_key =
+    R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page (?!1)[0-9]*)\)Tj\nET)";
+static constexpr auto page_any_id = ctll::fixed_string{
+    R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page (?!1)[0-9]*)\)Tj\nET)"};
+
 // Add to map here
 class ReAccel {
 
@@ -58,8 +68,14 @@ class ReAccel {
                   [](std::string_view sv) {
                       return ctre::range<PAGE_EXAMPLE_obj_match>(sv);
                   }},
-        std::pair{page_match_key, [](std::string_view sv) {
-                      return ctre::range<page_match>(sv);
+        std::pair{
+            page_match_key,
+            [](std::string_view sv) { return ctre::range<page_match>(sv); }},
+        std::pair{
+            page_1_id_key,
+            [](std::string_view sv) { return ctre::range<page_1_id>(sv); }},
+        std::pair{page_any_id_key, [](std::string_view sv) {
+                      return ctre::range<page_any_id>(sv);
                   }}};
 
     template <class Match, std::size_t... Is>
@@ -84,40 +100,12 @@ class ReAccel {
                 if (done)
                     return;
                 if (e.first == key) {
-                    const auto range = e.second(sv);
-                    if (range.begin() != range.end()) {
-                        auto &res = ret.emplace();
-                        for (const auto &m : range)
-                            res.push_back(match2vec(m));
-                    }
+                    auto &res = ret.emplace();
+                    for (const auto &m : e.second(sv))
+                        res.push_back(match2vec(m));
                     done = true;
                 }
             });
-            // if (!done) {
-            //     auto yyy = RE2("(\\w+):(\\d+)");
-            //     std::vector<RE2::Arg *> arguments_ptrs;
-            //     re2::StringPiece piece{"ruby:1234 diamond:1234 quartz:1234"};
-            //     while (RE2::FindAndConsumeN(&piece, yyy,
-            //     arguments_ptrs.data(),
-            //                                 yyy.NumberOfCapturingGroups())) {
-            //         for (auto matchz : arguments_ptrs) {
-            //           std::cout << matchz
-            //         }
-            //     }
-
-            //     boost::regex expr{std::string{key}};
-            //     auto &res = ret.emplace();
-            //     std::transform(
-            //         boost::sregex_iterator(sv.begin(), sv.end(), expr),
-            //         boost::sregex_iterator(), std::back_inserter(res),
-            //         [&](const auto &x) {
-            //             std::vector<std::string> tmp;
-            //             for (auto y : x) {
-            //                 tmp.push_back(y.str());
-            //             }
-            //             return tmp;
-            //         });
-            // }
             return ret;
         };
     };

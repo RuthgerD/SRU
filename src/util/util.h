@@ -2,6 +2,9 @@
 
 #include <filesystem>
 #include <optional>
+#include <string>
+#include <string_view>
+#include <vector>
 
 namespace sru::util {
 class Cordinate {
@@ -22,4 +25,6 @@ const int cmd(std::string command);
 int svoi(std::string_view sv);
 float svof(std::string_view sv);
 double svod(std::string_view sv);
+std::optional<std::vector<std::vector<std::string>>>
+re_search(std::string re, std::string &data);
 }; // namespace sru::util

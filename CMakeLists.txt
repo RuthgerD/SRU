@@ -9,7 +9,7 @@ add_compile_options("-march=native")
 
 find_package(Boost 1.66 REQUIRED COMPONENTS program_options regex)
 if (Boost_FOUND)
-include_directories(${Boost_INCLUDE_DIRS} thirdparty/ctre/include thirdparty/rapidjson/include thirdparty/re2/re2 thirdparty include)
+include_directories(${Boost_INCLUDE_DIRS} thirdparty/ctre/include thirdparty/rapidjson/include thirdparty/re2 thirdparty include)
 
 add_compile_definitions(RAPIDJSON_HAS_STDSTRING)
 

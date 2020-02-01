@@ -1,7 +1,9 @@
 #include "util.h"
+#include "re_accel.h"
 #include <boost/convert.hpp>
 #include <boost/convert/strtol.hpp>
 #include <charconv>
+#include <chrono>
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
@@ -10,6 +12,8 @@ namespace sru::util {
 const float &Cordinate::getX() const { return x; }
 const float &Cordinate::getY() const { return y; }
 std::optional<std::string> QFileRead(std::filesystem::path path) {
+    const auto start = std::chrono::steady_clock::now();
+
     if (auto f = std::fopen(path.lexically_normal().c_str(), "r")) {
         std::fseek(f, 0, SEEK_END);
         std::string str;
@@ -17,6 +21,13 @@ std::optional<std::string> QFileRead(std::filesystem::path path) {
         std::fseek(f, 0, SEEK_SET);
         std::fread(str.data(), str.length(), 1, f);
         std::fclose(f);
+        const auto end = std::chrono::steady_clock::now();
+        std::cout << "File read (sec) = "
+                  << (std::chrono::duration_cast<std::chrono::microseconds>(
+                          end - start)
+                          .count()) /
+                         1000000.0
+                  << "\n";
         return str;
     } else {
         return {};
@@ -58,4 +69,29 @@ double svod(std::string_view sv) {
     }
     return result;
 }
-} // namespace sru::util
+std::optional<std::vector<std::vector<std::string>>>
+re_search(std::string re, std::string &data) {
+    std::optional<std::vector<std::vector<std::string>>> ret{};
+    if (auto acceled = regex_accel[re](data)) {
+        ret = acceled;
+    }
+    if (!ret) {
+        std::cout << "Falling back to runtime re for: " << re << "\n";
+        boost::regex expr{re};
+        auto &res = ret.emplace();
+        std::transform(boost::sregex_iterator(data.begin(), data.end(), expr),
+                       boost::sregex_iterator(), std::back_inserter(res),
+                       [&](const auto &x) {
+                           std::vector<std::string> tmp;
+                           for (auto y : x) {
+                               tmp.push_back(y.str());
+                           }
+                           return tmp;
+                       });
+    }
+    if (ret.value().size() > 0) {
+        return ret;
+    }
+    return {};
+}
+}; // namespace sru::util
