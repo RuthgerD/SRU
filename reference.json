@@ -12,6 +12,7 @@
     }],
     "anchors": [{
         "id": 0,
+        "anchor_name": "testing anchor",
         "content_id": "",
         "content_": "",
         "content_alt": "",
@@ -20,6 +21,7 @@
     }],
     "objects": [{
         "id": 0,
+        "object_name": "testing object",
         "text_justify": 0,
         "maximum_values": 0,
         "y_object_spacing": 0,

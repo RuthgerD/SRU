@@ -59,6 +59,7 @@
                 "title": "The Anchor Schema",
                 "required": [
                     "id",
+                    "anchor_name",
                     "content_id",
                     "content_",
                     "content_alt",
@@ -70,6 +71,12 @@
                         "$id": "#/properties/anchors/items/properties/id",
                         "type": "integer",
                         "title": "The id Schema"
+                    },
+                    "anchor_name": {
+                        "$id": "#/properties/anchors/properties/items/properties/anchor_name",
+                        "type": "string",
+                        "title": "The anchor_name Schema",
+                        "pattern": "^(.*)$"
                     },
                     "content_id": {
                         "$id": "#/properties/anchors/items/properties/content_id",
@@ -117,6 +124,7 @@
                 "title": "The Items Schema",
                 "required": [
                     "id",
+                    "object_name",
                     "text_justify",
                     "maximum_values",
                     "y_object_spacing",
@@ -144,6 +152,12 @@
                         "$id": "#/properties/objects/properties/items/properties/id",
                         "type": "integer",
                         "title": "The id Schema"
+                    },
+                    "object_name": {
+                        "$id": "#/properties/objects/properties/items/properties/object_name",
+                        "type": "string",
+                        "title": "The object_name Schema",
+                        "pattern": "^(.*)$"
                     },
                     "text_justify": {
                         "$id": "#/properties/objects/properties/items/properties/text_justify",
