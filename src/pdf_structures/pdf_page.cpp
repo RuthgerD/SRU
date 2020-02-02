@@ -7,7 +7,7 @@
 
 namespace sru::pdf {
 PdfPage::PdfPage(std::string raw, const PageConfig config)
-        : raw{raw}, config{config} {}
+    : raw{raw}, config{config} {}
 void PdfPage::indexObjects() {
     objs.clear();
     marked_objs.clear();
@@ -16,16 +16,15 @@ void PdfPage::indexObjects() {
         for (const auto &x : found.value()) {
 
             if (x.at(1) == "") {
-                objs.emplace_back(
-                    color, sru::util::svoi(x.at(4)), sru::util::svof(x.at(5)),
-                    std::string{x.at(6)},
-                    sru::util::Cordinate{sru::util::svof(x.at(7)),
-                                         sru::util::svof(x.at(8))},
-                    std::string{x.at(9)});
+                objs.emplace_back(color, std::stoi(x.at(4)), std::stof(x.at(5)),
+                                  std::string{x.at(6)},
+                                  sru::util::Cordinate{std::stof(x.at(7)),
+                                                       std::stof(x.at(8))},
+                                  std::string{x.at(9)});
             } else {
-                color.r = sru::util::svof(x.at(1));
-                color.g = sru::util::svof(x.at(2));
-                color.b = sru::util::svof(x.at(3));
+                color.r = std::stof(x.at(1));
+                color.g = std::stof(x.at(2));
+                color.b = std::stof(x.at(3));
             }
         }
         // std::cout << "Amount of objects: " << objs.size() << std::endl;

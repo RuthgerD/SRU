@@ -1,12 +1,10 @@
 #include "util.h"
 #include "re_accel.h"
-#include <boost/convert.hpp>
-#include <boost/convert/strtol.hpp>
-#include <charconv>
 #include <chrono>
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
+#include <type_traits>
 
 namespace sru::util {
 const float &Cordinate::getX() const { return x; }
@@ -24,43 +22,17 @@ std::optional<std::string> QFileRead(std::filesystem::path path) {
         return {};
     }
 }
-constexpr Cordinate::Cordinate(float x, float y) : x{x}, y{y} {}
+Cordinate::Cordinate(float x, float y) : x{x}, y{y} {}
 const std::string Color::toString() const {
     return std::to_string(r) + ' ' + std::to_string(g) + ' ' +
            std::to_string(b) + ' ' + "rg";
 }
-constexpr Color::Color(float r, float g, float b) : r{r}, g{g}, b{b} {}
+Color::Color(float r, float g, float b) : r{r}, g{g}, b{b} {}
 const int cmd(std::string command) {
     std::cout << "RUNNING COMMAND: " << command << "\n";
     std::system(command.c_str());
     std::cout << "---\n";
     return 0;
-}
-// TODO: TEMPLATES
-int svoi(std::string_view sv) {
-    int result = 0;
-
-    std::from_chars(sv.data(), sv.data() + sv.size(), result);
-
-    return result;
-}
-float svof(std::string_view sv) {
-    float result = 0;
-
-    auto value = boost::convert<float>(sv, boost::cnv::strtol());
-    if (value.has_value()) {
-        result = value.get();
-    }
-
-    return result;
-}
-double svod(std::string_view sv) {
-    double result = 0;
-    auto value = boost::convert<double>(sv, boost::cnv::strtol());
-    if (value.has_value()) {
-        result = value.get();
-    }
-    return result;
 }
 std::optional<std::vector<std::vector<std::string>>>
 re_search(const std::string re, const std::string &data) {
