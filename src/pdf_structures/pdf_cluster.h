@@ -16,13 +16,6 @@ class PdfCluster {
 
   public:
     PdfCluster(std::vector<std::filesystem::path> pdf_file_paths,
-               sru::util::Qpdf qpdf)
-        : qpdf{qpdf} {
-        for (auto &path : pdf_file_paths) {
-            auto deflated = qpdf.decompress(path);
-            pdf_files.emplace_back(deflated);
-            std::cout << deflated.generic_string() << "\n";
-        }
-    };
+               sru::util::Qpdf qpdf);
 };
 } // namespace sru::pdf

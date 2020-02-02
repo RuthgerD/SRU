@@ -26,8 +26,7 @@ class PdfPage {
     const PageConfig config;
 
   public:
-    PdfPage(std::string raw, const PageConfig config)
-        : raw{raw}, config{config} {}
+    PdfPage(std::string raw, const PageConfig config);
     const std::vector<sru::pdf::StringObject> &getObjects() const;
     void indexObjects();
     void printObjects();

@@ -12,8 +12,7 @@ class Qpdf {
     const std::string bin{"qpdf/qpdf.exe"};
 #endif
   public:
-    Qpdf(std::filesystem::path cache_path)
-        : cache_path{cache_path.lexically_normal()} {}
+    Qpdf(std::filesystem::path cache_path);
 
     void getVersion();
     const std::filesystem::path

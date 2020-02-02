@@ -18,9 +18,7 @@ class StringObject {
   public:
     StringObject(sru::util::Color color, int text_type, double font_size,
                  std::string transform, sru::util::Cordinate position,
-                 std::string content)
-        : color{color}, text_type{text_type}, font_size{font_size},
-          transform{transform}, position{position}, content{content} {};
+                 std::string content);
 
     const sru::util::Color &getColor() const;
     const int &getTextType() const;

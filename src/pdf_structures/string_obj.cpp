@@ -1,6 +1,11 @@
 #include "string_obj.h"
 #include <string>
 namespace sru::pdf {
+StringObject::StringObject(sru::util::Color color, int text_type,
+                           double font_size, std::string transform,
+                           sru::util::Cordinate position, std::string content)
+    : color{color}, text_type{text_type}, font_size{font_size},
+      transform{transform}, position{position}, content{content} {}
 const sru::util::Color &StringObject::getColor() const { return color; }
 const int &StringObject::getTextType() const { return text_type; }
 const double &StringObject::getFontSize() const { return font_size; }

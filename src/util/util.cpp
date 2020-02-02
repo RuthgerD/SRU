@@ -24,10 +24,12 @@ std::optional<std::string> QFileRead(std::filesystem::path path) {
         return {};
     }
 }
+constexpr Cordinate::Cordinate(float x, float y) : x{x}, y{y} {}
 const std::string Color::toString() const {
     return std::to_string(r) + ' ' + std::to_string(g) + ' ' +
            std::to_string(b) + ' ' + "rg";
 }
+constexpr Color::Color(float r, float g, float b) : r{r}, g{g}, b{b} {}
 const int cmd(std::string command) {
     std::cout << "RUNNING COMMAND: " << command << "\n";
     std::system(command.c_str());

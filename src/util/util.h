@@ -11,13 +11,13 @@ class Cordinate {
     float x, y;
 
   public:
-    constexpr Cordinate(float x, float y) : x{x}, y{y} {};
+    constexpr Cordinate(float x, float y);
     const float &getX() const;
     const float &getY() const;
 };
 struct Color {
     float r, g, b;
-    constexpr Color(float r, float g, float b) : r{r}, g{g}, b{b} {};
+    constexpr Color(float r, float g, float b);
     const std::string toString() const;
 };
 std::optional<std::string> QFileRead(std::filesystem::path path);

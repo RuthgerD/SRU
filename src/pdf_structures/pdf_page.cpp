@@ -6,6 +6,8 @@
 #include <vector>
 
 namespace sru::pdf {
+PdfPage::PdfPage(std::string raw, const PageConfig config)
+        : raw{raw}, config{config} {}
 void PdfPage::indexObjects() {
     objs.clear();
     marked_objs.clear();

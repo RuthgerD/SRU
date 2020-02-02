@@ -5,6 +5,8 @@
 #include <string>
 
 namespace sru::util {
+Qpdf::Qpdf(std::filesystem::path cache_path)
+    : cache_path{cache_path.lexically_normal()} {}
 void Qpdf::getVersion() { cmd(bin + " --version"); };
 
 const std::filesystem::path &Qpdf::getCachePath() const {
