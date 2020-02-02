@@ -56,7 +56,6 @@ static constexpr auto page_any_id_key =
 static constexpr auto page_any_id = ctll::fixed_string{
     R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page (?!1)[0-9]*)\)Tj\nET)"};
 
-// Add to map here
 class ReAccel {
 
     static constexpr std::tuple ctre_regexs = {
@@ -93,7 +92,7 @@ class ReAccel {
 
   public:
     constexpr auto operator[](std::string_view key) const noexcept {
-        return [&, key](std::string &sv) {
+        return [&, key](const std::string &sv) {
             bool done = false;
             std::optional<std::vector<std::vector<std::string>>> ret{};
             visit(ctre_regexs, [&](const auto &e) {

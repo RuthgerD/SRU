@@ -10,5 +10,5 @@ struct PageConfig {
     std::string obj_regex;
     std::vector<int> groups;
 };
-static std::vector<PageConfig> PageConfigPool;
+extern std::vector<PageConfig> PageConfigPool;
 }; // namespace sru::pdf

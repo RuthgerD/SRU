@@ -13,7 +13,7 @@ include_directories(${Boost_INCLUDE_DIRS} thirdparty/ctre/include thirdparty/rap
 
 add_compile_definitions(RAPIDJSON_HAS_STDSTRING)
 
-add_executable(cppthings main.cpp src/pdf_structures/string_obj.cpp src/pdf_structures/pdf_cluster.cpp src/pdf_structures/pdf_file.cpp src/pdf_structures/pdf_page.cpp src/pdf_structures/object_config.cpp src/util/util.cpp src/util/qpdf_binding.cpp)
+add_executable(cppthings main.cpp src/pdf_structures/string_obj.cpp src/pdf_structures/pdf_cluster.cpp src/pdf_structures/pdf_file.cpp src/pdf_structures/pdf_page.cpp src/pdf_structures/object_config.cpp src/pdf_structures/anchor_config.cpp src/pdf_structures/page_config.cpp src/util/util.cpp src/util/qpdf_binding.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

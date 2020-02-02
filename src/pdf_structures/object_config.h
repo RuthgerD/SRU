@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -34,6 +35,6 @@ struct ObjectConfig {
     float margin_y;
     int object_count;
 };
-static std::vector<ObjectConfig> ObjectConfigPool;
-
+extern std::vector<ObjectConfig> ObjectConfigPool;
+const std::optional<ObjectConfig> getObjectConfig(int id);
 }; // namespace sru::pdf

@@ -1,6 +1,7 @@
 #pragma once
 #include "../util/qpdf_binding.h"
 #include "../util/util.h"
+#include "anchor_config.h"
 #include "pdf_file.h"
 #include <filesystem>
 #include <iostream>

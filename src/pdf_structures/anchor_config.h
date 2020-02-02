@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -12,6 +13,7 @@ struct AnchorConfig {
     bool save_anchor;
     std::vector<int> sub_groups;
 };
-static std::vector<AnchorConfig> AnchorConfigPool;
+const std::optional<AnchorConfig> getAnchorConfig(int id);
+extern std::vector<AnchorConfig> AnchorConfigPool;
 
 }; // namespace sru::pdf
