@@ -118,7 +118,7 @@ void PdfPage::printObjects() {
     // }
     for (auto anchor_pair : anchor_objs) {
         if (auto conf = getAnchorConfig(anchor_pair.first)) {
-            std::cout << conf.value().content_ << ":\n";
+            std::cout << conf.value().name << ":\n";
             for (auto id : conf.value().sub_groups) {
                 for (auto obj : marked_objs.at(id)) {
                     std::cout << "* " << obj->getContent() << "\n";

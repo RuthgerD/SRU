@@ -7,6 +7,7 @@
 namespace sru::pdf {
 struct AnchorConfig {
     int id;
+    std::string name;
     std::string content_id;
     std::string content_;
     std::string content_alt;

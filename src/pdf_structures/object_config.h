@@ -7,6 +7,7 @@
 namespace sru::pdf {
 struct ObjectConfig {
     int id;
+    std::string name;
 
     float text_justify;
     int maximum_values;

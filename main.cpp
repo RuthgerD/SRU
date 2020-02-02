@@ -77,10 +77,13 @@ int main(int argc, char **argv) {
         for (auto &val : obb["sub_groups"].GetArray()) {
             sub_groups.push_back(val.Get<int>());
         }
-        const sru::pdf::AnchorConfig anchor{
-            obb["id"].GetInt(),           obb["content_id"].GetString(),
-            obb["content_"].GetString(),  obb["content_alt"].GetString(),
-            obb["save_anchor"].GetBool(), sub_groups};
+        const sru::pdf::AnchorConfig anchor{obb["id"].GetInt(),
+                                            obb["anchor_name"].GetString(),
+                                            obb["content_id"].GetString(),
+                                            obb["content_"].GetString(),
+                                            obb["content_alt"].GetString(),
+                                            obb["save_anchor"].GetBool(),
+                                            sub_groups};
         sru::pdf::AnchorConfigPool.push_back(anchor);
     }
     for (auto &obb : d["objects"].GetArray()) {
@@ -101,6 +104,7 @@ int main(int argc, char **argv) {
 
         const sru::pdf::ObjectConfig testing{
             obb["id"].GetInt(),
+            obb["object_name"].GetString(),
             obb["text_justify"].GetFloat(),
             obb["maximum_values"].GetInt(),
             obb["y_object_spacing"].GetFloat(),
