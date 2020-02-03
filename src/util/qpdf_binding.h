@@ -15,9 +15,8 @@ class Qpdf {
     Qpdf(std::filesystem::path cache_path);
 
     void getVersion();
-    const std::filesystem::path
-    decompress(std::filesystem::path pdf_file) const;
+    const std::filesystem::path decompress(std::filesystem::path pdf_file) const;
     const std::filesystem::path compress(std::filesystem::path pdf_file) const;
-    const std::filesystem::path &getCachePath() const;
+    const std::filesystem::path& getCachePath() const;
 };
 }; // namespace sru::util

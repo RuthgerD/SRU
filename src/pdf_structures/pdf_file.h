@@ -21,7 +21,7 @@ class PdfFile {
 
   public:
     PdfFile(std::filesystem::path path);
-    const std::filesystem::path &getPath() const;
-    const std::vector<PdfPage> &getPages() const;
+    const std::filesystem::path& getPath() const;
+    const std::vector<PdfPage>& getPages() const;
 };
 }; // namespace sru::pdf

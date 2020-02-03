@@ -125,7 +125,8 @@ int main(int argc, char **argv) {
             regexs,
             obb["margin_x"].GetFloat(),
             obb["margin_y"].GetFloat(),
-            obb["object_count"].GetInt()};
+            obb["object_count"].GetInt(),
+            obb["sticky_id"].GetInt()};
         sru::pdf::ObjectConfigPool.push_back(testing);
     }
     std::vector<std::filesystem::path> pdf_file_paths{};

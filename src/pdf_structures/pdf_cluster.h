@@ -15,7 +15,6 @@ class PdfCluster {
     std::vector<sru::pdf::PdfFile> pdf_files;
 
   public:
-    PdfCluster(std::vector<std::filesystem::path> pdf_file_paths,
-               sru::util::Qpdf qpdf);
+    PdfCluster(std::vector<std::filesystem::path> pdf_file_paths, sru::util::Qpdf qpdf);
 };
 } // namespace sru::pdf

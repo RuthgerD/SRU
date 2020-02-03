@@ -145,7 +145,8 @@
                     "regexs",
                     "margin_x",
                     "margin_y",
-                    "object_count"
+                    "object_count",
+                    "sticky_id"
                 ],
                 "properties": {
                     "id": {
@@ -283,6 +284,11 @@
                         "$id": "#/properties/objects/properties/items/properties/object_count",
                         "type": "integer",
                         "title": "The object_count Schema"
+                    },
+                    "sticky_id": {
+                        "$id": "#/properties/objects/properties/items/properties/sticky_id",
+                        "type": "integer",
+                        "title": "The sticky_id Schema"
                     }
                 }
             }

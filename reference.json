@@ -1,79 +1,111 @@
 {
-    "pages": [{
-        "page_name": "page 1",
-        "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page 1)\\)Tj\\nET",
-        "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
-        "groups": [0, 1]
-    }, {
-        "page_name": "page any",
-        "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page (?!1)[0-9]*)\\)Tj\\nET",
-        "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*|Example No.: [0-9]*)\\)Tj\\nET)",
-        "groups": []
-    }],
-    "anchors": [{
-        "id": 0,
-        "anchor_name": "testing anchor",
-        "content_id": "Bradycardias:",
-        "content_": "Bradycardias",
-        "content_alt": "",
-        "save_anchor": true,
-        "sub_groups": [1]
-    }, {
-        "id": 1,
-        "anchor_name": "testing anchor",
-        "content_id": "Min:",
-        "content_": "Min",
-        "content_alt": "",
-        "save_anchor": true,
-        "sub_groups": [0]
-    }],
-    "objects": [{
-        "id": 0,
-        "object_name": "vals",
-        "text_justify": 0,
-        "maximum_values": 0,
-        "y_object_spacing": 0,
-        "round_cut_off": 0,
-        "is_int": true,
-        "minimum_value": 0,
-        "calc_modes": ["ADD", "AVRG"],
-        "avrg_self": false,
-        "avrg_source_group": "",
-        "avrg_source_sub_group": "",
-        "avrg_base_group": "",
-        "avrg_base_sub_group": "",
-        "avrg_multiplier": 0,
-        "overflow_threshold": 0,
-        "sort_settings": [true],
-        "re_comp_name": "comp",
-        "re_group_count": 0,
-        "regexs": [""],
-        "margin_x": 150,
-        "margin_y": 0,
-        "object_count": 2
-    }, {
-        "id": 1,
-        "object_name": "list",
-        "text_justify": 0,
-        "maximum_values": 0,
-        "y_object_spacing": 0,
-        "round_cut_off": 0,
-        "is_int": true,
-        "minimum_value": 0,
-        "calc_modes": ["ADD", "AVRG"],
-        "avrg_self": false,
-        "avrg_source_group": "",
-        "avrg_source_sub_group": "",
-        "avrg_base_group": "",
-        "avrg_base_sub_group": "",
-        "avrg_multiplier": 0,
-        "overflow_threshold": 0,
-        "sort_settings": [true],
-        "re_comp_name": "comp",
-        "re_group_count": 0,
-        "regexs": [""],
-        "margin_x": 20,
-        "margin_y": -40,
-        "object_count": 3
-    }]
+    "pages": [
+        {
+            "page_name": "page 1",
+            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page 1)\\)Tj\\nET",
+            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
+            "groups": [
+                0,
+                1
+            ]
+        },
+        {
+            "page_name": "page any",
+            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page (?!1)[0-9]*)\\)Tj\\nET",
+            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*|Example No.: [0-9]*)\\)Tj\\nET)",
+            "groups": []
+        }
+    ],
+    "anchors": [
+        {
+            "id": 0,
+            "anchor_name": "testing anchor",
+            "content_id": "Bradycardias:",
+            "content_": "Bradycardias",
+            "content_alt": "",
+            "save_anchor": true,
+            "sub_groups": [
+                1
+            ]
+        },
+        {
+            "id": 1,
+            "anchor_name": "testing anchor",
+            "content_id": "Min:",
+            "content_": "Min",
+            "content_alt": "",
+            "save_anchor": true,
+            "sub_groups": [
+                0
+            ]
+        }
+    ],
+    "objects": [
+        {
+            "id": 0,
+            "object_name": "vals",
+            "text_justify": 0,
+            "maximum_values": 0,
+            "y_object_spacing": 0,
+            "round_cut_off": 0,
+            "is_int": true,
+            "minimum_value": 0,
+            "calc_modes": [
+                "ADD",
+                "AVRG"
+            ],
+            "avrg_self": false,
+            "avrg_source_group": "",
+            "avrg_source_sub_group": "",
+            "avrg_base_group": "",
+            "avrg_base_sub_group": "",
+            "avrg_multiplier": 0,
+            "overflow_threshold": 0,
+            "sort_settings": [
+                true
+            ],
+            "re_comp_name": "comp",
+            "re_group_count": 0,
+            "regexs": [
+                ""
+            ],
+            "margin_x": 150,
+            "margin_y": 0,
+            "object_count": 2,
+            "sticky_id": -1
+        },
+        {
+            "id": 1,
+            "object_name": "list",
+            "text_justify": 0,
+            "maximum_values": 0,
+            "y_object_spacing": 0,
+            "round_cut_off": 0,
+            "is_int": true,
+            "minimum_value": 0,
+            "calc_modes": [
+                "ADD",
+                "AVRG"
+            ],
+            "avrg_self": false,
+            "avrg_source_group": "",
+            "avrg_source_sub_group": "",
+            "avrg_base_group": "",
+            "avrg_base_sub_group": "",
+            "avrg_multiplier": 0,
+            "overflow_threshold": 0,
+            "sort_settings": [
+                true
+            ],
+            "re_comp_name": "comp",
+            "re_group_count": 0,
+            "regexs": [
+                ""
+            ],
+            "margin_x": 20,
+            "margin_y": -40,
+            "object_count": 3,
+            "sticky_id": -1
+        }
+    ]
 }

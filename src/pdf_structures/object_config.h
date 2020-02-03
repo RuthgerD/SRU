@@ -35,6 +35,7 @@ struct ObjectConfig {
     float margin_x;
     float margin_y;
     int object_count;
+    int sticky_id;
 };
 extern std::vector<ObjectConfig> ObjectConfigPool;
 const std::optional<ObjectConfig> getObjectConfig(int id);

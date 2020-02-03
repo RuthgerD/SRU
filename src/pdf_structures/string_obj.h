@@ -16,17 +16,15 @@ class StringObject {
     bool modified = false;
 
   public:
-    StringObject(sru::util::Color color, int text_type, double font_size,
-                 std::string transform, sru::util::Cordinate position,
-                 std::string content);
+    StringObject(sru::util::Color color, int text_type, double font_size, std::string transform, sru::util::Cordinate position, std::string content);
 
-    const sru::util::Color &getColor() const;
-    const int &getTextType() const;
-    const double &getFontSize() const;
-    const sru::util::Cordinate &getPosition() const;
-    const std::string &getContent() const;
+    const sru::util::Color& getColor() const;
+    const int& getTextType() const;
+    const double& getFontSize() const;
+    const sru::util::Cordinate& getPosition() const;
+    const std::string& getContent() const;
     const std::string toString() const;
-    bool &isModified();
+    bool& isModified();
 };
 
 }; // namespace sru::pdf
