@@ -8,7 +8,9 @@ add_compile_options("-mtune=native")
 add_compile_options("-march=native")
 
 find_package(Boost 1.66 REQUIRED COMPONENTS program_options regex)
-if (Boost_FOUND)
+find_package (Threads)
+
+if (Boost_FOUND AND Threads_FOUND)
 include_directories(${Boost_INCLUDE_DIRS} thirdparty/ctre/include thirdparty/rapidjson/include thirdparty/re2 thirdparty include)
 
 add_compile_definitions(RAPIDJSON_HAS_STDSTRING)
@@ -18,6 +20,6 @@ add_executable(cppthings main.cpp src/pdf_structures/string_obj.cpp src/pdf_stru
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
-target_link_libraries(cppthings ${Boost_LIBRARIES})
+target_link_libraries(cppthings ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 endif()

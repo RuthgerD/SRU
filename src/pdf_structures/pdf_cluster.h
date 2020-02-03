@@ -4,6 +4,7 @@
 #include "anchor_config.h"
 #include "pdf_file.h"
 #include <filesystem>
+#include <future>
 #include <iostream>
 #include <string>
 #include <vector>
