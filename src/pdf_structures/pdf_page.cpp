@@ -31,7 +31,7 @@ void PdfPage::indexObjects() {
                 const auto& anchor_conf = anchor_conf_opt.value();
                 if (sru::util::re_search(anchor_conf.content_id, obj.getContent())) {
                     if (anchor_conf.save_anchor) {
-                        anchor_objs.emplace(anchor_conf_id, &obj);
+                        anchor_objs.emplace(anchor_conf_id, obj);
                     }
                 }
             }
@@ -40,13 +40,13 @@ void PdfPage::indexObjects() {
     for (const auto anchor_pair : anchor_objs) {
         // std::cout << "Anchor: " << anchor_pair.second->getContent() << "\n";
         if (const auto anchor_conf = getAnchorConfig(anchor_pair.first)) {
-            const auto anchor_obj = anchor_pair.second;
+            const auto& anchor_obj = anchor_pair.second;
             for (auto object_conf_id : anchor_conf.value().sub_groups) {
                 if (const auto object_conf_opt = getObjectConfig(object_conf_id); object_conf_opt) {
                     const auto& object_conf = object_conf_opt.value();
 
-                    const float& ref_x = anchor_obj->getPosition().getX();
-                    const float& ref_y = anchor_obj->getPosition().getY();
+                    const float& ref_x = anchor_obj.get().getPosition().getX();
+                    const float& ref_y = anchor_obj.get().getPosition().getY();
 
                     const float max_x = ref_x + object_conf.margin_x;
                     const float max_y = ref_y + object_conf.margin_y;
@@ -67,7 +67,7 @@ void PdfPage::indexObjects() {
                             comp_x <= max_x && comp_x >= ref_x && comp_y > max_y && comp_y < ref_y) {
 
                             if (captured_count != object_count) {
-                                if (found_count >= count_start && &comp_obj != anchor_obj) {
+                                if (found_count >= count_start && &comp_obj != &anchor_obj.get()) {
 
                                     // std::cout
                                     //     << "obj:" << comp_obj.getContent()
@@ -83,14 +83,14 @@ void PdfPage::indexObjects() {
                                     if (sticky_id < 0) {
                                         if (marked_objs.find(object_conf_id) == marked_objs.end()) {
 
-                                            marked_objs.emplace(object_conf_id, std::vector<StringObject*>{});
+                                            marked_objs.emplace(object_conf_id, std::vector<std::reference_wrapper<sru::pdf::StringObject>>{});
                                         }
-                                        marked_objs.at(object_conf_id).emplace_back(&comp_obj);
+                                        marked_objs.at(object_conf_id).emplace_back(comp_obj);
                                     } else {
                                         if (stickied_objs.find(sticky_id) == stickied_objs.end() && sticky_id >= 0) {
-                                            stickied_objs.emplace(sticky_id, std::vector<StringObject*>{});
+                                            stickied_objs.emplace(sticky_id, std::vector<std::reference_wrapper<sru::pdf::StringObject>>{});
                                         }
-                                        marked_objs.at(sticky_id).emplace_back(&comp_obj);
+                                        marked_objs.at(sticky_id).emplace_back(comp_obj);
                                     }
                                     ++captured_count;
                                 }
@@ -116,8 +116,8 @@ void PdfPage::printObjects() const {
         if (auto conf = getAnchorConfig(anchor_pair.first)) {
             std::cout << conf.value().name << ":\n";
             for (auto id : conf.value().sub_groups) {
-                for (auto obj : marked_objs.at(id)) {
-                    std::cout << "* " << obj->getContent() << "\n";
+                for (auto& obj : marked_objs.at(id)) {
+                    std::cout << "* " << obj.get().getContent() << "\n";
                 }
             }
         }
