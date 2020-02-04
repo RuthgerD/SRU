@@ -11,6 +11,7 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths, sru::u
         }));
     }
     const auto deflated = qpdf.decompress(pdf_file_paths.back());
+
     pdf_files.push_back(PdfFile{deflated});
 
     for (auto& x : result) {

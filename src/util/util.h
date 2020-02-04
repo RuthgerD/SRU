@@ -6,6 +6,7 @@
 #include <optional>
 #include <string>
 #include <string_view>
+#include <tuple>
 #include <vector>
 
 namespace sru::util {
@@ -25,7 +26,8 @@ struct Color {
 std::optional<std::string> QFileRead(std::filesystem::path path);
 const int cmd(std::string command);
 std::optional<std::vector<std::vector<std::string_view>>> re_search(const std::string re, const std::string_view data);
-template <typename T, typename = std::enable_if_t<std::is_arithmetic<T>::value>>
+bool re_match(const std::string re, const std::string_view data);
+template <typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
 // TODO: unsafe :P
 T svto(const std::string_view& sv) {
     auto value = boost::convert<T>(sv, boost::cnv::strtol());

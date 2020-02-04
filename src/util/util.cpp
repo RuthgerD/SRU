@@ -80,4 +80,5 @@ std::optional<std::vector<std::vector<std::string_view>>> re_search(const std::s
     }
     return {};
 }
+bool re_match(const std::string re, const std::string_view data) { return re_search(re, data).has_value(); }
 }; // namespace sru::util
