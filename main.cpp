@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
             groups.push_back(val.Get<int>());
         }
         const sru::pdf::PageConfig page{obb["regex_id"].GetString(), obb["obj_regex"].GetString(), groups};
-        sru::pdf::PageConfigPool.push_back(page);
+        sru::pdf::PageConfigPool.push_back(std::move(page));
     }
     for (auto& obb : d["anchors"].GetArray()) {
         std::vector<int> sub_groups;
@@ -82,7 +82,6 @@ int main(int argc, char** argv) {
                                       obb["content_alt"].GetString(),
                                       obb["save_anchor"].GetBool(),
                                       sub_groups};
-        std::cout << anchor.name << " HELLO" << std::endl;
         sru::pdf::AnchorConfigPool.push_back(std::move(anchor)); // REMINDER TO DO THIS FOR EVERYTHING
     }
     for (auto& obb : d["objects"].GetArray()) {
@@ -125,7 +124,7 @@ int main(int argc, char** argv) {
                                              obb["margin_y"].GetFloat(),
                                              obb["object_count"].GetInt(),
                                              obb["sticky_id"].GetInt()};
-        sru::pdf::ObjectConfigPool.push_back(testing);
+        sru::pdf::ObjectConfigPool.push_back(std::move(testing));
     }
     std::vector<std::filesystem::path> pdf_file_paths{};
     // On unix based systems the binary isnt stored in a place where the user

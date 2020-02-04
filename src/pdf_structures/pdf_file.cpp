@@ -17,7 +17,6 @@ PdfFile::PdfFile(std::filesystem::path path) : path{path} {
             }
         }
     }
-    std::cout << "Pdf file creation (sec) = " << timepool << "\n";
 }
 const std::vector<sru::pdf::PdfPage>& PdfFile::getPages() const { return pages; }
 } // namespace sru::pdf

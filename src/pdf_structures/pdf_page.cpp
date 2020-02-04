@@ -105,7 +105,6 @@ void PdfPage::indexObjects() {
             }
         }
     }
-    printObjects();
 }
 void PdfPage::printObjects() const {
     // for (auto pair : marked_objs) {

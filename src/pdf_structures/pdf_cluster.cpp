@@ -2,24 +2,29 @@
 
 namespace sru::pdf {
 PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths, sru::util::Qpdf qpdf) : qpdf{qpdf} {
+
     std::vector<std::future<PdfFile>> result;
-    // TODO: Use current thread as well :)
-    for (const auto& path : pdf_file_paths) {
+    for (int i = 0; i < pdf_file_paths.size() - 1; i++) {
         result.push_back(std::async([&]() {
-            const auto deflated = qpdf.decompress(path);
-            // std::cout << deflated.generic_string() << "\n";
+            const auto deflated = qpdf.decompress(pdf_file_paths[i]); // needs checks
             return PdfFile{deflated};
         }));
     }
-    int index = 0;
+    const auto deflated = qpdf.decompress(pdf_file_paths.back());
+    pdf_files.push_back(PdfFile{deflated});
+
     for (auto& x : result) {
-        ++index;
         auto tmp = x.get();
-        std::cout << "Page " << index << ":\n";
-        for (const auto& page : tmp.getPages()) {
+        pdf_files.push_back(std::move(tmp));
+    }
+
+    int index = 0;
+    for (auto& x : pdf_files) {
+        ++index;
+        std::cout << "Pdf " << index << ":\n";
+        for (const auto& page : x.getPages()) {
             page.printObjects();
         }
-        pdf_files.push_back(std::move(tmp)); // move
     }
 }
 } // namespace sru::pdf
