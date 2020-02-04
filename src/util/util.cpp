@@ -36,11 +36,11 @@ const int cmd(std::string command) {
 }
 std::optional<std::vector<std::vector<std::string_view>>> re2_search(const std::string& pattern, const std::string_view str) {
     std::string wrapped_pattern = "(" + pattern + ")";
-    const re2::RE2 regex{wrapped_pattern};
-    if (!regex.ok()) {
+    const re2::RE2 re{wrapped_pattern};
+    if (!re.ok()) {
         return {};
     }
-    const std::size_t n = regex.NumberOfCapturingGroups();
+    const std::size_t n = re.NumberOfCapturingGroups();
 
     std::vector<re2::RE2::Arg> arguments(n);
 
@@ -56,7 +56,7 @@ std::optional<std::vector<std::vector<std::string_view>>> re2_search(const std::
     std::optional<std::vector<std::vector<std::string_view>>> ret{};
     auto& res = ret.emplace();
     re2::StringPiece piece(str);
-    while (re2::RE2::FindAndConsumeN(&piece, regex, argument_ptrs.data(), n)) {
+    while (re2::RE2::FindAndConsumeN(&piece, re, argument_ptrs.data(), n)) {
         std::vector<std::string_view> tmp;
         std::copy(results.begin(), results.end(), std::back_inserter(tmp));
         res.push_back(std::move(tmp));
@@ -69,7 +69,7 @@ std::optional<std::vector<std::vector<std::string_view>>> re2_search(const std::
 }
 std::optional<std::vector<std::vector<std::string_view>>> re_search(const std::string re, const std::string_view data) {
     std::optional<std::vector<std::vector<std::string_view>>> ret{};
-    if (auto acceled = regex_accel[re](data)) {
+    if (auto acceled = regex_accel[re](data); acceled) {
         ret = acceled;
     }
     if (!ret) {
@@ -81,4 +81,18 @@ std::optional<std::vector<std::vector<std::string_view>>> re_search(const std::s
     return {};
 }
 bool re_match(const std::string re, const std::string_view data) { return re_search(re, data).has_value(); }
+bool re_replace(const std::string regex, const std::string_view repl, std::string& data) {
+    bool replaced = false;
+    if (false) {
+        // TODO: implement acceled implementation
+    }
+    if (!replaced) {
+        const re2::RE2 re{regex};
+        if (!re.ok()) {
+            return false;
+        }
+        replaced = re2::RE2::Replace(&data, re, repl);
+    }
+    return replaced;
+}
 }; // namespace sru::util

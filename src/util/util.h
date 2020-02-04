@@ -27,6 +27,7 @@ std::optional<std::string> QFileRead(std::filesystem::path path);
 const int cmd(std::string command);
 std::optional<std::vector<std::vector<std::string_view>>> re_search(const std::string re, const std::string_view data);
 bool re_match(const std::string re, const std::string_view data);
+bool re_replace(const std::string re, const std::string_view repl, std::string& data);
 template <typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
 // TODO: unsafe :P
 T svto(const std::string_view& sv) {
