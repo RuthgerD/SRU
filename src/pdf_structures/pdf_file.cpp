@@ -11,7 +11,7 @@ PdfFile::PdfFile(std::filesystem::path path) : path{path} {
             ++page_no;
             for (const auto pconf : sru::pdf::PageConfigPool) {
                 if (auto result = sru::util::re_search(pconf.regex_id, page_match.at(2))) {
-                    pages.emplace_back(page_match.at(2), pconf).indexObjects();
+                    pages.emplace_back(std::string{page_match.at(2)}, pconf).indexObjects();
                     break;
                 }
             }

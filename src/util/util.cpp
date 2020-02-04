@@ -1,9 +1,12 @@
 #include "util.h"
 #include "re_accel.h"
+#include <algorithm>
+#include <array>
 #include <chrono>
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
+#include <re2/re2.h>
 #include <type_traits>
 
 namespace sru::util {
@@ -31,24 +34,48 @@ const int cmd(std::string command) {
     // std::cout << "---\n";
     return 0;
 }
-std::optional<std::vector<std::vector<std::string>>> re_search(const std::string re, const std::string& data) {
-    std::optional<std::vector<std::vector<std::string>>> ret{};
+std::optional<std::vector<std::vector<std::string_view>>> re2_search(const std::string& pattern, const std::string_view str) {
+    std::string wrapped_pattern = "(" + pattern + ")";
+    const re2::RE2 regex{wrapped_pattern};
+    if (!regex.ok()) {
+        return {};
+    }
+    const std::size_t n = regex.NumberOfCapturingGroups();
+
+    std::vector<re2::RE2::Arg> arguments(n);
+
+    std::vector<re2::RE2::Arg*> argument_ptrs(n);
+
+    std::vector<std::string> results(n);
+
+    for (std::size_t i = 0; i < n; ++i) {
+        arguments[i] = &results[i];
+        argument_ptrs[i] = &arguments[i];
+    }
+
+    std::optional<std::vector<std::vector<std::string_view>>> ret{};
+    auto& res = ret.emplace();
+    re2::StringPiece piece(str);
+    while (re2::RE2::FindAndConsumeN(&piece, regex, argument_ptrs.data(), n)) {
+        std::vector<std::string_view> tmp;
+        std::copy(results.begin(), results.end(), std::back_inserter(tmp));
+        res.push_back(std::move(tmp));
+    }
+
+    if (res.size() > 0) {
+        return ret;
+    }
+    return {};
+}
+std::optional<std::vector<std::vector<std::string_view>>> re_search(const std::string re, const std::string_view data) {
+    std::optional<std::vector<std::vector<std::string_view>>> ret{};
     if (auto acceled = regex_accel[re](data)) {
         ret = acceled;
     }
     if (!ret) {
-        // std::cout << "Falling back to runtime re for: " << re << "\n";
-        boost::regex expr{re};
-        auto& res = ret.emplace();
-        std::transform(boost::sregex_iterator(data.begin(), data.end(), expr), boost::sregex_iterator(), std::back_inserter(res), [&](const auto& x) {
-            std::vector<std::string> tmp;
-            for (auto y : x) {
-                tmp.push_back(y.str());
-            }
-            return tmp;
-        });
+        ret = re2_search(re, data);
     }
-    if (ret.value().size() > 0) {
+    if (ret->size() > 0) {
         return ret;
     }
     return {};

@@ -55,20 +55,20 @@ class ReAccel {
         std::pair{page_any_id_key, [](std::string_view sv) { return ctre::range<page_any_id>(sv); }}};
 
     template <class Match, std::size_t... Is> static auto match2vec_impl(Match match, std::index_sequence<Is...>) {
-        std::vector<std::string> ret;
-        (ret.push_back(match.template get<Is>().to_string()), ...);
+        std::vector<std::string_view> ret;
+        (ret.push_back(match.template get<Is>().to_view()), ...);
         return ret;
     }
 
-    template <class Match> static auto match2vec(Match match) -> std::vector<std::string> {
+    template <class Match> static auto match2vec(Match match) -> std::vector<std::string_view> {
         return match2vec_impl(match, std::make_index_sequence<std::tuple_size_v<Match>>{});
     }
 
   public:
     constexpr auto operator[](std::string_view key) const noexcept {
-        return [&, key](const std::string& sv) {
+        return [&, key](const std::string_view sv) {
             bool done = false;
-            std::optional<std::vector<std::vector<std::string>>> ret{};
+            std::optional<std::vector<std::vector<std::string_view>>> ret{};
             visit(ctre_regexs, [&](const auto& e) {
                 if (done)
                     return;
