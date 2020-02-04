@@ -5,6 +5,7 @@
 #include "src/pdf_structures/pdf_cluster.h"
 #include "src/util/util.h"
 #include <algorithm>
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/program_options.hpp>
 #include <boost/regex.hpp>
 #include <chrono>
@@ -130,7 +131,7 @@ int main(int argc, char** argv) {
     // On unix based systems the binary isnt stored in a place where the user
     // has easy access to, add a --in option or something
     for (auto& file : std::filesystem::directory_iterator{"./import"}) {
-        if (auto file_path = file.path(); file_path.extension() == ".pdf") {
+        if (auto file_path = file.path(); boost::iequals(file_path.extension().generic_string(), ".pdf")) {
             pdf_file_paths.push_back(file_path);
         }
     }
