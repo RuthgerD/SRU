@@ -3,15 +3,18 @@ project(cppthings VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/Modules/")
+
 add_compile_options("-O3")
 add_compile_options("-mtune=native")
 add_compile_options("-march=native")
 
 find_package(Boost 1.66 REQUIRED COMPONENTS program_options regex)
 find_package (Threads)
+find_package (RE2)
 
-if (Boost_FOUND AND Threads_FOUND)
-include_directories(${Boost_INCLUDE_DIRS} thirdparty/ctre/include thirdparty/rapidjson/include thirdparty/re2 thirdparty include)
+if (Boost_FOUND AND Threads_FOUND AND RE2_FOUND)
+include_directories(${Boost_INCLUDE_DIRS} ${RE2_INCLUDE_DIR} thirdparty/ctre/include thirdparty/rapidjson/include thirdparty include)
 
 add_compile_definitions(RAPIDJSON_HAS_STDSTRING)
 
@@ -20,6 +23,6 @@ add_executable(cppthings main.cpp src/pdf_structures/string_obj.cpp src/pdf_stru
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
-target_link_libraries(cppthings ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(cppthings ${Boost_LIBRARIES} ${RE2_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
 
 endif()
