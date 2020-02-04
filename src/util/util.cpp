@@ -26,9 +26,9 @@ Cordinate::Cordinate(float x, float y) : x{x}, y{y} {}
 const std::string Color::toString() const { return std::to_string(r) + ' ' + std::to_string(g) + ' ' + std::to_string(b) + ' ' + "rg"; }
 Color::Color(float r, float g, float b) : r{r}, g{g}, b{b} {}
 const int cmd(std::string command) {
-    std::cout << "RUNNING COMMAND: " << command << "\n";
+    // std::cout << "RUNNING COMMAND: " << command << "\n";
     std::system(command.c_str());
-    std::cout << "---\n";
+    // std::cout << "---\n";
     return 0;
 }
 std::optional<std::vector<std::vector<std::string>>> re_search(const std::string re, const std::string& data) {

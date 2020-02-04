@@ -42,7 +42,7 @@ void PdfPage::indexObjects() {
         if (const auto anchor_conf = getAnchorConfig(anchor_pair.first)) {
             const auto anchor_obj = anchor_pair.second;
             for (auto object_conf_id : anchor_conf.value().sub_groups) {
-                if (const auto object_conf_opt = getObjectConfig(object_conf_id)) {
+                if (const auto object_conf_opt = getObjectConfig(object_conf_id); object_conf_opt) {
                     const auto& object_conf = object_conf_opt.value();
 
                     const float& ref_x = anchor_obj->getPosition().getX();
@@ -51,16 +51,17 @@ void PdfPage::indexObjects() {
                     const float max_x = ref_x + object_conf.margin_x;
                     const float max_y = ref_y + object_conf.margin_y;
 
-                    float count_start = 0;
                     const float object_count = object_conf.object_count;
+                    int sticky_id = object_conf.sticky_id;
+
+                    float count_start = 0;
                     float found_count = 0;
                     float captured_count = 0;
 
-                    int sticky_id = object_conf.sticky_id;
                     // TODO: Support stickies.
                     for (auto& comp_obj : objs) {
-                        const float& comp_x = std::fabs(comp_obj.getPosition().getX());
-                        const float& comp_y = std::fabs(comp_obj.getPosition().getY());
+                        const float comp_x = std::fabs(comp_obj.getPosition().getX());
+                        const float comp_y = std::fabs(comp_obj.getPosition().getY());
 
                         if (comp_x < max_x && comp_x > ref_x && comp_y >= max_y && comp_y <= ref_y ||
                             comp_x <= max_x && comp_x >= ref_x && comp_y > max_y && comp_y < ref_y) {
@@ -106,7 +107,7 @@ void PdfPage::indexObjects() {
     }
     printObjects();
 }
-void PdfPage::printObjects() {
+void PdfPage::printObjects() const {
     // for (auto pair : marked_objs) {
     //     for (auto obj : pair.second) {
     //         std::cout << obj->getContent() << "\n";

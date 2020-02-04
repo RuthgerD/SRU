@@ -19,7 +19,7 @@
     "anchors": [
         {
             "id": 0,
-            "anchor_name": "testing anchor",
+            "anchor_name": "Bradycardias",
             "content_id": "Bradycardias:",
             "content_": "Bradycardias",
             "content_alt": "",
@@ -30,7 +30,7 @@
         },
         {
             "id": 1,
-            "anchor_name": "testing anchor",
+            "anchor_name": "Min heartrate",
             "content_id": "Min:",
             "content_": "Min",
             "content_alt": "",

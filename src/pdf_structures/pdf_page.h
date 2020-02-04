@@ -27,10 +27,14 @@ class PdfPage {
     const PageConfig config;
 
   public:
+    PdfPage(const PdfPage& oth) = delete;
+    PdfPage(PdfPage&&) = default;
+    PdfPage& operator=(const PdfPage& oth) = delete;
+    PdfPage& operator=(PdfPage&&) = default;
     PdfPage(std::string raw, const PageConfig config);
     const std::vector<sru::pdf::StringObject>& getObjects() const;
     void indexObjects();
-    void printObjects();
+    void printObjects() const;
 };
 
 }; // namespace sru::pdf
