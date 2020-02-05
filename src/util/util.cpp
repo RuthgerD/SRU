@@ -95,4 +95,39 @@ bool re_replace(const std::string regex, const std::string_view repl, std::strin
     }
     return replaced;
 }
+std::pair<std::vector<std::vector<float>>, std::vector<std::vector<int>>> multi_search(std::string re, std::vector<std::string> content,
+                                                                                       std::vector<int> order) {
+    std::vector<std::vector<float>> total_extracted{};
+    std::vector<std::vector<int>> total_count{};
+    for (const auto& data : content) {
+        if (auto result = re_search(re, data); result) {
+            std::vector<float> extracted{};
+            std::vector<int> count{};
+
+            for (int i = 1; i < result->front().size(); i++) {
+                extracted.push_back(svto<float>(result->front().at(i)));
+                count.push_back(1);
+            }
+            total_extracted.push_back(std::move(extracted));
+            total_count.push_back(std::move(count));
+        }
+    }
+    return std::pair{total_extracted, total_count};
+}
+std::vector<float> multi_add(std::vector<std::vector<float>> values, int overflow) {
+    std::vector<float> total(values.front().size());
+    for (const auto& value : values) {
+        int count = value.size() - 1;
+        std::for_each(value.rbegin(), value.rend(), [&](const auto& x) {
+            if (total.at(count) + x >= overflow && overflow != -1 && count != 0) {
+                total.at(count) += x - overflow;
+                ++total.at(count - 1);
+            } else {
+                total.at(count) += x;
+            }
+            --count;
+        });
+    }
+    return total;
+}
 }; // namespace sru::util

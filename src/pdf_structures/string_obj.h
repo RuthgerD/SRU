@@ -18,12 +18,12 @@ class StringObject {
   public:
     StringObject(sru::util::Color color, int text_type, double font_size, std::string transform, sru::util::Cordinate position, std::string content);
 
-    const sru::util::Color& getColor() const;
-    const int& getTextType() const;
-    const double& getFontSize() const;
-    const sru::util::Cordinate& getPosition() const;
-    const std::string& getContent() const;
-    const std::string toString() const;
+    [[nodiscard]] const sru::util::Color& getColor() const;
+    [[nodiscard]] const int& getTextType() const;
+    [[nodiscard]] const double& getFontSize() const;
+    [[nodiscard]] const sru::util::Cordinate& getPosition() const;
+    [[nodiscard]] const std::string& getContent() const;
+    std::string toString() const;
     bool& isModified();
 };
 

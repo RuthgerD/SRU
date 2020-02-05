@@ -1,6 +1,5 @@
 {
-    "pages": [
-        {
+    "pages": [{
             "page_name": "page 1",
             "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page 1)\\)Tj\\nET",
             "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
@@ -16,8 +15,7 @@
             "groups": []
         }
     ],
-    "anchors": [
-        {
+    "anchors": [{
             "id": 0,
             "anchor_name": "Bradycardias",
             "content_id": "Bradycardias:",
@@ -40,10 +38,9 @@
             ]
         }
     ],
-    "objects": [
-        {
+    "objects": [{
             "id": 0,
-            "object_name": "vals",
+            "object_name": "heart rate",
             "text_justify": 0,
             "maximum_values": 0,
             "y_object_spacing": 0,
@@ -51,8 +48,7 @@
             "is_int": true,
             "minimum_value": 0,
             "calc_modes": [
-                "ADD",
-                "AVRG"
+                "ADD"
             ],
             "avrg_self": false,
             "avrg_source_group": "",
@@ -67,11 +63,11 @@
             "re_comp_name": "comp",
             "re_group_count": 0,
             "regexs": [
-                ""
+                "([0-9]+?)/min"
             ],
             "margin_x": 150,
             "margin_y": 0,
-            "object_count": 2,
+            "object_count": 1,
             "sticky_id": -1
         },
         {
@@ -84,8 +80,7 @@
             "is_int": true,
             "minimum_value": 0,
             "calc_modes": [
-                "ADD",
-                "AVRG"
+                "ADD"
             ],
             "avrg_self": false,
             "avrg_source_group": "",
@@ -100,7 +95,7 @@
             "re_comp_name": "comp",
             "re_group_count": 0,
             "regexs": [
-                ""
+                "(.*?)s, .*\\. (.*?)/min"
             ],
             "margin_x": 20,
             "margin_y": -40,

@@ -7,6 +7,7 @@
 #include <string>
 #include <string_view>
 #include <tuple>
+#include <utility>
 #include <vector>
 
 namespace sru::util {
@@ -28,6 +29,9 @@ const int cmd(std::string command);
 std::optional<std::vector<std::vector<std::string_view>>> re_search(const std::string re, const std::string_view data);
 bool re_match(const std::string re, const std::string_view data);
 bool re_replace(const std::string re, const std::string_view repl, std::string& data);
+std::pair<std::vector<std::vector<float>>, std::vector<std::vector<int>>> multi_search(std::string re, std::vector<std::string> content,
+                                                                                       std::vector<int> order);
+std::vector<float> multi_add(std::vector<std::vector<float>> values, int overflow = 1);
 template <typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
 // TODO: unsafe :P
 T svto(const std::string_view& sv) {

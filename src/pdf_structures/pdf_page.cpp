@@ -2,11 +2,12 @@
 #include "../util/util.h"
 #include "anchor_config.h"
 #include "object_config.h"
-#include <math.h>
+#include <cmath>
+#include <utility>
 #include <vector>
 
 namespace sru::pdf {
-PdfPage::PdfPage(std::string raw, const PageConfig config) : raw{raw}, config{config} {}
+PdfPage::PdfPage(std::string raw, const PageConfig config) : raw{std::move(raw)}, config{config} {}
 void PdfPage::indexObjects() {
     objs.clear();
     marked_objs.clear();
@@ -49,19 +50,19 @@ void PdfPage::indexObjects() {
                     const float max_x = ref_x + object_conf.margin_x;
                     const float max_y = ref_y + object_conf.margin_y;
 
-                    const float object_count = object_conf.object_count;
+                    const int object_count = object_conf.object_count;
                     int sticky_id = object_conf.sticky_id;
 
-                    float count_start = 0;
-                    float found_count = 0;
-                    float captured_count = 0;
+                    int count_start = 0;
+                    int found_count = 0;
+                    int captured_count = 0;
 
                     for (auto& comp_obj : objs) {
                         const float comp_x = std::fabs(comp_obj.getPosition().getX());
                         const float comp_y = std::fabs(comp_obj.getPosition().getY());
 
-                        if (comp_x < max_x && comp_x > ref_x && comp_y >= max_y && comp_y <= ref_y ||
-                            comp_x <= max_x && comp_x >= ref_x && comp_y > max_y && comp_y < ref_y) {
+                        if ((comp_x < max_x && comp_x > ref_x && comp_y >= max_y && comp_y <= ref_y) ||
+                            (comp_x <= max_x && comp_x >= ref_x && comp_y > max_y && comp_y < ref_y)) {
                             if (captured_count == object_count) {
                                 break;
                             }
@@ -102,4 +103,11 @@ void PdfPage::printObjects() const {
     }
 }
 const std::vector<sru::pdf::StringObject>& PdfPage::getObjects() const { return objs; }
+std::vector<std::reference_wrapper<sru::pdf::StringObject>> PdfPage::getMarkedObjects(int id) const {
+    if (marked_objs.find(id) != marked_objs.end()) {
+        return marked_objs.at(id);
+    } else {
+        return std::vector<std::reference_wrapper<sru::pdf::StringObject>>{}; // maybe use optional instead
+    }
+}
 } // namespace sru::pdf

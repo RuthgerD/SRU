@@ -20,8 +20,9 @@ class PdfFile {
     std::vector<PdfPage> pages;
 
   public:
-    PdfFile(std::filesystem::path path);
+    PdfFile(const std::filesystem::path& path);
     const std::filesystem::path& getPath() const;
     const std::vector<PdfPage>& getPages() const;
+    std::vector<std::reference_wrapper<sru::pdf::StringObject>> getMarkedObjects(int id) const;
 };
 }; // namespace sru::pdf

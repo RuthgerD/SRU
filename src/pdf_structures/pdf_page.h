@@ -33,6 +33,7 @@ class PdfPage {
     PdfPage& operator=(PdfPage&&) = default;
     PdfPage(std::string raw, const PageConfig config);
     const std::vector<sru::pdf::StringObject>& getObjects() const;
+    std::vector<std::reference_wrapper<sru::pdf::StringObject>> getMarkedObjects(int id) const;
     void indexObjects();
     void printObjects() const;
 };

@@ -24,6 +24,7 @@
 #include <vector>
 
 int main(int argc, char** argv) {
+    std::cout << std::filesystem::current_path().c_str() << std::endl;
     // std::ios::sync_with_stdio(false);
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
@@ -61,7 +62,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    std::cout << "JSON succesfully parsed.\n";
+    std::cout << "JSON successfully parsed.\n";
 
     for (auto& obb : d["pages"].GetArray()) {
         std::vector<int> groups;

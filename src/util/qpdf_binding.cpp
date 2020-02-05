@@ -1,11 +1,10 @@
 #include "qpdf_binding.h"
 #include "util.h"
-#include <cstdlib>
 #include <filesystem>
 #include <string>
 
 namespace sru::util {
-Qpdf::Qpdf(std::filesystem::path cache_path) : cache_path{cache_path.lexically_normal()} {}
+Qpdf::Qpdf(const std::filesystem::path& cache_path) : cache_path{cache_path.lexically_normal()} {}
 void Qpdf::getVersion() { cmd(bin + " --version"); };
 
 const std::filesystem::path& Qpdf::getCachePath() const {
@@ -15,7 +14,7 @@ const std::filesystem::path& Qpdf::getCachePath() const {
     return cache_path;
 }
 
-const std::filesystem::path Qpdf::decompress(std::filesystem::path pdf_file) const {
+std::filesystem::path Qpdf::decompress(const std::filesystem::path& pdf_file) const {
     const auto abs_pdf_file = std::filesystem::absolute(pdf_file.lexically_normal());
     auto abs_cache_path = std::filesystem::absolute(getCachePath());
     abs_cache_path.append(pdf_file.filename().generic_string());
