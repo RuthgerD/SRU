@@ -4,34 +4,25 @@
 #include "src/pdf_structures/page_config.h"
 #include "src/pdf_structures/pdf_cluster.h"
 #include "src/util/util.h"
-#include <algorithm>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/program_options.hpp>
-#include <boost/regex.hpp>
 #include <chrono>
-#include <cstdio>
-#include <cstdlib>
-#include <ctll.hpp>
-#include <ctre.hpp>
 #include <filesystem>
-#include <fstream>
-#include <functional>
 #include <iostream>
 #include <rapidjson/schema.h>
-#include <string>
 #include <string_view>
 #include <utility>
 #include <vector>
 
-int main(int argc, char** argv) {
+auto main(int argc, char** argv) -> int {
     std::cout << std::filesystem::current_path().c_str() << std::endl;
     // std::ios::sync_with_stdio(false);
-    namespace po = boost::program_options;
-    po::options_description desc("Allowed options");
-    desc.add_options()("help,h", "Help screen")("config", po::value<std::string>(), "file path");
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
+    namespace p_opt = boost::program_options;
+    p_opt::options_description desc("Allowed options");
+    desc.add_options()("help,h", "Help screen")("config", p_opt::value<std::string>(), "file path");
+    p_opt::variables_map vm;
+    p_opt::store(p_opt::parse_command_line(argc, argv, desc), vm);
+    p_opt::notify(vm);
 
     // if (vm.count("config")) {
     // } else {
@@ -69,7 +60,7 @@ int main(int argc, char** argv) {
         for (auto& val : obb["groups"].GetArray()) {
             groups.push_back(val.Get<int>());
         }
-        const sru::pdf::PageConfig page{obb["regex_id"].GetString(), obb["obj_regex"].GetString(), groups};
+        sru::pdf::PageConfig page{obb["regex_id"].GetString(), obb["obj_regex"].GetString(), groups};
         sru::pdf::PageConfigPool.push_back(std::move(page));
     }
     for (auto& obb : d["anchors"].GetArray()) {
@@ -102,7 +93,7 @@ int main(int argc, char** argv) {
             regexs.push_back(val.Get<std::string>());
         }
 
-        const sru::pdf::ObjectConfig testing{obb["id"].GetInt(),
+        sru::pdf::ObjectConfig testing{obb["id"].GetInt(),
                                              obb["object_name"].GetString(),
                                              obb["text_justify"].GetFloat(),
                                              obb["maximum_values"].GetInt(),
@@ -132,7 +123,7 @@ int main(int argc, char** argv) {
     // On unix based systems the binary isnt stored in a place where the user
     // has easy access to, add a --in option or something
     for (auto& file : std::filesystem::directory_iterator{"./import"}) {
-        if (auto file_path = file.path(); boost::iequals(file_path.extension().generic_string(), ".pdf")) {
+        if (const auto& file_path = file.path(); boost::iequals(file_path.extension().generic_string(), ".pdf")) {
             pdf_file_paths.push_back(file_path);
         }
     }

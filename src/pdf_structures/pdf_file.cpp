@@ -22,7 +22,7 @@ const std::vector<sru::pdf::PdfPage>& PdfFile::getPages() const { return pages; 
 std::vector<std::reference_wrapper<sru::pdf::StringObject>> PdfFile::getMarkedObjects(int id) const {
     std::vector<std::reference_wrapper<sru::pdf::StringObject>> total{};
     for (const auto& page : pages) {
-        auto& tmp = page.getMarkedObjects(id);
+        auto tmp = page.getMarkedObjects(id);
 
         total.insert(total.end(), std::make_move_iterator(tmp.begin()), std::make_move_iterator(tmp.end()));
     }

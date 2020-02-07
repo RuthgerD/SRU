@@ -11,30 +11,33 @@
 #include <vector>
 
 namespace sru::util {
-class Cordinate {
+class Coordinate {
     float x, y;
 
   public:
-    Cordinate(float x, float y);
-    const float& getX() const;
-    const float& getY() const;
+    // TODO: contexpr
+    Coordinate(float x, float y);
+    [[nodiscard]] auto getX() -> float&;
+    [[nodiscard]] auto getX() const noexcept -> float;
+    [[nodiscard]] auto getY()  -> float&;
+    [[nodiscard]] auto getY() const noexcept -> float;
 };
 struct Color {
     float r, g, b;
     Color(float r, float g, float b);
-    const std::string toString() const;
+    [[nodiscard]] auto toString() const -> const std::string;
 };
-std::optional<std::string> QFileRead(std::filesystem::path path);
-const int cmd(std::string command);
-std::optional<std::vector<std::vector<std::string_view>>> re_search(const std::string re, const std::string_view data);
-bool re_match(const std::string re, const std::string_view data);
-bool re_replace(const std::string re, const std::string_view repl, std::string& data);
-std::pair<std::vector<std::vector<float>>, std::vector<std::vector<int>>> multi_search(std::string re, std::vector<std::string> content,
-                                                                                       std::vector<int> order);
-std::vector<float> multi_add(std::vector<std::vector<float>> values, int overflow = 1);
+auto QFileRead(const std::filesystem::path& path) -> std::optional<std::string>;
+auto cmd(std::string command) -> int;
+auto re_search(const std::string& re, std::string_view data) -> std::optional<std::vector<std::vector<std::string_view>>>;
+auto re_match(const std::string& re, std::string_view data) -> bool;
+auto re_replace(const std::string& re, std::string_view repl, std::string& data) -> bool;
+auto multi_search(std::string re, const std::vector<std::string>& content, std::vector<int> order)
+    -> std::pair<std::vector<std::vector<float>>, std::vector<std::vector<int>>>;
+auto multi_add(std::vector<std::vector<float>> values, int overflow = 1) -> std::vector<float>;
 template <typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
 // TODO: unsafe :P
-T svto(const std::string_view& sv) {
+auto svto(const std::string_view& sv) -> T {
     auto value = boost::convert<T>(sv, boost::cnv::strtol());
     return value.get();
 }

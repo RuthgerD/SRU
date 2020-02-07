@@ -47,13 +47,6 @@ static constexpr auto page_any_id = ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) T
 
 class ReAccel {
 
-    static constexpr std::tuple ctre_regexs = {
-        std::pair{default_obj_match_key, [](std::string_view sv) { return ctre::range<default_obj_match>(sv); }},
-        std::pair{PAGE_EXAMPLE_obj_match_key, [](std::string_view sv) { return ctre::range<PAGE_EXAMPLE_obj_match>(sv); }},
-        std::pair{page_match_key, [](std::string_view sv) { return ctre::range<page_match>(sv); }},
-        std::pair{page_1_id_key, [](std::string_view sv) { return ctre::range<page_1_id>(sv); }},
-        std::pair{page_any_id_key, [](std::string_view sv) { return ctre::range<page_any_id>(sv); }}};
-
     template <class Match, std::size_t... Is> static auto match2vec_impl(Match match, std::index_sequence<Is...>) {
         std::vector<std::string_view> ret;
         (ret.push_back(match.template get<Is>().to_view()), ...);
@@ -63,24 +56,13 @@ class ReAccel {
     template <class Match> static auto match2vec(Match match) -> std::vector<std::string_view> {
         return match2vec_impl(match, std::make_index_sequence<std::tuple_size_v<Match>>{});
     }
+    using OptMatchResults = std::optional<std::vector<std::vector<std::string_view>>>;
+    static auto getAllMatches(std::string_view key, std::string_view sv) -> OptMatchResults;
 
   public:
     constexpr auto operator[](std::string_view key) const noexcept {
-        return [&, key](const std::string_view sv) {
-            bool done = false;
-            std::optional<std::vector<std::vector<std::string_view>>> ret{};
-            visit(ctre_regexs, [&](const auto& e) {
-                if (done)
-                    return;
-                if (e.first == key) {
-                    auto& res = ret.emplace();
-                    for (const auto& m : e.second(sv))
-                        res.push_back(match2vec(m));
-                    done = true;
-                }
-            });
-            return ret;
-        };
+        return [key](const std::string_view sv) { return getAllMatches(key, sv); };
     };
+
 } constexpr regex_accel{};
 } // namespace sru::util

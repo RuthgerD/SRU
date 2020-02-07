@@ -10,21 +10,21 @@ class StringObject {
     int text_type;
     double font_size;
     std::string transform; // only used to reconstruct original atm.
-    sru::util::Cordinate position;
+    sru::util::Coordinate position;
     std::string content;
 
     bool modified = false;
 
   public:
-    StringObject(sru::util::Color color, int text_type, double font_size, std::string transform, sru::util::Cordinate position, std::string content);
+    StringObject(sru::util::Color color, int text_type, double font_size, std::string transform, sru::util::Coordinate position, std::string content);
 
     [[nodiscard]] const sru::util::Color& getColor() const;
-    [[nodiscard]] const int& getTextType() const;
-    [[nodiscard]] const double& getFontSize() const;
-    [[nodiscard]] const sru::util::Cordinate& getPosition() const;
-    [[nodiscard]] const std::string& getContent() const;
-    std::string toString() const;
-    bool& isModified();
+    [[nodiscard]] int getTextType() const;
+    [[nodiscard]] double getFontSize() const;
+    [[nodiscard]] auto getPosition() const -> const sru::util::Coordinate&;
+    [[nodiscard]] auto getContent() const -> const std::string&;
+    auto toString() const -> std::string;
+    auto isModified() const -> bool;
 };
 
 }; // namespace sru::pdf
