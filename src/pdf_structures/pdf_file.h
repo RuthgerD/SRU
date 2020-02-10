@@ -16,13 +16,13 @@
 namespace sru::pdf {
 static float timepool = 0;
 class PdfFile {
-    std::filesystem::path path;
+    std::string raw;
     std::vector<PdfPage> pages;
 
   public:
-    PdfFile(const std::filesystem::path& path);
-    const std::filesystem::path& getPath() const;
-    const std::vector<PdfPage>& getPages() const;
-    std::vector<std::reference_wrapper<sru::pdf::StringObject>> getMarkedObjects(int id) const;
+    explicit PdfFile(const std::string& raw);
+    [[nodiscard]] auto getPages() const -> const std::vector<PdfPage>&;
+    [[nodiscard]] auto getRaw() const -> const std::string&;
+    [[nodiscard]] auto getMarkedObjects(int id) const -> std::vector<std::reference_wrapper<sru::pdf::StringObject>>;
 };
 }; // namespace sru::pdf

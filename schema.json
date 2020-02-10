@@ -129,19 +129,15 @@
                     "maximum_values",
                     "y_object_spacing",
                     "round_cut_off",
-                    "is_int",
-                    "minimum_value",
+                    "decimal_points",
                     "calc_modes",
                     "avrg_self",
-                    "avrg_source_group",
-                    "avrg_source_sub_group",
-                    "avrg_base_group",
-                    "avrg_base_sub_group",
+                    "avrg_source_id",
+                    "avrg_base_id",
                     "avrg_multiplier",
                     "overflow_threshold",
                     "sort_settings",
-                    "re_comp_name",
-                    "re_group_count",
+                    "re_extract_order",
                     "regexs",
                     "margin_x",
                     "margin_y",
@@ -180,15 +176,10 @@
                         "type": "number",
                         "title": "The round_cut_off Schema"
                     },
-                    "is_int": {
-                        "$id": "#/properties/objects/properties/items/properties/is_int",
-                        "type": "boolean",
-                        "title": "The is_int Schema"
-                    },
-                    "minimum_value": {
-                        "$id": "#/properties/objects/properties/items/properties/minimum_value",
-                        "type": "number",
-                        "title": "The minimum_value Schema"
+                    "decimal_points": {
+                        "$id": "#/properties/objects/properties/items/properties/decimal_points",
+                        "type": "integer",
+                        "title": "The decimal_points Schema"
                     },
                     "calc_modes": {
                         "$id": "#/properties/objects/properties/items/properties/calc_modes",
@@ -205,29 +196,15 @@
                         "type": "boolean",
                         "title": "The avrg_self Schema"
                     },
-                    "avrg_source_group": {
-                        "$id": "#/properties/objects/properties/items/properties/avrg_source_group",
-                        "type": "string",
-                        "title": "The avrg_source_group Schema",
-                        "pattern": "^(.*)$"
+                    "avrg_source_id": {
+                        "$id": "#/properties/objects/properties/items/properties/avrg_source_id",
+                        "type": "integer",
+                        "title": "The avrg_source_id Schema"
                     },
-                    "avrg_source_sub_group": {
-                        "$id": "#/properties/objects/properties/items/properties/avrg_source_sub_group",
-                        "type": "string",
-                        "title": "The avrg_source_sub_group Schema",
-                        "pattern": "^(.*)$"
-                    },
-                    "avrg_base_group": {
-                        "$id": "#/properties/objects/properties/items/properties/avrg_base_group",
-                        "type": "string",
-                        "title": "The avrg_base_group Schema",
-                        "pattern": "^(.*)$"
-                    },
-                    "avrg_base_sub_group": {
-                        "$id": "#/properties/objects/properties/items/properties/avrg_base_sub_group",
-                        "type": "string",
-                        "title": "The avrg_base_sub_group Schema",
-                        "pattern": "^(.*)$"
+                    "avrg_base_id": {
+                        "$id": "#/properties/objects/properties/items/properties/avrg_base_id",
+                        "type": "integer",
+                        "title": "The avrg_base_id Schema"
                     },
                     "avrg_multiplier": {
                         "$id": "#/properties/objects/properties/items/properties/avrg_multiplier",
@@ -249,16 +226,15 @@
                             "title": "The Items Schema"
                         }
                     },
-                    "re_comp_name": {
-                        "$id": "#/properties/objects/properties/items/properties/re_comp_name",
-                        "type": "string",
-                        "title": "The re_comp_name Schema",
-                        "pattern": "^(.*)$"
-                    },
-                    "re_group_count": {
-                        "$id": "#/properties/objects/properties/items/properties/re_group_count",
-                        "type": "integer",
-                        "title": "The re_group_count Schema"
+                    "re_extract_order": {
+                        "$id": "#/properties/objects/properties/items/properties/re_extract_order",
+                        "type": "array",
+                        "title": "The re_extract_order Schema",
+                        "items": {
+                            "$id": "#/properties/objects/properties/items/properties/re_extract_order/items",
+                            "type": "integer",
+                            "title": "The Items Schema"
+                        }
                     },
                     "regexs": {
                         "$id": "#/properties/objects/properties/items/properties/regexs",

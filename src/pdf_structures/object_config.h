@@ -13,23 +13,19 @@ struct ObjectConfig {
     int maximum_values;
     float y_object_spacing;
     float round_cut_off;
-    bool is_int;
-    float minimum_value;
+    int decimal_points;
 
     std::vector<std::string> calc_modes;
 
     bool avrg_self;
-    std::string avrg_source_group;
-    std::string avrg_source_sub_group;
-    std::string avrg_base_group;
-    std::string avrg_base_sub_group;
+    int avrg_source_id;
+    int avrg_base_id;
     int avrg_multiplier;
 
     float overflow_threshold;
 
     std::vector<bool> sort_settings;
-    std::string re_comp_name;
-    int re_group_count;
+    std::vector<int> re_extract_order;
     std::vector<std::string> regexs;
 
     float margin_x;

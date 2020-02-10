@@ -24,14 +24,14 @@ class PdfPage {
     std::unordered_map<int, std::vector<std::reference_wrapper<sru::pdf::StringObject>>> stickied_objs;
     std::unordered_map<int, std::reference_wrapper<sru::pdf::StringObject>> anchor_objs;
 
-    const PageConfig config;
+    PageConfig config;
 
   public:
     PdfPage(const PdfPage& oth) = delete;
     PdfPage(PdfPage&&) = default;
     PdfPage& operator=(const PdfPage& oth) = delete;
     PdfPage& operator=(PdfPage&&) = default;
-    PdfPage(std::string raw, const PageConfig config);
+    PdfPage(std::string raw, PageConfig config);
     const std::vector<sru::pdf::StringObject>& getObjects() const;
     std::vector<std::reference_wrapper<sru::pdf::StringObject>> getMarkedObjects(int id) const;
     void indexObjects();

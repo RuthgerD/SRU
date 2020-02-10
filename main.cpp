@@ -9,6 +9,7 @@
 #include <chrono>
 #include <filesystem>
 #include <iostream>
+#include <iterator>
 #include <rapidjson/schema.h>
 #include <string_view>
 #include <utility>
@@ -93,30 +94,30 @@ auto main(int argc, char** argv) -> int {
             regexs.push_back(val.Get<std::string>());
         }
 
+        std::vector<int> re_extract_order;
+        for (auto& val : obb["re_extract_order"].GetArray()) {
+            re_extract_order.push_back(val.Get<int>());
+        }
         sru::pdf::ObjectConfig testing{obb["id"].GetInt(),
-                                             obb["object_name"].GetString(),
-                                             obb["text_justify"].GetFloat(),
-                                             obb["maximum_values"].GetInt(),
-                                             obb["y_object_spacing"].GetFloat(),
-                                             obb["round_cut_off"].GetFloat(),
-                                             obb["is_int"].GetBool(),
-                                             obb["minimum_value"].GetFloat(),
-                                             calc_modes,
-                                             obb["avrg_self"].GetBool(),
-                                             obb["avrg_source_group"].GetString(),
-                                             obb["avrg_source_sub_group"].GetString(),
-                                             obb["avrg_base_group"].GetString(),
-                                             obb["avrg_base_sub_group"].GetString(),
-                                             obb["avrg_multiplier"].GetInt(),
-                                             obb["overflow_threshold"].GetFloat(),
-                                             sort_settings,
-                                             obb["re_comp_name"].GetString(),
-                                             obb["re_group_count"].GetInt(),
-                                             regexs,
-                                             obb["margin_x"].GetFloat(),
-                                             obb["margin_y"].GetFloat(),
-                                             obb["object_count"].GetInt(),
-                                             obb["sticky_id"].GetInt()};
+                                       obb["object_name"].GetString(),
+                                       obb["text_justify"].GetFloat(),
+                                       obb["maximum_values"].GetInt(),
+                                       obb["y_object_spacing"].GetFloat(),
+                                       obb["round_cut_off"].GetFloat(),
+                                       obb["decimal_points"].GetInt(),
+                                       calc_modes,
+                                       obb["avrg_self"].GetBool(),
+                                       obb["avrg_source_id"].GetInt(),
+                                       obb["avrg_base_id"].GetInt(),
+                                       obb["avrg_multiplier"].GetInt(),
+                                       obb["overflow_threshold"].GetFloat(),
+                                       sort_settings,
+                                       re_extract_order,
+                                       regexs,
+                                       obb["margin_x"].GetFloat(),
+                                       obb["margin_y"].GetFloat(),
+                                       obb["object_count"].GetInt(),
+                                       obb["sticky_id"].GetInt()};
         sru::pdf::ObjectConfigPool.push_back(std::move(testing));
     }
     std::vector<std::filesystem::path> pdf_file_paths{};
@@ -129,6 +130,7 @@ auto main(int argc, char** argv) -> int {
     }
     auto qpdf = sru::util::Qpdf{"import/cache"};
     auto cluster = sru::pdf::PdfCluster{pdf_file_paths, qpdf};
+
     const auto end = std::chrono::steady_clock::now();
 
     std::cout << "Time difference (sec) = " << (std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()) / 1000000.0 << std::endl;

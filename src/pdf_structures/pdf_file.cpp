@@ -3,10 +3,9 @@
 #include <vector>
 
 namespace sru::pdf {
-PdfFile::PdfFile(const std::filesystem::path& path) : path{path} {
-    auto contents = sru::util::QFileRead(path);
+PdfFile::PdfFile(const std::string& raw) : raw{raw} {
     int page_no = 0;
-    if (auto page_matches = sru::util::re_search(sru::util::page_match_key, contents.value()); page_matches) {
+    if (auto page_matches = sru::util::re_search(sru::util::page_match_key, raw); page_matches) {
         for (auto page_match : *page_matches) {
             ++page_no;
             for (const auto& pconf : sru::pdf::PageConfigPool) {
@@ -23,13 +22,12 @@ std::vector<std::reference_wrapper<sru::pdf::StringObject>> PdfFile::getMarkedOb
     std::vector<std::reference_wrapper<sru::pdf::StringObject>> total{};
     for (const auto& page : pages) {
         auto tmp = page.getMarkedObjects(id);
-
         total.insert(total.end(), std::make_move_iterator(tmp.begin()), std::make_move_iterator(tmp.end()));
     }
     return total;
 }
 
-    const std::filesystem::path &PdfFile::getPath() const {
-        return path;
-    }
+auto PdfFile::getRaw() const -> const std::string& {
+    return raw;
+}
 } // namespace sru::pdf

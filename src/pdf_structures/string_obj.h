@@ -18,13 +18,16 @@ class StringObject {
   public:
     StringObject(sru::util::Color color, int text_type, double font_size, std::string transform, sru::util::Coordinate position, std::string content);
 
-    [[nodiscard]] const sru::util::Color& getColor() const;
-    [[nodiscard]] int getTextType() const;
-    [[nodiscard]] double getFontSize() const;
+    [[nodiscard]] auto getColor() const -> const sru::util::Color&;
+    [[nodiscard]] auto getTextType() const -> int;
+    [[nodiscard]] auto getFontSize() const -> double;
     [[nodiscard]] auto getPosition() const -> const sru::util::Coordinate&;
     [[nodiscard]] auto getContent() const -> const std::string&;
-    auto toString() const -> std::string;
-    auto isModified() const -> bool;
+    [[nodiscard]] auto toString() const -> std::string;
+    [[nodiscard]] auto isModified() const -> bool;
+    auto setContent(const std::string& new_content, float justify = 0) -> void;
+    auto translateX(float amount) -> void;
+    auto translateY(float amount) -> void;
 };
 
 }; // namespace sru::pdf

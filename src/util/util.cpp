@@ -1,7 +1,9 @@
 #include "util.h"
+#include "../pdf_structures/string_obj.h"
 #include "re_accel.h"
 #include <algorithm>
 #include <array>
+#include <cmath>
 #include <cstdlib>
 #include <filesystem>
 #include <re2/re2.h>
@@ -12,8 +14,10 @@ auto Coordinate::getX() -> float& { return x; }
 auto Coordinate::getX() const noexcept -> float { return x; }
 auto Coordinate::getY() -> float& { return y; }
 auto Coordinate::getY() const noexcept -> float { return y; }
+auto Coordinate::translateX(float amount) -> void { x += amount; }
+auto Coordinate::translateY(float amount) -> void { y += amount; }
 auto QFileRead(const std::filesystem::path& path) -> std::optional<std::string> {
-    if (auto f = std::fopen(path.lexically_normal().c_str(), "r")) {
+    if (auto f = std::fopen(path.lexically_normal().c_str(), "r"); f) {
         std::fseek(f, 0, SEEK_END);
         std::string str;
         str.resize(std::ftell(f));
@@ -25,10 +29,19 @@ auto QFileRead(const std::filesystem::path& path) -> std::optional<std::string> 
         return {};
     }
 }
+auto QFileWrite(const std::string& content, const std::filesystem::path& path) -> bool {
+    if (auto f = std::fopen(path.lexically_normal().c_str(), "w"); f) {
+        std::fprintf(f, "%s", content.data());
+        fclose(f);
+        return true;
+    } else {
+        return false;
+    }
+}
 Coordinate::Coordinate(float x, float y) : x{x}, y{y} {}
-auto Color::toString() const -> const std::string { return std::to_string(r) + ' ' + std::to_string(g) + ' ' + std::to_string(b) + ' ' + "rg"; }
+auto Color::toString() const -> std::string { return std::to_string(r) + ' ' + std::to_string(g) + ' ' + std::to_string(b) + ' ' + "rg"; }
 Color::Color(float r, float g, float b) : r{r}, g{g}, b{b} {}
-auto cmd(std::string command) -> int {
+auto cmd(const std::string& command) -> int {
     // std::cout << "RUNNING COMMAND: " << command << "\n";
     std::system(command.c_str());
     // std::cout << "---\n";
@@ -46,7 +59,7 @@ auto re2_search(const std::string& pattern, const std::string_view str) -> std::
 
     std::vector<re2::RE2::Arg*> argument_ptrs(n);
 
-    std::vector<std::string> results(n);
+    std::vector<re2::StringPiece> results(n);
 
     for (std::size_t i = 0; i < n; ++i) {
         arguments[i] = &results[i];
@@ -55,10 +68,10 @@ auto re2_search(const std::string& pattern, const std::string_view str) -> std::
 
     std::optional<std::vector<std::vector<std::string_view>>> ret{};
     auto& res = ret.emplace();
-    re2::StringPiece piece(str.data(), str.length());
+    re2::StringPiece piece(str.data(), str.size());
     while (re2::RE2::FindAndConsumeN(&piece, re, argument_ptrs.data(), n)) {
         std::vector<std::string_view> tmp;
-        std::copy(results.begin(), results.end(), std::back_inserter(tmp));
+        std::transform(results.begin(), results.end(), std::back_inserter(tmp), [](const auto& x) { return std::string_view{x.data(), x.size()}; });
         res.push_back(std::move(tmp));
     }
 
@@ -96,18 +109,38 @@ auto re_replace(const std::string& regex, const std::string_view repl, std::stri
     }
     return replaced;
 }
-auto multi_search(std::string re, const std::vector<std::string>& content, std::vector<int> order)
-    -> std::pair<std::vector<std::vector<float>>, std::vector<std::vector<int>>> {
+auto re_group_count(const std::string& regex) -> int {
+    const re2::RE2 re{regex};
+    if (!re.ok()) {
+        return -1;
+    }
+    return re.NumberOfCapturingGroups();
+}
+auto multi_search(const std::string& re, const std::vector<std::string>& content, std::vector<int> order)
+    -> std::pair<std::vector<std::vector<float>>, std::vector<std::vector<float>>> {
     std::vector<std::vector<float>> total_extracted{};
-    std::vector<std::vector<int>> total_count{};
+    std::vector<std::vector<float>> total_count{};
+
+    // checks if we can use it
+    order.erase(std::unique(order.begin(), order.end()), order.end());
+    if (re_group_count(re) != order.size()) {
+        std::cout << "1. Invalid order for multi_search";
+        return {total_extracted, total_count};
+    }
+    auto max = *std::max_element(order.begin(), order.end());
+    auto min = *std::min_element(order.begin(), order.end());
+    if (max > order.size() || min < 0) {
+        std::cout << "2. Invalid order for multi_search";
+        return {total_extracted, total_count};
+    }
+
     for (const auto& data : content) {
         if (auto result = re_search(re, data); result) {
-            std::vector<float> extracted{};
-            std::vector<int> count{};
-
             const auto& f = result->front();
+            std::vector<float> extracted{};
+            std::vector<float> count{};
             for (int i = 1; i < f.size(); ++i) {
-                extracted.push_back(svto<float>(f[i]));
+                extracted.push_back(svto<float>(f[order[i - 1]]));
                 count.push_back(1);
             }
             total_extracted.push_back(std::move(extracted));
@@ -116,6 +149,7 @@ auto multi_search(std::string re, const std::vector<std::string>& content, std::
     }
     return {total_extracted, total_count};
 }
+// TODO: add boolean variable to disable overflow instead of checking if its -1
 auto multi_add(std::vector<std::vector<float>> values, int overflow) -> std::vector<float> {
     /// FIXME: add bound checks
     std::vector<float> total(values.front().size());
@@ -133,5 +167,58 @@ auto multi_add(std::vector<std::vector<float>> values, int overflow) -> std::vec
         });
     }
     return total;
+}
+auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector<std::reference_wrapper<sru::pdf::StringObject>>& objects,
+                const std::vector<bool>& settings)
+    -> std::pair<std::vector<std::vector<float>>, std::vector<std::reference_wrapper<sru::pdf::StringObject>>> {
+
+    std::vector<std::pair<std::vector<float>, std::reference_wrapper<sru::pdf::StringObject>>> zip;
+    zip.reserve(values.size());
+    for (int i = 0; i < values.size(); ++i) {
+        zip.emplace_back(values[i], objects[i]);
+    }
+    std::sort(zip.begin(), zip.end(), [&settings](const auto& a, const auto& b) {
+        auto compa = a.first;
+        auto compb = b.first;
+
+        int diff = 0;
+        for (int i = 0; i < compa.size(); ++i) {
+            auto tmp = (compa[i] - compb[i]) * std::pow(10, compa.size() - i);
+            if (!settings[i]) {
+                tmp *= -1;
+            }
+            diff += tmp;
+        }
+        return diff > 0;
+    });
+    std::vector<std::vector<float>> unzipped1;
+    std::vector<std::reference_wrapper<sru::pdf::StringObject>> unzipped2;
+    for (auto& i : zip) {
+        unzipped1.push_back(i.first);
+        unzipped2.push_back(i.second);
+    }
+
+    return std::pair{unzipped1, unzipped2};
+}
+auto multi_avrg(const std::vector<float>& values, const std::vector<float>& compare, float multiplier) -> std::vector<float> {
+    std::vector<float> result(values.size());
+    for (int i = 0; i < values.size(); ++i) {
+        result[i] = (values[i] / compare[i]) * multiplier;
+    }
+    return result;
+}
+auto multi_re_place(const std::string& regex, std::string& base, std::vector<std::string> content) -> bool {
+    if (re_group_count(regex) != content.size()) {
+        std::cout << "warning: multi_re_place: content doesnt match regex groups" << std::endl;
+        return false;
+    }
+    int i = 0;
+    for (; i < content.size(); ++i) {
+        if (auto tmp = re_search(regex, base); tmp) {
+            const auto& views = tmp->front();
+            base.replace(views[i + 1].data() - base.data(), views[i + 1].size(), content[i]);
+        }
+    }
+    return (i == content.size());
 }
 }; // namespace sru::util

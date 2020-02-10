@@ -16,5 +16,10 @@ std::string StringObject::toString() const {
            " " + std::to_string(position.getY()) + " Tm\n(" + content + ")Tj\nET\n";
 }
 bool StringObject::isModified() const { return modified; }
-
+auto StringObject::translateX(float amount) -> void { position.translateX(amount); }
+auto StringObject::translateY(float amount) -> void { position.translateY(amount); }
+auto StringObject::setContent(const std::string& new_content, float justify) -> void {
+    translateX(new_content.size() - content.size());
+    content = new_content;
+}
 } // namespace sru::pdf
