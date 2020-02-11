@@ -2,28 +2,54 @@
 #include "util.h"
 #include <filesystem>
 #include <string>
+#include <string_view>
 
-namespace sru::util {
-Qpdf::Qpdf(const std::filesystem::path& cache_path) : cache_path{cache_path.lexically_normal()} {}
-void Qpdf::getVersion() { cmd(bin + " --version"); };
+namespace sru::qpdf {
 
-const std::filesystem::path& Qpdf::getCachePath() const {
-    if (!std::filesystem::is_directory(cache_path)) {
-        std::filesystem::create_directories(cache_path);
+class Qpdf {
+    std::filesystem::path cache_path;
+#ifdef __linux__
+    const std::string bin{"qpdf"};
+#else
+    const std::string bin{"qpdf/qpdf.exe"};
+#endif
+  public:
+    Qpdf() : cache_path{std::filesystem::current_path()} {
+        cache_path.append(".qpdf_cache");
     }
-    return cache_path;
+    [[nodiscard]] auto get_bin() const -> const std::string& {
+        return bin;
+    }
+    [[nodiscard]] auto get_cache_path() const -> const std::filesystem::path& {
+        if (!std::filesystem::is_directory(cache_path)) {
+            std::filesystem::create_directories(cache_path);
+        }
+        return cache_path;
+    }
+    auto set_cache_path(std::filesystem::path& path) -> bool {
+        // TODO: add checks
+        cache_path = path;
+        return true;
+    }
+} qpdf_settings{};
+
+auto set_cache_path(std::filesystem::path& path) -> void {
+    qpdf_settings.set_cache_path(path);
 }
 
-std::filesystem::path Qpdf::decompress(const std::filesystem::path& pdf_file) const {
+auto decompress(const std::filesystem::path& pdf_file) -> std::optional<std::filesystem::path> {
     const auto abs_pdf_file = std::filesystem::absolute(pdf_file.lexically_normal());
-    auto abs_cache_path = std::filesystem::absolute(getCachePath());
+    auto abs_cache_path = std::filesystem::absolute(qpdf_settings.get_cache_path());
     abs_cache_path.append(pdf_file.filename().generic_string());
 
-    auto command = bin + " --stream-data=uncompress \"" + abs_pdf_file.generic_string() + "\" -- \"" + abs_cache_path.generic_string() + "\"";
+    auto command = qpdf_settings.get_bin() + " --stream-data=uncompress \"" + abs_pdf_file.generic_string() + "\" -- \"" + abs_cache_path.generic_string() + "\"";
 
-    cmd(command);
+    sru::util::cmd(command);
 
     return abs_cache_path;
 }
 
-}; // namespace sru::util
+auto compress(const std::filesystem::path& pdf_file) -> std::optional<std::filesystem::path>{
+}
+
+}

@@ -1,22 +1,25 @@
 #include "pdf_cluster.h"
 
 namespace sru::pdf {
-PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths, sru::util::Qpdf qpdf) : qpdf{qpdf} {
+PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
     std::vector<std::future<std::optional<std::pair<std::filesystem::path, sru::pdf::PdfFile>>>> result;
 
     for (int i = 0; i < pdf_file_paths.size() - 1; i++) {
         const auto path = pdf_file_paths[i];
-        result.push_back(std::async([path, &qpdf]() {
-            const auto deflated_path = qpdf.decompress(path); // needs checks
-            if (const auto tmp = sru::util::QFileRead(deflated_path); tmp) {
-                return std::optional{std::pair{deflated_path, PdfFile{*tmp}}};
+        result.push_back(std::async([path]() {
+            if (const auto deflated_path = sru::qpdf::decompress(path); deflated_path) {
+                if (const auto tmp = sru::util::QFileRead(*deflated_path); tmp) {
+                    return std::optional{std::pair{*deflated_path, PdfFile{*tmp}}};
+                }
             }
             return std::optional<std::pair<std::filesystem::path, sru::pdf::PdfFile>>{};
         }));
     }
-    const auto deflated_path = qpdf.decompress(pdf_file_paths.back());
-    if (const auto tmp = sru::util::QFileRead(deflated_path); tmp) {
-        pdf_files.emplace_back(*tmp, deflated_path);
+
+    if (const auto deflated_path = sru::qpdf::decompress(pdf_file_paths.back()); deflated_path) {
+        if (const auto tmp = sru::util::QFileRead(*deflated_path); tmp) {
+            pdf_files.emplace_back(*tmp, *deflated_path);
+        }
     }
 
     for (auto& x : result) {

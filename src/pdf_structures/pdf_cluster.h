@@ -14,11 +14,10 @@
 namespace sru::pdf {
 class PdfCluster {
 
-    sru::util::Qpdf qpdf;
     std::vector<std::pair<std::filesystem::path, sru::pdf::PdfFile>> pdf_files;
 
   public:
-    PdfCluster(std::vector<std::filesystem::path> pdf_file_paths, sru::util::Qpdf qpdf);
+    explicit PdfCluster(std::vector<std::filesystem::path> pdf_file_paths);
     [[nodiscard]] auto getMarkedObjects(int id) const -> std::vector<std::reference_wrapper<sru::pdf::StringObject>>;
     auto calculate() -> std::unordered_map<int, std::vector<sru::pdf::StringObject>>;
 };

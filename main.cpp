@@ -128,8 +128,11 @@ auto main(int argc, char** argv) -> int {
             pdf_file_paths.push_back(file_path);
         }
     }
-    auto qpdf = sru::util::Qpdf{"import/cache"};
-    auto cluster = sru::pdf::PdfCluster{pdf_file_paths, qpdf};
+    auto cache_path = std::filesystem::current_path();
+    cache_path.append("import");
+    cache_path.append("cache");
+    sru::qpdf::set_cache_path(cache_path);
+    auto cluster = sru::pdf::PdfCluster{pdf_file_paths};
 
     const auto end = std::chrono::steady_clock::now();
 
