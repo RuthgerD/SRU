@@ -1,9 +1,10 @@
 #include "pdf_file.h"
 #include "pdf_page.h"
+#include <utility>
 #include <vector>
 
 namespace sru::pdf {
-PdfFile::PdfFile(const std::string& raw) : raw{raw} {
+PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw{raw}, path{std::move(path)} {
     int page_no = 0;
     if (auto page_matches = sru::util::re_search(sru::util::page_match_key, raw); page_matches) {
         for (auto page_match : *page_matches) {
@@ -27,7 +28,5 @@ std::vector<std::reference_wrapper<sru::pdf::StringObject>> PdfFile::getMarkedOb
     return total;
 }
 
-auto PdfFile::getRaw() const -> const std::string& {
-    return raw;
-}
+auto PdfFile::getRaw() const -> const std::string& { return raw; }
 } // namespace sru::pdf
