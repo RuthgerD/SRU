@@ -1,10 +1,12 @@
 #include "pdf_file.h"
 #include "pdf_page.h"
+#include "../util/qpdf_binding.h"
 #include <utility>
 #include <vector>
 
 namespace sru::pdf {
-PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw{raw}, path{std::move(path)} {
+PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw{raw}, path{path} {
+    sru::qpdf::delete_page(path, 3);
     int page_no = 0;
     if (auto page_matches = sru::util::re_search(sru::util::page_match_key, raw); page_matches) {
         for (auto page_match : *page_matches) {
