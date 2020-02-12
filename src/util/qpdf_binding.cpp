@@ -1,4 +1,5 @@
 #include "qpdf_binding.h"
+#include "../pdf_structures/pdf_file.h"
 #include "util.h"
 #include <filesystem>
 #include <string>
@@ -43,24 +44,38 @@ auto decompress(const std::filesystem::path& pdf_file) -> std::optional<std::fil
 
     return abs_cache_path;
 }
-
-auto delete_page(const std::filesystem::path& pdf_file, unsigned int page_no) -> bool {
-    const auto abs_pdf_file = std::filesystem::absolute(pdf_file.lexically_normal());
+auto delete_page(const sru::pdf::PdfFile& pdf_file, unsigned int page_no) -> bool {
+    ++page_no;
+    const auto abs_pdf_file = std::filesystem::absolute(pdf_file.getPath().lexically_normal());
     auto abs_cache_path = std::filesystem::absolute(qpdf_settings.get_cache_path());
-    abs_cache_path.append(pdf_file.filename().generic_string());
+    abs_cache_path.append(pdf_file.getPath().filename().generic_string());
 
     auto tmp_path = abs_pdf_file;
     tmp_path.concat("-tmp");
-    auto command = qpdf_settings.get_bin() + " --empty " + tmp_path.c_str() + " --stream-data=uncompress --pages \"" + abs_pdf_file.generic_string() +
-                   "\" 1-" + std::to_string(page_no - 1) + +" \"" + abs_pdf_file.generic_string() + "\" " + std::to_string(page_no + 1) + "-z --";
+
+    auto command = qpdf_settings.get_bin() + " --empty " + tmp_path.generic_string() + " --stream-data=preserve " + "--pages ";
+    command += abs_pdf_file.generic_string() + " ";
+    if (page_no == 1) {
+        command += "2-z";
+    } else if (page_no == pdf_file.getPageCount()) {
+        command += "1-r2";
+    } else {
+        command += "1-" + std::to_string(page_no - 1) + " ";
+        command += abs_pdf_file.generic_string() + " " + std::to_string(page_no + 1) + "-z";
+    }
+    command += " --";
 
     sru::util::cmd(command);
-
     // TODO: fix unsafe
-    std::filesystem::remove(abs_pdf_file);
-    std::filesystem::rename(tmp_path, abs_pdf_file);
+    if (std::filesystem::exists(tmp_path)) {
+        std::filesystem::remove(abs_pdf_file);
+        std::filesystem::rename(tmp_path, abs_pdf_file);
 
-    return true;
+        return true;
+
+    } else {
+        return false;
+    }
 }
 
 } // namespace sru::qpdf

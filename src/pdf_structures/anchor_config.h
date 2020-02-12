@@ -14,7 +14,7 @@ struct AnchorConfig {
     bool save_anchor;
     std::vector<int> sub_groups;
 };
-const std::optional<AnchorConfig> getAnchorConfig(int id);
+std::optional<AnchorConfig> getAnchorConfig(int id);
 extern std::vector<AnchorConfig> AnchorConfigPool;
 
-}; // namespace sru::pdf
+} // namespace sru::pdf

@@ -221,4 +221,4 @@ auto multi_re_place(const std::string& regex, std::string& base, std::vector<std
     }
     return (i == content.size());
 }
-}; // namespace sru::util
+} // namespace sru::util
