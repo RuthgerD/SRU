@@ -96,8 +96,12 @@ auto re_search(const std::string& re, const std::string_view data) -> std::optio
 auto re_match(const std::string& re, const std::string_view data) -> bool { return re_search(re, data).has_value(); }
 auto re_replace(const std::string& regex, const std::string_view repl, std::string& data) -> bool {
     bool replaced = false;
-    if (false) {
-        // TODO: implement acceled implementation
+    if (auto acceled = regex_accel[regex](data); acceled) {
+        // TODO: at the moment we reuse regex_accel that defaults to searching a whole document for all possible matches which is definitely slower
+        // than single match, so add a single match method to re_accel.
+        const auto& views = acceled->front().front();
+        data.replace(views.data() - data.data(), views.size(), repl);
+        replaced = true;
     }
     if (!replaced) {
         const re2::RE2 re{regex};
