@@ -17,7 +17,6 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
             return std::optional<sru::pdf::PdfFile>{};
         }));
     }
-
     if (const auto deflated_path_opt = sru::qpdf::decompress(pdf_file_paths.back()); deflated_path_opt) {
         const auto& deflated_path = *deflated_path_opt;
         if (const auto tmp_opt = sru::util::QFileRead(deflated_path); tmp_opt) {
@@ -25,13 +24,15 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
             pdf_files.emplace_back(tmp, deflated_path);
         }
     }
-
     for (auto& x : result) {
         if (auto tmp = x.get(); tmp) {
             pdf_files.emplace_back(std::move(*tmp));
         }
     }
     calculate();
+}
+auto PdfCluster::exportTest() -> void {
+    sru::util::QFileWrite(pdf_files.front().getRaw(), std::filesystem::current_path().append("testing_export.pdf"));
 }
 
 auto PdfCluster::getMarkedObjects(int id) const -> std::vector<std::reference_wrapper<sru::pdf::StringObject>> {

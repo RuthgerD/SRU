@@ -20,5 +20,6 @@ class PdfCluster {
     explicit PdfCluster(std::vector<std::filesystem::path> pdf_file_paths);
     [[nodiscard]] auto getMarkedObjects(int id) const -> std::vector<std::reference_wrapper<sru::pdf::StringObject>>;
     auto calculate() -> std::unordered_map<int, std::vector<sru::pdf::StringObject>>;
+    auto exportTest() -> void;
 };
 } // namespace sru::pdf

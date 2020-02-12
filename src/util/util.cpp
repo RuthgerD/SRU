@@ -6,6 +6,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <filesystem>
+#include <fstream>
 #include <re2/re2.h>
 #include <type_traits>
 
@@ -30,13 +31,12 @@ auto QFileRead(const std::filesystem::path& path) -> std::optional<std::string> 
     }
 }
 auto QFileWrite(const std::string& content, const std::filesystem::path& path) -> bool {
-    if (auto f = std::fopen(path.lexically_normal().c_str(), "w"); f) {
-        std::fprintf(f, "%s", content.data());
-        fclose(f);
+    if (std::ofstream out(path.lexically_normal().c_str()); out) {
+        out << content;
+        out.close();
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 Coordinate::Coordinate(float x, float y) : x{x}, y{y} {}
 auto Color::toString() const -> std::string { return std::to_string(r) + ' ' + std::to_string(g) + ' ' + std::to_string(b) + ' ' + "rg"; }

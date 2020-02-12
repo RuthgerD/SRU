@@ -29,6 +29,15 @@ std::vector<std::reference_wrapper<sru::pdf::StringObject>> PdfFile::getMarkedOb
     }
     return total;
 }
-
-auto PdfFile::getRaw() const -> const std::string& { return raw; }
+auto PdfFile::deletePage(unsigned int page_no) -> bool {
+    if (page_no < pages.size())
+        return deletePage(pages[page_no]);
+    return false;
+}
+auto PdfFile::deletePage(sru::pdf::PdfPage& page) -> bool {
+    return true;
+}
+auto PdfFile::getRaw() const -> const std::string& {
+    return raw;
+}
 } // namespace sru::pdf

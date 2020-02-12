@@ -12,3 +12,4 @@ auto insert_page(const std::filesystem::path& pdf_file, int page_no) -> bool;
 auto append_page(const std::filesystem::path& pdf_file, int page_no) -> bool;
 
 } // namespace sru::qpdf
+

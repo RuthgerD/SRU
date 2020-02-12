@@ -26,5 +26,8 @@ class PdfFile {
     [[nodiscard]] auto getPages() const -> const std::vector<PdfPage>&;
     [[nodiscard]] auto getRaw() const -> const std::string&;
     [[nodiscard]] auto getMarkedObjects(int id) const -> std::vector<std::reference_wrapper<sru::pdf::StringObject>>;
+    auto deletePage(unsigned int page_no) -> bool;
+    auto deletePage(sru::pdf::PdfPage& page) -> bool;
+
 };
 }; // namespace sru::pdf
