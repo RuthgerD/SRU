@@ -1,5 +1,4 @@
 #pragma once
-#include <boost/regex.hpp>
 #include <ctll.hpp>
 #include <ctre.hpp>
 #include <functional>
@@ -57,11 +56,11 @@ class ReAccel {
         return match2vec_impl(match, std::make_index_sequence<std::tuple_size_v<Match>>{});
     }
     using OptMatchResults = std::optional<std::vector<std::vector<std::string_view>>>;
-    static auto getAllMatches(std::string_view key, std::string_view sv) -> OptMatchResults;
+    static auto getAllMatches(std::string_view key, std::string_view sv, int limit = -1) -> OptMatchResults;
 
   public:
     constexpr auto operator[](std::string_view key) const noexcept {
-        return [key](const std::string_view sv) { return getAllMatches(key, sv); };
+        return [key](const std::string_view sv, int matches = -1) { return getAllMatches(key, sv, matches); };
     };
 
 } constexpr regex_accel{};

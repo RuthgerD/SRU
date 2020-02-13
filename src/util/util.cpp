@@ -47,7 +47,7 @@ auto cmd(const std::string& command) -> int {
     // std::cout << "---\n";
     return 0;
 }
-auto re2_search(const std::string& pattern, const std::string_view str) -> std::optional<std::vector<std::vector<std::string_view>>> {
+auto re2_search(const std::string& pattern, const std::string_view str, int limit = -1) -> std::optional<std::vector<std::vector<std::string_view>>> {
     std::string wrapped_pattern = "(" + pattern + ")";
     const re2::RE2 re{wrapped_pattern};
     if (!re.ok()) {
@@ -69,10 +69,12 @@ auto re2_search(const std::string& pattern, const std::string_view str) -> std::
     std::optional<std::vector<std::vector<std::string_view>>> ret{};
     auto& res = ret.emplace();
     re2::StringPiece piece(str.data(), str.size());
-    while (re2::RE2::FindAndConsumeN(&piece, re, argument_ptrs.data(), n)) {
+    int i = 0;
+    while (re2::RE2::FindAndConsumeN(&piece, re, argument_ptrs.data(), n) && !(i > limit && limit > 0)) {
         std::vector<std::string_view> tmp;
         std::transform(results.begin(), results.end(), std::back_inserter(tmp), [](const auto& x) { return std::string_view{x.data(), x.size()}; });
         res.push_back(std::move(tmp));
+        ++i;
     }
 
     if (!res.empty()) {
@@ -80,25 +82,23 @@ auto re2_search(const std::string& pattern, const std::string_view str) -> std::
     }
     return {};
 }
-auto re_search(const std::string& re, const std::string_view data) -> std::optional<std::vector<std::vector<std::string_view>>> {
+auto re_search(const std::string& re, const std::string_view data, int limit) -> std::optional<std::vector<std::vector<std::string_view>>> {
     std::optional<std::vector<std::vector<std::string_view>>> ret{};
-    if (auto acceled = regex_accel[re](data); acceled) {
+    if (auto acceled = regex_accel[re](data, limit); acceled) {
         ret = acceled;
     }
     if (!ret) {
-        ret = re2_search(re, data);
+        ret = re2_search(re, data, limit);
     }
     if (!ret->empty()) {
         return ret;
     }
     return {};
 }
-auto re_match(const std::string& re, const std::string_view data) -> bool { return re_search(re, data).has_value(); }
+auto re_match(const std::string& re, const std::string_view data) -> bool { return re_search(re, data, 1).has_value(); }
 auto re_replace(const std::string& regex, const std::string_view repl, std::string& data) -> bool {
     bool replaced = false;
     if (auto acceled = regex_accel[regex](data); acceled) {
-        // TODO: at the moment we reuse regex_accel that defaults to searching a whole document for all possible matches which is definitely slower
-        // than single match, so add a single match method to re_accel.
         const auto& views = acceled->front().front();
         data.replace(views.data() - data.data(), views.size(), repl);
         replaced = true;
