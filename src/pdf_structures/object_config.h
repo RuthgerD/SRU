@@ -35,4 +35,4 @@ struct ObjectConfig {
 };
 extern std::vector<ObjectConfig> ObjectConfigPool;
 std::optional<ObjectConfig> getObjectConfig(int id);
-}; // namespace sru::pdf
+} // namespace sru::pdf

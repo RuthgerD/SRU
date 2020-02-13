@@ -30,4 +30,4 @@ class StringObject {
     auto translateY(float amount) -> void;
 };
 
-}; // namespace sru::pdf
+} // namespace sru::pdf

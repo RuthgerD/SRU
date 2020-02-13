@@ -9,7 +9,6 @@ PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw{raw},
     total_pages = 0;
     if (auto page_matches = sru::util::re_search(sru::util::page_match_key, raw); page_matches) {
         for (auto page_match : *page_matches) {
-            std::cout << total_pages << ", ";
             for (const auto& pconf : sru::pdf::PageConfigPool) {
                 if (sru::util::re_match(pconf.regex_id, page_match.at(2))) {
                     pages.emplace_back(std::pair{total_pages, sru::pdf::PdfPage{std::move(std::string{page_match.at(2)}), pconf}})

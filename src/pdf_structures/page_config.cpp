@@ -12,4 +12,4 @@ std::vector<PageConfig> PageConfigPool;
 //     }
 //     return {};
 // }
-}; // namespace sru::pdf
+} // namespace sru::pdf

@@ -13,4 +13,4 @@ std::optional<ObjectConfig> getObjectConfig(int id) {
     }
     return {};
 }
-}; // namespace sru::pdf
+} // namespace sru::pdf

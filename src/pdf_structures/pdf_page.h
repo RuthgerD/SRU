@@ -38,4 +38,4 @@ class PdfPage {
     void printObjects() const;
 };
 
-}; // namespace sru::pdf
+} // namespace sru::pdf

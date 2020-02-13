@@ -20,7 +20,6 @@ auto ReAccel::getAllMatches(std::string_view key, std::string_view sv, int limit
             int i = 0;
             for (const auto& m : e.second(sv)) {
                 if (i > limit && limit > 0) {
-                    std::cout << "i: " << i << " limit" << limit << " : " << (i > limit && limit > 0) << std::endl;
                     break;
                 }
                 res.push_back(match2vec(m));

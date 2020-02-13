@@ -11,4 +11,4 @@ struct PageConfig {
     std::vector<int> groups;
 };
 extern std::vector<PageConfig> PageConfigPool;
-}; // namespace sru::pdf
+} // namespace sru::pdf

@@ -32,4 +32,4 @@ class PdfFile {
     auto deletePage(const sru::pdf::PdfPage& page) -> bool;
 
 };
-}; // namespace sru::pdf
+} // namespace sru::pdf
