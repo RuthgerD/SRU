@@ -13,6 +13,7 @@ add_compile_options("-fno-except")
 
 endif()
 add_compile_options("-fno-rtti")
+add_compile_options("-Wpedantic")
 
 find_package(Boost 1.66 REQUIRED COMPONENTS program_options regex)
 find_package (Threads)
