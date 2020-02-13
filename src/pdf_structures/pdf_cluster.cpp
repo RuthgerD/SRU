@@ -35,7 +35,7 @@ auto PdfCluster::exportTest() -> void {
     sru::util::QFileWrite(pdf_files.front().getRaw(), std::filesystem::current_path().append("testing_export.pdf"));
 }
 
-auto PdfCluster::getMarkedObjects(int id) const -> std::vector<std::reference_wrapper<sru::pdf::StringObject>> {
+auto PdfCluster::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<sru::pdf::StringObject>> {
     std::vector<std::reference_wrapper<sru::pdf::StringObject>> total{};
     for (auto& file : pdf_files) {
         auto tmp = file.getMarkedObjects(id);

@@ -24,12 +24,13 @@ class PdfFile {
   public:
     explicit PdfFile(const std::string& raw, std::filesystem::path path);
     [[nodiscard]] auto getPages() const -> const std::vector<std::pair<unsigned int, PdfPage>>&;
+    [[nodiscard]] auto getPage(unsigned int page_no) const -> const std::pair<unsigned int, PdfPage>&;
     [[nodiscard]] auto getRaw() const -> std::string;
-    [[nodiscard]] auto getMarkedObjects(int id) const -> std::vector<std::reference_wrapper<sru::pdf::StringObject>>;
+    [[nodiscard]] auto getMarkedObjects(int id) -> std::vector<std::reference_wrapper<sru::pdf::StringObject>>;
     [[nodiscard]] auto getPath() const -> const std::filesystem::path&;
     auto getPageCount() const -> unsigned int;
     auto deletePage(unsigned int page_no) -> bool;
-    auto deletePage(const sru::pdf::PdfPage& page) -> bool;
-
+    auto deletePage(const PdfPage& page) -> bool;
+    auto insertPage(const PdfFile& file, unsigned int page_no, unsigned int new_page_no) -> void;
 };
 } // namespace sru::pdf

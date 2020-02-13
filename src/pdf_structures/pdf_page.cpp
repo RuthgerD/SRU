@@ -7,7 +7,7 @@
 #include <vector>
 
 namespace sru::pdf {
-PdfPage::PdfPage(std::string raw, const PageConfig config) : raw{std::move(raw)}, config{config} {}
+PdfPage::PdfPage(std::string raw, const PageConfig& config) : raw{std::move(raw)}, config{config} {}
 void PdfPage::indexObjects() {
     objs.clear();
     marked_objs.clear();
@@ -31,7 +31,7 @@ void PdfPage::indexObjects() {
             if (const auto anchor_conf = getAnchorConfig(anchor_conf_id); anchor_conf) {
                 if (sru::util::re_match(anchor_conf->content_id, obj.getContent())) {
                     if (anchor_conf->save_anchor) {
-                        anchor_objs.emplace(anchor_conf_id, obj);
+                        anchor_objs.emplace(anchor_conf_id, &obj - objs.data());
                     }
                 }
             }
@@ -44,8 +44,8 @@ void PdfPage::indexObjects() {
                 if (const auto object_conf_opt = getObjectConfig(object_conf_id); object_conf_opt) {
                     const auto& object_conf = object_conf_opt.value();
 
-                    const float& ref_x = anchor_obj.get().getPosition().getX();
-                    const float& ref_y = anchor_obj.get().getPosition().getY();
+                    const float& ref_x = objs[anchor_obj].getPosition().getX();
+                    const float& ref_y = objs[anchor_obj].getPosition().getY();
 
                     const float max_x = ref_x + object_conf.margin_x;
                     const float max_y = ref_y + object_conf.margin_y;
@@ -66,18 +66,18 @@ void PdfPage::indexObjects() {
                             if (captured_count == object_count) {
                                 break;
                             }
-                            if (found_count >= count_start && &comp_obj != &anchor_obj.get()) {
+                            if (found_count >= count_start && &comp_obj != (objs.data() + anchor_obj)) {
                                 if (sticky_id < 0) {
                                     if (marked_objs.find(object_conf_id) == marked_objs.end()) {
 
-                                        marked_objs.emplace(object_conf_id, std::vector<std::reference_wrapper<sru::pdf::StringObject>>{});
+                                        marked_objs.emplace(object_conf_id, std::vector<int>{});
                                     }
-                                    marked_objs.at(object_conf_id).emplace_back(comp_obj);
+                                    marked_objs.at(object_conf_id).emplace_back(&comp_obj - objs.data());
                                 } else {
                                     if (stickied_objs.find(sticky_id) == stickied_objs.end() && sticky_id >= 0) {
-                                        stickied_objs.emplace(sticky_id, std::vector<std::reference_wrapper<sru::pdf::StringObject>>{});
+                                        stickied_objs.emplace(sticky_id, std::vector<int>{});
                                     }
-                                    marked_objs.at(sticky_id).emplace_back(comp_obj);
+                                    marked_objs.at(sticky_id).emplace_back(&comp_obj - objs.data());
                                 }
                                 ++captured_count;
                             }
@@ -96,7 +96,7 @@ void PdfPage::printObjects() const {
             std::cout << conf.value().name << ":\n";
             for (auto id : conf.value().sub_groups) {
                 for (auto& obj : marked_objs.at(id)) {
-                    std::cout << "* " << obj.get().getContent() << "\n";
+                    std::cout << "* " << objs[obj].getContent() << "\n";
                 }
             }
         }
@@ -104,11 +104,13 @@ void PdfPage::printObjects() const {
 }
 const std::vector<sru::pdf::StringObject>& PdfPage::getObjects() const { return objs; }
 auto PdfPage::getRaw() const -> const std::string& { return raw; }
-std::vector<std::reference_wrapper<sru::pdf::StringObject>> PdfPage::getMarkedObjects(int id) const {
+auto PdfPage::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<StringObject>> {
+    std::vector<std::reference_wrapper<StringObject>> wrapped{};
     if (marked_objs.find(id) != marked_objs.end()) {
-        return marked_objs.at(id);
-    } else {
-        return std::vector<std::reference_wrapper<sru::pdf::StringObject>>{}; // maybe use optional instead
+        for (const int& x : marked_objs.at(id)) {
+            wrapped.emplace_back(objs[x]);
+        }
     }
+    return wrapped;
 }
 } // namespace sru::pdf

@@ -16,24 +16,24 @@
 #include <vector>
 
 namespace sru::pdf {
-static float pagecounter = 0;
 class PdfPage {
     std::string raw;
     std::vector<sru::pdf::StringObject> objs;
-    std::unordered_map<int, std::vector<std::reference_wrapper<sru::pdf::StringObject>>> marked_objs;
-    std::unordered_map<int, std::vector<std::reference_wrapper<sru::pdf::StringObject>>> stickied_objs;
-    std::unordered_map<int, std::reference_wrapper<sru::pdf::StringObject>> anchor_objs;
+    std::unordered_map<int, std::vector<int>> marked_objs;
+    std::unordered_map<int, std::vector<int>> stickied_objs;
+    std::unordered_map<int, int> anchor_objs;
 
     PageConfig config;
 
   public:
-    PdfPage(const PdfPage& oth) = delete;
+    PdfPage(const PdfPage& oth) = default;
     PdfPage(PdfPage&&) = default;
-    PdfPage& operator=(const PdfPage& oth) = delete;
+    PdfPage& operator=(const PdfPage& oth) = default;
     PdfPage& operator=(PdfPage&&) = default;
-    PdfPage(std::string raw, PageConfig config);
+    PdfPage(std::string raw, const PageConfig& config);
     const std::vector<sru::pdf::StringObject>& getObjects() const;
-    std::vector<std::reference_wrapper<sru::pdf::StringObject>> getMarkedObjects(int id) const;
+    auto getMarkedObjects(int id) -> std::vector<std::reference_wrapper<StringObject>>;
+
     auto getRaw() const -> const std::string&;
     void indexObjects();
     void printObjects() const;
