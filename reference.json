@@ -11,7 +11,7 @@
     },
     {
       "page_name": "page any",
-      "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page (?!1)[0-9]*)\\)Tj\\nET",
+      "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [2-9]|[0-9]{2,})\\)Tj\\nET",
       "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*|Example No.: [0-9]*)\\)Tj\\nET)",
       "groups": []
     }
