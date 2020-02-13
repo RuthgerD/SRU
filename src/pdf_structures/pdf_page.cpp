@@ -103,6 +103,7 @@ void PdfPage::printObjects() const {
     }
 }
 const std::vector<sru::pdf::StringObject>& PdfPage::getObjects() const { return objs; }
+auto PdfPage::getRaw() const -> const std::string& { return raw; }
 std::vector<std::reference_wrapper<sru::pdf::StringObject>> PdfPage::getMarkedObjects(int id) const {
     if (marked_objs.find(id) != marked_objs.end()) {
         return marked_objs.at(id);

@@ -24,7 +24,7 @@ class PdfFile {
   public:
     explicit PdfFile(const std::string& raw, std::filesystem::path path);
     [[nodiscard]] auto getPages() const -> const std::vector<std::pair<unsigned int, PdfPage>>&;
-    [[nodiscard]] auto getRaw() const -> const std::string&;
+    [[nodiscard]] auto getRaw() const -> std::string;
     [[nodiscard]] auto getMarkedObjects(int id) const -> std::vector<std::reference_wrapper<sru::pdf::StringObject>>;
     [[nodiscard]] auto getPath() const -> const std::filesystem::path&;
     auto getPageCount() const -> unsigned int;

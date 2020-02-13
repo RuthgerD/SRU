@@ -50,5 +50,21 @@ auto PdfFile::deletePage(const sru::pdf::PdfPage& page) -> bool {
     }
     return false;
 }
-auto PdfFile::getRaw() const -> const std::string& { return raw; }
+auto PdfFile::getRaw() const -> std::string {
+    // TODO: possible performance issues:
+    // TODO: * Dont overwrite pages if they are unchanged
+    // TODO: * Dont scan every loop and keep an offset instead
+    auto real_raw = *sru::util::QFileRead(path);
+    for (unsigned int j = 0; j < total_pages; ++j) {
+        auto sv = std::string_view{real_raw};
+        if (auto page_matches_opt = sru::util::re_search(sru::util::page_match_key, sv); page_matches_opt) {
+            auto& matches = *page_matches_opt;
+            auto& match = matches[j];
+            if (auto page = std::find_if(pages.begin(), pages.end(), [&](const auto& x) { return x.first == j; }); page != pages.end()) {
+                real_raw.replace(match[2].data() - sv.data(), match[2].size(), page->second.getRaw());
+            }
+        }
+    }
+    return real_raw;
+}
 } // namespace sru::pdf
