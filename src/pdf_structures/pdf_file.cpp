@@ -58,20 +58,19 @@ auto PdfFile::deletePage(const sru::pdf::PdfPage& page) -> bool {
     }
     return false;
 }
-auto PdfFile::insertPage(const sru::pdf::PdfFile& file, unsigned int page_no, unsigned int new_page_no) -> void {
-    auto future = std::async([&]() { return sru::qpdf::insert_page(file, page_no, *this, new_page_no); });
+auto PdfFile::insertPage(PdfPage new_page, unsigned int new_page_no) -> void {
+    if (sru::qpdf::increase_size(*this)) {
+        // maybe assert?
+        if (new_page_no > pages.size()) {
+            new_page_no = pages.size();
+        }
+        if (auto it = std::find_if(pages.begin(), pages.end(), [&](const auto& x) { return x.first == new_page_no; }); it != pages.end()) {
+            std::for_each(it, pages.end(), [](auto& x) { x.first += 1; });
+        }
+        pages.emplace_back(new_page_no, std::move(new_page));
+        ++total_pages;
+    }
 
-    auto page = file.getPage(page_no);
-    // maybe assert?
-    if (new_page_no > pages.size()) {
-        new_page_no = pages.size();
-    }
-    if (auto it = std::find_if(pages.begin(), pages.end(), [&](const auto& x) { return x.first == new_page_no; }); it != pages.end()) {
-        std::for_each(it, pages.end(), [](auto& x) { x.first += 1; });
-    }
-    page.first = new_page_no;
-    pages.push_back(std::move(page));
-    future.wait();
 }
 auto PdfFile::getRaw() const -> std::string {
     // TODO: possible performance issues:

@@ -12,5 +12,6 @@ auto compress(const std::filesystem::path& pdf_file) -> std::optional<std::files
 auto delete_page(const sru::pdf::PdfFile& pdf_file, unsigned int page_no) -> bool;
 auto insert_page(const sru::pdf::PdfFile& pdf_file_out, unsigned int page_no, const sru::pdf::PdfFile& pdf_file_in, unsigned int new_page_no) -> bool;
 auto append_page(const sru::pdf::PdfFile& pdf_file_out, unsigned int page_no, const sru::pdf::PdfFile& pdf_file_in, unsigned int new_page_no) -> bool;
+auto increase_size(const sru::pdf::PdfFile& pdf_file) -> bool;
 } // namespace sru::qpdf
 

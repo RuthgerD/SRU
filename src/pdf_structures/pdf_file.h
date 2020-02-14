@@ -31,6 +31,6 @@ class PdfFile {
     auto getPageCount() const -> unsigned int;
     auto deletePage(unsigned int page_no) -> bool;
     auto deletePage(const PdfPage& page) -> bool;
-    auto insertPage(const PdfFile& file, unsigned int page_no, unsigned int new_page_no) -> void;
+    auto insertPage(PdfPage new_page, unsigned int new_page_no) -> void;
 };
 } // namespace sru::pdf
