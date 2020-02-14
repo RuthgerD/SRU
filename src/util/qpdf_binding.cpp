@@ -111,8 +111,12 @@ auto insert_page(const sru::pdf::PdfFile& pdf_file_out, unsigned int page_no, co
         return false;
     }
 }
-// TODO: add option to increase by more than 1
-auto increase_size(const sru::pdf::PdfFile& pdf_file) -> bool {
+auto increase_size(const sru::pdf::PdfFile& pdf_file, unsigned int size) -> bool {
+    // TODO: remove this lazy limitation
+    if (size > pdf_file.getPageCount()) {
+        std::cout << "cant extract more pages to increase!" << std::endl;
+        return false;
+    }
     const auto abs_pdf_file = std::filesystem::absolute(pdf_file.getPath().lexically_normal());
     auto abs_cache_path = std::filesystem::absolute(qpdf_settings.get_cache_path());
     abs_cache_path.append(pdf_file.getPath().filename().generic_string());
@@ -120,7 +124,10 @@ auto increase_size(const sru::pdf::PdfFile& pdf_file) -> bool {
     tmp_path.concat("-last");
 
     // && might not work on windows
-    auto command = qpdf_settings.get_bin() + " " + abs_pdf_file.generic_string() + " --stream-data=preserve --pages . z -- " + tmp_path.generic_string() + " && " + qpdf_settings.get_bin() + " " + abs_pdf_file.generic_string() + " --replace-input --stream-data=preserve --pages . 1-z " + tmp_path.generic_string() + " --";
+    auto command = qpdf_settings.get_bin() + " " + abs_pdf_file.generic_string() + " --stream-data=preserve --pages . 1-" + std::to_string(size) +
+                   " -- " + tmp_path.generic_string();
+    command += " && " + qpdf_settings.get_bin() + " " + abs_pdf_file.generic_string() + " --replace-input --stream-data=preserve --pages . 1-z " +
+               tmp_path.generic_string() + " 1-z --";
 
     sru::util::cmd(command);
     if (std::filesystem::exists(tmp_path)) {
