@@ -66,7 +66,7 @@ void PdfPage::indexObjects() {
                             if (captured_count == object_count) {
                                 break;
                             }
-                            if (found_count >= count_start && &comp_obj != (objs.data() + anchor_obj)) {
+                            if (found_count >= count_start && &comp_obj != &objs[anchor_obj]) {
                                 if (sticky_id < 0) {
                                     if (marked_objs.find(object_conf_id) == marked_objs.end()) {
 
@@ -91,6 +91,9 @@ void PdfPage::indexObjects() {
     }
 }
 void PdfPage::printObjects() const {
+    if (anchor_objs.empty()) {
+        std::cout << "page: no objects to display" << std::endl;
+    }
     for (auto anchor_pair : anchor_objs) {
         if (auto conf = getAnchorConfig(anchor_pair.first)) {
             std::cout << conf.value().name << ":\n";
