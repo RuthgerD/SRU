@@ -10,12 +10,22 @@ PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw{""}, 
     total_pages = 0;
     if (auto page_matches = sru::util::re_search(sru::util::page_match_key, raw); page_matches) {
         for (auto page_match : *page_matches) {
+            const PageConfig* best_config = nullptr;
             for (const auto& pconf : sru::pdf::PageConfigPool) {
                 if (sru::util::re_match(pconf.regex_id, page_match.at(2))) {
-                    pages.emplace_back(std::pair{total_pages, sru::pdf::PdfPage{std::move(std::string{page_match.at(2)}), pconf}})
-                        .second.indexObjects();
-                    break;
+                    if (best_config == nullptr) {
+                        best_config = &pconf;
+                    } else if (best_config->priority > pconf.priority) {
+                        best_config = &pconf;
+                    }
+                    if (pconf.priority == 0) {
+                        break;
+                    }
                 }
+            }
+            if (best_config != nullptr) {
+                pages.emplace_back(std::pair{total_pages, sru::pdf::PdfPage{std::move(std::string{page_match.at(2)}), *best_config}})
+                    .second.indexObjects();
             }
             ++total_pages;
         }
@@ -91,7 +101,7 @@ auto PdfFile::getRaw() -> std::string {
     // TODO: * Dont overwrite pages if they are unchanged
     // TODO: * Dont scan every loop and keep an offset instead
     if (total_pages != real_pages) {
-        sru::qpdf::change_size(*this, (int) total_pages - (int) real_pages);
+        sru::qpdf::change_size(*this, (int)total_pages - (int)real_pages);
         real_pages = total_pages;
     }
 

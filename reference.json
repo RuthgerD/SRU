@@ -1,7 +1,15 @@
 {
   "pages": [
     {
+      "page_name": "page any",
+      "priority": 0,
+      "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET",
+      "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET)",
+      "groups": []
+    },
+    {
       "page_name": "page 1",
+      "priority": 1,
       "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page 1)\\)Tj\\nET",
       "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
       "groups": [
@@ -10,9 +18,10 @@
       ]
     },
     {
-      "page_name": "page any",
-      "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [2-9]|[0-9]{2,})\\)Tj\\nET",
-      "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*|Example No.: [0-9]*)\\)Tj\\nET)",
+      "page_name": "example pages",
+      "priority": 1,
+      "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*)\\)Tj\\nET",
+      "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*)\\)Tj\\nET)",
       "groups": []
     }
   ],
@@ -88,7 +97,8 @@
       "avrg_multiplier": 0,
       "overflow_threshold": 0,
       "sort_settings": [
-        true, false
+        true,
+        false
       ],
       "re_extract_order": [
         2,

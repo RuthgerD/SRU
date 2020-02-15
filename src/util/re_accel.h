@@ -31,9 +31,9 @@ static constexpr auto default_obj_match =
     ctll::fixed_string{R"((?:([\d.]*) ([\d.]*) ([\d.]*) rg\n)|(?:BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\(([^\n]*)\)Tj\nET))"};
 
 static constexpr auto PAGE_EXAMPLE_obj_match_key =
-    R"((?:([\d.]*) ([\d.]*) ([\d.]*) rg\n)|(?:BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [0-9]*|Example No.: [0-9]*)\)Tj\nET))";
+    R"((?:([\d.]*) ([\d.]*) ([\d.]*) rg\n)|(?:BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [0-9]*)\)Tj\nET))";
 static constexpr auto PAGE_EXAMPLE_obj_match = ctll::fixed_string{
-    R"((?:([\d.]*) ([\d.]*) ([\d.]*) rg\n)|(?:BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [0-9]*|Example No.: [0-9]*)\)Tj\nET))"};
+    R"((?:([\d.]*) ([\d.]*) ([\d.]*) rg\n)|(?:BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [0-9]*)\)Tj\nET))"};
 
 static constexpr auto page_match_key = R"(([0-9]*?) . obj\n<< /BBox.*?>>\nstream\n((\n|.)*?)\nendstream\nendobj)";
 static constexpr auto page_match = ctll::fixed_string{R"(([0-9]*?) . obj\n<< /BBox.*?>>\nstream\n((\n|.)*?)\nendstream\nendobj)"};
@@ -41,8 +41,8 @@ static constexpr auto page_match = ctll::fixed_string{R"(([0-9]*?) . obj\n<< /BB
 static constexpr auto page_1_id_key = R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page 1)\)Tj\nET)";
 static constexpr auto page_1_id = ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page 1)\)Tj\nET)"};
 
-static constexpr auto page_any_id_key = R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [2-9]|[0-9]{2,})\)Tj\nET)";
-static constexpr auto page_any_id = ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [2-9]|[0-9]{2,})\)Tj\nET)"};
+static constexpr auto page_any_id_key = R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [0-9]*)\)Tj\nET)";
+static constexpr auto page_any_id = ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [0-9]*)\)Tj\nET)"};
 
 class ReAccel {
 

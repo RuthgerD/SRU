@@ -19,11 +19,24 @@
                 "type": "object",
                 "title": "The Anchor Objects Schema",
                 "required": [
+                    "page_name",
+                    "priority",
                     "regex_id",
                     "obj_regex",
                     "groups"
                 ],
                 "properties": {
+                    "page_name": {
+                        "$id": "#/properties/pages/items/properties/page_name",
+                        "type": "string",
+                        "title": "The regex_id Schema",
+                        "pattern": "^(.*)$"
+                    },
+                    "priority": {
+                        "$id": "#/properties/pages/items/properties/priority",
+                        "type": "integer",
+                        "title": "The regex_id Schema",
+                    },
                     "regex_id": {
                         "$id": "#/properties/pages/items/properties/regex_id",
                         "type": "string",

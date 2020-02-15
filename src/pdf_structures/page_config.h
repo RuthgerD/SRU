@@ -6,6 +6,8 @@
 namespace sru::pdf {
 
 struct PageConfig {
+    std::string page_name;
+    int priority;
     std::string regex_id;
     std::string obj_regex;
     std::vector<int> groups;
