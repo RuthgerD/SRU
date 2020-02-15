@@ -20,9 +20,10 @@ PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw{""}, 
             ++total_pages;
         }
     }
+    real_pages = total_pages;
 }
-bool operator==(const sru::pdf::PdfPage& a, const sru::pdf::PdfPage& b) noexcept { return &a == &b; }
-bool operator!=(const sru::pdf::PdfPage& a, const sru::pdf::PdfPage& b) noexcept { return &a != &b; }
+auto operator==(const sru::pdf::PdfPage& a, const sru::pdf::PdfPage& b) noexcept -> bool { return &a == &b; }
+auto operator!=(const sru::pdf::PdfPage& a, const sru::pdf::PdfPage& b) noexcept -> bool { return &a != &b; }
 auto PdfFile::getPages() const -> const std::vector<std::pair<unsigned int, PdfPage>>& { return pages; }
 
 auto PdfFile::getPage(unsigned int page_no) const -> const std::pair<unsigned int, PdfPage>& {
@@ -59,23 +60,27 @@ auto PdfFile::deletePage(const sru::pdf::PdfPage& page) -> bool {
     return false;
 }
 auto PdfFile::insertPage(PdfPage new_page, unsigned int new_page_no) -> void {
-    if (sru::qpdf::increase_size(*this)) {
-        // maybe assert?
-        if (new_page_no > pages.size()) {
-            new_page_no = pages.size();
-        }
-        if (auto it = std::find_if(pages.begin(), pages.end(), [&](const auto& x) { return x.first == new_page_no; }); it != pages.end()) {
-            std::for_each(it, pages.end(), [](auto& x) { x.first += 1; });
-        }
-        pages.emplace_back(new_page_no, std::move(new_page));
-        ++total_pages;
+    // maybe assert?
+    if (new_page_no > pages.size()) {
+        new_page_no = pages.size();
     }
-
+    for (auto& x : pages) {
+        if (x.first >= new_page_no) {
+            x.first += 1;
+        }
+    }
+    pages.emplace_back(new_page_no, std::move(new_page));
+    ++total_pages;
 }
-auto PdfFile::getRaw() const -> std::string {
+auto PdfFile::getRaw() -> std::string {
     // TODO: possible performance issues:
     // TODO: * Dont overwrite pages if they are unchanged
     // TODO: * Dont scan every loop and keep an offset instead
+    if (total_pages - real_pages > 0) {
+        sru::qpdf::increase_size(*this, total_pages - real_pages);
+        real_pages = total_pages;
+    }
+
     auto real_raw = *sru::util::QFileRead(path);
     for (unsigned int j = 0; j < total_pages; ++j) {
         auto sv = std::string_view{real_raw};
