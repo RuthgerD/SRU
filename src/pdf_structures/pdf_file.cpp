@@ -59,18 +59,30 @@ auto PdfFile::deletePage(const sru::pdf::PdfPage& page) -> bool {
     }
     return false;
 }
-auto PdfFile::insertPage(PdfPage new_page, unsigned int new_page_no) -> void {
+auto PdfFile::insertPage(PdfPage new_page, unsigned int new_page_no) -> void { insertPages({std::move(new_page)}, new_page_no); }
+auto PdfFile::insertPages(std::vector<std::pair<unsigned int, PdfPage>> new_pages, unsigned int new_page_no) -> void {
+    std::vector<PdfPage> new_pages_unpacked;
+    pages.reserve(new_pages.size());
+    for (auto& page : new_pages) {
+        new_pages_unpacked.push_back(std::move(page.second));
+    }
+    insertPages(std::move(new_pages_unpacked), new_page_no);
+}
+auto PdfFile::insertPages(std::vector<PdfPage> new_pages, unsigned int new_page_no) -> void {
     // maybe assert?
     if (new_page_no > pages.size()) {
         new_page_no = pages.size();
     }
     for (auto& x : pages) {
         if (x.first >= new_page_no) {
-            x.first += 1;
+            x.first += new_pages.size();
         }
     }
-    pages.emplace_back(new_page_no, std::move(new_page));
-    ++total_pages;
+    pages.reserve(new_pages.size());
+    total_pages += new_pages.size();
+    for (int i = 0; i < new_pages.size(); ++i) {
+        pages.emplace_back(new_page_no + i, std::move(new_pages[i]));
+    }
 }
 auto PdfFile::getRaw() -> std::string {
     // TODO: possible performance issues:
