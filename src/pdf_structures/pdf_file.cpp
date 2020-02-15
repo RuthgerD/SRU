@@ -41,21 +41,23 @@ auto PdfFile::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<sru
     return total;
 }
 auto PdfFile::getPath() const -> const std::filesystem::path& { return path; }
-auto PdfFile::getPageCount() const -> unsigned int { return total_pages; }
+auto PdfFile::getPageCount() const -> int { return total_pages; }
 auto PdfFile::deletePage(unsigned int page_no) -> bool {
-    if (auto tmp = std::find_if(pages.begin(), pages.end(), [page_no](const auto& x) { return x.first == page_no - 1; }); tmp != pages.end()) {
+    if (auto tmp = std::find_if(pages.begin(), pages.end(), [page_no](const auto& x) { return x.first == page_no; }); tmp != pages.end()) {
         return deletePage(tmp->second);
     }
     return false;
 }
 auto PdfFile::deletePage(const sru::pdf::PdfPage& page) -> bool {
     if (auto it = std::find_if(pages.begin(), pages.end(), [&](const auto& x) { return x.second == page; }); it != pages.end()) {
-        if (sru::qpdf::delete_page(*this, it->first)) {
-            pages.erase(it);
-            std::for_each(it, pages.end(), [](auto& x) { x.first -= 1; });
-            raw = *sru::util::QFileRead(path);
-            return true;
+        for (auto& x : pages) {
+            if (x.first > it->first) {
+                x.first -= 1;
+            }
         }
+        pages.erase(it);
+        --total_pages;
+        return true;
     }
     return false;
 }
@@ -88,8 +90,8 @@ auto PdfFile::getRaw() -> std::string {
     // TODO: possible performance issues:
     // TODO: * Dont overwrite pages if they are unchanged
     // TODO: * Dont scan every loop and keep an offset instead
-    if (total_pages - real_pages > 0) {
-        sru::qpdf::increase_size(*this, total_pages - real_pages);
+    if (total_pages != real_pages) {
+        sru::qpdf::change_size(*this, (int) total_pages - (int) real_pages);
         real_pages = total_pages;
     }
 
@@ -104,6 +106,6 @@ auto PdfFile::getRaw() -> std::string {
             }
         }
     }
-    return real_raw;
+    return std::move(real_raw);
 }
 } // namespace sru::pdf

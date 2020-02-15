@@ -109,23 +109,23 @@ auto insert_page(const sru::pdf::PdfFile& pdf_file_out, unsigned int page_no, co
         return false;
     }
 }
-auto increase_size(const sru::pdf::PdfFile& pdf_file, unsigned int size) -> bool {
+auto change_size(const sru::pdf::PdfFile& pdf_file, int size) -> bool {
     // TODO: remove this lazy limitation
-    if (size > pdf_file.getPageCount()) {
-        std::cout << "cant extract more pages to increase!" << std::endl;
+    if (size > pdf_file.getPageCount() | size < -pdf_file.getPageCount()) {
+        std::cout << "qpdf: cant change size beyond original limits!" << std::endl;
         return false;
     }
     const auto abs_pdf_file = std::filesystem::absolute(pdf_file.getPath().lexically_normal());
-
-    auto command = qpdf_settings.get_bin() + " " + abs_pdf_file.generic_string() + " --replace-input --stream-data=preserve --pages . 1-z " +
-                    std::filesystem::relative(abs_pdf_file).generic_string() + " 1-" + std::to_string(size) + " -- ";
+    std::string command{};
+    if (size > 0) {
+        command = qpdf_settings.get_bin() + " " + abs_pdf_file.generic_string() + " --replace-input --stream-data=preserve --pages . 1-z " +
+                  std::filesystem::relative(abs_pdf_file).generic_string() + " 1-" + std::to_string(size) + " -- ";
+    } else if (size < 0) {
+        command = qpdf_settings.get_bin() + " " + abs_pdf_file.generic_string() + " --replace-input --stream-data=preserve --pages . 1-r" + std::to_string(-1*size+1) + " -- ";
+    }
 
     sru::util::cmd(command);
-    if (std::filesystem::exists(abs_pdf_file)) {
-        return true;
-    } else {
-        return false;
-    }
+    return std::filesystem::exists(abs_pdf_file);
 }
 
 } // namespace sru::qpdf

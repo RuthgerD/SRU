@@ -29,7 +29,7 @@ class PdfFile {
     [[nodiscard]] auto getRaw() -> std::string;
     [[nodiscard]] auto getMarkedObjects(int id) -> std::vector<std::reference_wrapper<sru::pdf::StringObject>>;
     [[nodiscard]] auto getPath() const -> const std::filesystem::path&;
-    [[nodiscard]] auto getPageCount() const -> unsigned int;
+    [[nodiscard]] auto getPageCount() const -> int;
     auto deletePage(unsigned int page_no) -> bool;
     auto deletePage(const PdfPage& page) -> bool;
     auto insertPage(PdfPage new_page, unsigned int new_page_no) -> void;
