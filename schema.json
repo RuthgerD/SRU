@@ -21,6 +21,7 @@
                 "required": [
                     "page_name",
                     "priority",
+                    "copy_to_final",
                     "regex_id",
                     "obj_regex",
                     "groups"
@@ -35,7 +36,12 @@
                     "priority": {
                         "$id": "#/properties/pages/items/properties/priority",
                         "type": "integer",
-                        "title": "The regex_id Schema",
+                        "title": "The priority Schema"
+                    },
+                    "copy_to_final": {
+                        "$id": "#/properties/pages/items/properties/copy_to_final",
+                        "type": "boolean",
+                        "title": "The copy_to_final Schema"
                     },
                     "regex_id": {
                         "$id": "#/properties/pages/items/properties/regex_id",

@@ -13,9 +13,7 @@ PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw{""}, 
             const PageConfig* best_config = nullptr;
             for (const auto& pconf : sru::pdf::PageConfigPool) {
                 if (sru::util::re_match(pconf.regex_id, page_match.at(2))) {
-                    if (best_config == nullptr) {
-                        best_config = &pconf;
-                    } else if (best_config->priority > pconf.priority) {
+                    if (!best_config || best_config->priority > pconf.priority) {
                         best_config = &pconf;
                     }
                     if (pconf.priority == 0) {
@@ -23,7 +21,7 @@ PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw{""}, 
                     }
                 }
             }
-            if (best_config != nullptr) {
+            if (best_config) {
                 pages.emplace_back(std::pair{total_pages, sru::pdf::PdfPage{std::move(std::string{page_match.at(2)}), *best_config}})
                     .second.indexObjects();
             }

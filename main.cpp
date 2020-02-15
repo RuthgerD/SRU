@@ -61,8 +61,8 @@ auto main(int argc, char** argv) -> int {
         for (auto& val : obb["groups"].GetArray()) {
             groups.push_back(val.Get<int>());
         }
-        sru::pdf::PageConfig page{obb["page_name"].GetString(), obb["priority"].GetInt(), obb["regex_id"].GetString(), obb["obj_regex"].GetString(),
-                                  groups};
+        sru::pdf::PageConfig page{obb["page_name"].GetString(), obb["priority"].GetInt(),     obb["copy_to_final"].GetBool(),
+                                  obb["regex_id"].GetString(),  obb["obj_regex"].GetString(), groups};
         sru::pdf::PageConfigPool.push_back(std::move(page));
     }
     for (auto& obb : d["anchors"].GetArray()) {

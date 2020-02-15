@@ -3,6 +3,7 @@
     {
       "page_name": "page any",
       "priority": 1,
+      "copy_to_final": false,
       "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET",
       "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET)",
       "groups": []
@@ -10,6 +11,7 @@
     {
       "page_name": "page 1",
       "priority": 0,
+      "copy_to_final": false,
       "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page 1)\\)Tj\\nET",
       "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
       "groups": [
@@ -21,6 +23,7 @@
     {
       "page_name": "example pages",
       "priority": 0,
+      "copy_to_final": true,
       "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*)\\)Tj\\nET",
       "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*)\\)Tj\\nET)",
       "groups": []
