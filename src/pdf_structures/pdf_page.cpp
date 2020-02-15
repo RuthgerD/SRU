@@ -8,9 +8,12 @@
 
 namespace sru::pdf {
 PdfPage::PdfPage(std::string raw, const PageConfig& config) : raw{std::move(raw)}, config{config} {}
+auto PdfPage::getConfig() const -> PageConfig { return config; }
 void PdfPage::indexObjects() {
     objs.clear();
     marked_objs.clear();
+    stickied_objs.clear();
+    anchor_objs.clear();
     if (const auto found = sru::util::regex_accel[config.obj_regex](raw); found) {
         auto color = sru::util::Color{0, 0, 0};
         for (const auto& x : *found) {
@@ -32,20 +35,28 @@ void PdfPage::indexObjects() {
                 if (sru::util::re_match(anchor_conf->content_id, obj.getContent())) {
                     if (anchor_conf->save_anchor) {
                         anchor_objs.emplace(anchor_conf_id, &obj - objs.data());
+                        anchor_positions.emplace(anchor_conf_id, sru::util::Coordinate(obj.getPosition()));
                     }
                 }
             }
         }
     }
-    for (const auto anchor_pair : anchor_objs) {
+    for (const auto &anchor_conf_id : config.groups) {
+        if (const auto anchor_conf = getAnchorConfig(anchor_conf_id); anchor_conf) {
+            if(anchor_conf->is_virtual) {
+                anchor_positions.emplace(anchor_conf_id, anchor_conf->position);
+            }
+        }
+    }
+    for (const auto anchor_pair : anchor_positions) {
         if (const auto anchor_conf = getAnchorConfig(anchor_pair.first); anchor_conf) {
             const auto& anchor_obj = anchor_pair.second;
             for (auto object_conf_id : anchor_conf.value().sub_groups) {
                 if (const auto object_conf_opt = getObjectConfig(object_conf_id); object_conf_opt) {
                     const auto& object_conf = object_conf_opt.value();
 
-                    const float& ref_x = objs[anchor_obj].getPosition().getX();
-                    const float& ref_y = objs[anchor_obj].getPosition().getY();
+                    const float& ref_x = anchor_obj.getX();
+                    const float& ref_y = anchor_obj.getY();
 
                     const float max_x = ref_x + object_conf.margin_x;
                     const float max_y = ref_y + object_conf.margin_y;
@@ -61,12 +72,13 @@ void PdfPage::indexObjects() {
                         const float comp_x = std::fabs(comp_obj.getPosition().getX());
                         const float comp_y = std::fabs(comp_obj.getPosition().getY());
 
+                        // TODO: use sru::util::Coordinate when its implemented
                         if ((comp_x < max_x && comp_x > ref_x && comp_y >= max_y && comp_y <= ref_y) ||
                             (comp_x <= max_x && comp_x >= ref_x && comp_y > max_y && comp_y < ref_y)) {
                             if (captured_count == object_count) {
                                 break;
                             }
-                            if (found_count >= count_start && &comp_obj != &objs[anchor_obj]) {
+                            if (found_count >= count_start) {
                                 if (sticky_id < 0) {
                                     if (marked_objs.find(object_conf_id) == marked_objs.end()) {
 
@@ -94,7 +106,7 @@ void PdfPage::printObjects() const {
     if (anchor_objs.empty()) {
         std::cout << "page: no objects to display" << std::endl;
     }
-    for (auto anchor_pair : anchor_objs) {
+    for (auto anchor_pair : anchor_positions) {
         if (auto conf = getAnchorConfig(anchor_pair.first)) {
             std::cout << conf.value().name << ":\n";
             for (auto id : conf.value().sub_groups) {

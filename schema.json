@@ -72,6 +72,9 @@
                 "title": "The Anchor Schema",
                 "required": [
                     "id",
+                    "is_virtual",
+                    "x",
+                    "y",
                     "anchor_name",
                     "content_id",
                     "content_",
@@ -84,6 +87,21 @@
                         "$id": "#/properties/anchors/items/properties/id",
                         "type": "integer",
                         "title": "The id Schema"
+                    },
+                    "is_virtual": {
+                        "$id": "#/properties/anchors/items/properties/is_virtual",
+                        "type": "boolean",
+                        "title": "The is_virtual Schema"
+                    },
+                    "x": {
+                        "$id": "#/properties/anchors/items/properties/x",
+                        "type": "number",
+                        "title": "The x Schema"
+                    },
+                    "y": {
+                        "$id": "#/properties/anchors/items/properties/y",
+                        "type": "number",
+                        "title": "The y Schema"
                     },
                     "anchor_name": {
                         "$id": "#/properties/anchors/properties/items/properties/anchor_name",

@@ -1,4 +1,5 @@
 #pragma once
+#include "../util/util.h"
 #include <iostream>
 #include <optional>
 #include <string>
@@ -7,6 +8,8 @@
 namespace sru::pdf {
 struct AnchorConfig {
     int id;
+    bool is_virtual;
+    sru::util::Coordinate position;
     std::string name;
     std::string content_id;
     std::string content_;

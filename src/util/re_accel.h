@@ -44,6 +44,8 @@ static constexpr auto page_1_id = ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) Tf\
 static constexpr auto page_any_id_key = R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [0-9]*)\)Tj\nET)";
 static constexpr auto page_any_id = ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [0-9]*)\)Tj\nET)"};
 
+static constexpr auto page_example_id_key = R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Example No.: [0-9]*)\)Tj\nET)";
+static constexpr auto page_example_id = ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Example No.: [0-9]*)\)Tj\nET)"};
 class ReAccel {
 
     template <class Match, std::size_t... Is> static auto match2vec_impl(Match match, std::index_sequence<Is...>) {

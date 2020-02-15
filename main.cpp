@@ -71,6 +71,8 @@ auto main(int argc, char** argv) -> int {
             sub_groups.push_back(val.Get<int>());
         }
         sru::pdf::AnchorConfig anchor{obb["id"].GetInt(),
+                                      obb["is_virtual"].GetBool(),
+                                      sru::util::Coordinate(obb["x"].GetFloat(), obb["y"].GetFloat()),
                                       obb["anchor_name"].GetString(),
                                       obb["content_id"].GetString(),
                                       obb["content_"].GetString(),

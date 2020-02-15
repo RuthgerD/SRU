@@ -22,6 +22,7 @@ class PdfPage {
     std::unordered_map<int, std::vector<int>> marked_objs;
     std::unordered_map<int, std::vector<int>> stickied_objs;
     std::unordered_map<int, int> anchor_objs;
+    std::unordered_map<int, sru::util::Coordinate> anchor_positions;
 
     PageConfig config;
 
@@ -32,6 +33,7 @@ class PdfPage {
     PdfPage& operator=(PdfPage&&) = default;
     PdfPage(std::string raw, const PageConfig& config);
     const std::vector<sru::pdf::StringObject>& getObjects() const;
+    auto getConfig() const -> PageConfig;
     auto getMarkedObjects(int id) -> std::vector<std::reference_wrapper<StringObject>>;
 
     auto getRaw() const -> const std::string&;

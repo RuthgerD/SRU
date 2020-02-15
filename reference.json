@@ -2,24 +2,25 @@
   "pages": [
     {
       "page_name": "page any",
-      "priority": 0,
+      "priority": 1,
       "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET",
       "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET)",
       "groups": []
     },
     {
       "page_name": "page 1",
-      "priority": 1,
+      "priority": 0,
       "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page 1)\\)Tj\\nET",
       "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
       "groups": [
         0,
-        1
+        1,
+        2
       ]
     },
     {
       "page_name": "example pages",
-      "priority": 1,
+      "priority": 0,
       "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*)\\)Tj\\nET",
       "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*)\\)Tj\\nET)",
       "groups": []
@@ -28,6 +29,9 @@
   "anchors": [
     {
       "id": 0,
+      "is_virtual": false,
+      "x": 0,
+      "y": 0,
       "anchor_name": "Bradycardias",
       "content_id": "Bradycardias:",
       "content_": "Bradycardias",
@@ -39,6 +43,9 @@
     },
     {
       "id": 1,
+      "is_virtual": false,
+      "x": 0,
+      "y": 0,
       "anchor_name": "Min heartrate",
       "content_id": "Min:",
       "content_": "Min",
@@ -46,6 +53,20 @@
       "save_anchor": true,
       "sub_groups": [
         0
+      ]
+    },
+    {
+      "id": 2,
+      "is_virtual": true,
+      "x": 340.85,
+      "y":  698.45,
+      "anchor_name": "First name",
+      "content_id": "",
+      "content_": "",
+      "content_alt": "",
+      "save_anchor": false,
+      "sub_groups": [
+        2
       ]
     }
   ],
@@ -110,6 +131,36 @@
       "margin_x": 20,
       "margin_y": -40,
       "object_count": 3,
+      "sticky_id": -1
+    },
+    {
+      "id": 2,
+      "object_name": "first name",
+      "text_justify": 0,
+      "maximum_values": -1,
+      "y_object_spacing": 0,
+      "round_cut_off": 0,
+      "decimal_points": 0,
+      "calc_modes": [
+
+      ],
+      "avrg_self": false,
+      "avrg_source_id": -1,
+      "avrg_base_id": -1,
+      "avrg_multiplier": 0,
+      "overflow_threshold": 0,
+      "sort_settings": [
+        true
+      ],
+      "re_extract_order": [
+        1
+      ],
+      "regexs": [
+        "(.*)"
+      ],
+      "margin_x": 150,
+      "margin_y": 0,
+      "object_count": 1,
       "sticky_id": -1
     }
   ]
