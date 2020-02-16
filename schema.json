@@ -5,11 +5,17 @@
     "type": "object",
     "title": "The Root Schema",
     "required": [
+        "date_provider",
         "pages",
         "anchors",
         "objects"
     ],
     "properties": {
+        "date_provider": {
+            "$id": "#/properties/date_provider",
+            "type": "integer",
+            "title": "The date_provider Schema"
+        },
         "pages": {
             "$id": "#/properties/pages",
             "type": "array",

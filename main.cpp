@@ -56,6 +56,8 @@ auto main(int argc, char** argv) -> int {
 
     std::cout << "JSON successfully parsed.\n";
 
+    sru::pdf::DATE_PROVIDER = d["date_provider"].GetInt();
+
     for (auto& obb : d["pages"].GetArray()) {
         std::vector<int> groups;
         for (auto& val : obb["groups"].GetArray()) {

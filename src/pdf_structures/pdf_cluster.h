@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <ctime>
 
 namespace sru::pdf {
 class PdfCluster {

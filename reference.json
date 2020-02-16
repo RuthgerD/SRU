@@ -1,4 +1,5 @@
 {
+  "date_provider": 3,
   "pages": [
     {
       "page_name": "page any",
@@ -17,7 +18,8 @@
       "groups": [
         0,
         1,
-        2
+        2,
+        3
       ]
     },
     {
@@ -69,7 +71,7 @@
       "y": 842,
       "anchor_name": "Min heartrate",
       "content_id": "Min:",
-      "content_": "Min",
+      "content_": "Min:",
       "content_alt": "",
       "save_anchor": true,
       "sub_groups": [
@@ -88,6 +90,20 @@
       "save_anchor": false,
       "sub_groups": [
         2
+      ]
+    },
+    {
+      "id": 3,
+      "is_virtual": true,
+      "x": 226.67,
+      "y": 338.9,
+      "anchor_name": "Start:",
+      "content_id": "",
+      "content_": "",
+      "content_alt": "",
+      "save_anchor": false,
+      "sub_groups": [
+        3
       ]
     }
   ],
@@ -170,15 +186,38 @@
       "avrg_multiplier": 0,
       "overflow_threshold": 0,
       "sort_settings": [
-        true
       ],
       "re_extract_order": [
-        1
       ],
       "regexs": [
-        "(.*)"
       ],
       "margin_x": 150,
+      "margin_y": 0,
+      "object_count": 1,
+      "sticky_id": -1
+    },
+    {
+      "id": 3,
+      "object_name": "begin date",
+      "text_justify": 0,
+      "maximum_values": -1,
+      "y_object_spacing": 0,
+      "round_cut_off": 0,
+      "decimal_points": 0,
+      "calc_modes": [
+      ],
+      "avrg_self": false,
+      "avrg_source_id": -1,
+      "avrg_base_id": -1,
+      "avrg_multiplier": 0,
+      "overflow_threshold": 0,
+      "sort_settings": [
+      ],
+      "re_extract_order": [
+      ],
+      "regexs": [
+      ],
+      "margin_x": 200,
       "margin_y": 0,
       "object_count": 1,
       "sticky_id": -1

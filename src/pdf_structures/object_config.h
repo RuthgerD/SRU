@@ -5,6 +5,8 @@
 #include <vector>
 
 namespace sru::pdf {
+extern int DATE_PROVIDER;
+
 struct ObjectConfig {
     int id;
     std::string name;
