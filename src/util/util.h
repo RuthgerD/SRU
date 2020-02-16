@@ -61,15 +61,6 @@ auto svto(const std::string_view& sv) -> T {
     auto value = boost::convert<T>(sv, boost::cnv::strtol());
     return value.get();
 }
-template <typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>> auto to_string(const T& value, int decimal_point) -> std::string {
-    int accuracy = std::pow(10, decimal_point+1);
-    T rounded = value + ((5.0/9.0)/accuracy);
-    return fmt::format("{:." + std::to_string(decimal_point) + "f}",rounded);
-}
-template <typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>> auto to_string(const T& value, float cut_off, int decimal_point) -> std::string {
-    if (value < cut_off) {
-        return ("<" + to_string(cut_off, decimal_point));
-    }
-    return to_string(value, decimal_point);
-}
+auto to_string(const float& value, int decimal_point) -> std::string;
+auto to_string(const float& value, float cut_off, int decimal_point) -> std::string;
 } // namespace sru::util
