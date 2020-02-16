@@ -1,0 +1,51 @@
+SRU 2.0: Now with less speculation!
+TODO LIST today:
+instead of copy_to_final have more generalized copy / delete / optional
+Coordinate helpers
+object writing
+
+TODO LIST for alpha:
+instead of copy_to_final have more generalized copy / delete / optional
+actual object write system
+graph generation
+numbering support in calculations
+userinput in calculations
+pdf sorting based on a special object config key (user configurable)
+
+TODO LIST for beta:
+pdf file to doc convertion
+config defaulting to reduce config size
+dctmk integration
+better error checking and handling with asserts
+Ryan magic
+global configs to disable stuff
+good logging system
+sru::util::cmd stderr checking
+
+TODO LIST for stable:
+verify and compare results against v1 to make sure all edge cases are handled properly (also check source code of v1)
+
+TODO LIST for later:
+more fine grained control for page detection
+libqpdf integration, dctmk integration
+Page overflow
+opensourcing
+CTRE JIT :^)
+
+
+Ideas:
+Page range configs + virtual anchors = profit!
+
+
+
+Graph stuff:
+Create option for margin_x/y to be based on an anchor (for our case its Total: and Result:)
+Add option to have virtual x/y assist in searching (in case of dupes) since order cant be trusted OR or use id as order
+
+table creation:
+configurable x axis and y axis (Time in our case) where the x axis defines the amount of values used (in our case should always match or be larger then the gather values)
+create special collumn object with name and vector of values (ints in our case but store in float), for dates we have to calculate the delta,
+ to generate the graph we need to get the starting data from somewhere (perhaps save the first time entry).
+
+graph generation:
+
