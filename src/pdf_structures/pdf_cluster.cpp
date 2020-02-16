@@ -6,7 +6,7 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
 
     for (int i = 0; i < pdf_file_paths.size() - 1; i++) {
         const auto path = pdf_file_paths[i];
-        result.push_back(std::async([path]() {
+        result.push_back(std::async(std::launch::async, [path]() {
             if (const auto deflated_path_opt = sru::qpdf::decompress(path); deflated_path_opt) {
                 const auto& deflated_path = *deflated_path_opt;
                 if (const auto tmp_opt = sru::util::QFileRead(deflated_path); tmp_opt) {

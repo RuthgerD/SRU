@@ -45,9 +45,9 @@ void PdfPage::indexObjects() {
             }
         }
     }
-    for (const auto &anchor_conf_id : config.groups) {
+    for (const auto& anchor_conf_id : config.groups) {
         if (const auto anchor_conf = getAnchorConfig(anchor_conf_id); anchor_conf) {
-            if(anchor_conf->is_virtual) {
+            if (anchor_conf->is_virtual) {
                 anchor_positions.emplace(anchor_conf_id, anchor_conf->position);
             }
         }
@@ -114,8 +114,10 @@ void PdfPage::printObjects() const {
         if (auto conf = getAnchorConfig(anchor_pair.first)) {
             std::cout << conf.value().name << ":\n";
             for (auto id : conf.value().sub_groups) {
-                for (auto& obj : marked_objs.at(id)) {
-                    std::cout << "* " << objs[obj].getContent() << "\n";
+                if (marked_objs.find(id) != marked_objs.end()) {
+                    for (auto& obj : marked_objs.at(id)) {
+                        std::cout << "* " << objs[obj].getContent() << "\n";
+                    }
                 }
             }
         }

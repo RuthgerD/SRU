@@ -10,6 +10,7 @@ add_compile_options("-O3")
 add_compile_options("-mtune=native")
 add_compile_options("-march=native")
 add_compile_options("-fno-except")
+add_compile_options("-flto")
 
 endif()
 add_compile_options("-fno-rtti")
