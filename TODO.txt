@@ -1,11 +1,9 @@
 SRU 2.0: Now with less speculation!
 TODO LIST today:
-instead of copy_to_final have more generalized copy / delete / optional
 Coordinate helpers
 object writing
 
 TODO LIST for alpha:
-instead of copy_to_final have more generalized copy / delete / optional
 actual object write system
 graph generation
 numbering support in calculations
@@ -13,6 +11,7 @@ userinput in calculations
 pdf sorting based on a special object config key (user configurable)
 
 TODO LIST for beta:
+add patterns in the schema to restrict modes and others
 pdf file to doc convertion
 config defaulting to reduce config size
 dctmk integration

@@ -21,7 +21,7 @@ constexpr auto SRU_SCHEMA = R"({
                 "required": [
                     "page_name",
                     "priority",
-                    "copy_to_final",
+                    "mutate_in_final",
                     "regex_id",
                     "obj_regex",
                     "groups"
@@ -38,10 +38,11 @@ constexpr auto SRU_SCHEMA = R"({
                         "type": "integer",
                         "title": "The priority Schema"
                     },
-                    "copy_to_final": {
-                        "$id": "#/properties/pages/items/properties/copy_to_final",
-                        "type": "boolean",
-                        "title": "The copy_to_final Schema"
+                    "mutate_in_final": {
+                        "$id": "#/properties/pages/items/properties/mutate_in_final",
+                        "type": "string",
+                        "title": "The mutate_in_final Schema",
+                        "pattern": "^(append|delete|none)$"
                     },
                     "regex_id": {
                         "$id": "#/properties/pages/items/properties/regex_id",
