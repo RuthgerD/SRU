@@ -33,7 +33,15 @@ PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw{""}, 
 auto operator==(const sru::pdf::PdfPage& a, const sru::pdf::PdfPage& b) noexcept -> bool { return &a == &b; }
 auto operator!=(const sru::pdf::PdfPage& a, const sru::pdf::PdfPage& b) noexcept -> bool { return &a != &b; }
 auto PdfFile::getPages() const -> const std::vector<std::pair<unsigned int, PdfPage>>& { return pages; }
+auto PdfFile::getPages() -> std::vector<std::pair<unsigned int, PdfPage>>& { return pages; }
 
+// TODO: duplicate code
+auto PdfFile::getPage(unsigned int page_no) -> std::pair<unsigned int, PdfPage>& {
+    if (auto tmp = std::find_if(pages.begin(), pages.end(), [page_no](const auto& x) { return x.first == page_no; }); tmp != pages.end()) {
+        return *tmp;
+    }
+    return pages.back();
+}
 auto PdfFile::getPage(unsigned int page_no) const -> const std::pair<unsigned int, PdfPage>& {
     if (auto tmp = std::find_if(pages.begin(), pages.end(), [page_no](const auto& x) { return x.first == page_no; }); tmp != pages.end()) {
         return *tmp;

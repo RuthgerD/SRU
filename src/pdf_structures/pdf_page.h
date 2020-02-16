@@ -24,6 +24,9 @@ class PdfPage {
     std::unordered_map<int, int> anchor_objs;
     std::unordered_map<int, sru::util::Coordinate> anchor_positions;
 
+    std::unordered_map<int, StringObject> update_staging;
+    std::vector<int> delete_staging;
+    std::vector<StringObject> insert_staging;
     PageConfig config;
 
   public:
@@ -32,13 +35,20 @@ class PdfPage {
     PdfPage& operator=(const PdfPage& oth) = default;
     PdfPage& operator=(PdfPage&&) = default;
     PdfPage(std::string raw, const PageConfig& config);
-    const std::vector<sru::pdf::StringObject>& getObjects() const;
+    auto getObjects() const -> const std::vector<sru::pdf::StringObject>&;
+    auto getObjects() -> std::vector<sru::pdf::StringObject>&;
+    auto db_getObjects() -> const std::vector<StringObject>&;
+    auto db_updateObject(int id, StringObject obj) -> bool;
+    auto db_deleteObject(int id) -> bool;
+    auto db_insertObject(const StringObject& obj) -> void;
+    auto db_commit() -> bool;
     auto getConfig() const -> PageConfig;
     auto getMarkedObjects(int id) -> std::vector<std::reference_wrapper<StringObject>>;
 
     auto getRaw() const -> const std::string&;
     void indexObjects();
     void printObjects() const;
+
 };
 
 } // namespace sru::pdf

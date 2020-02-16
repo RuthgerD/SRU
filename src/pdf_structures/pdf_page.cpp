@@ -123,7 +123,8 @@ void PdfPage::printObjects() const {
         }
     }
 }
-const std::vector<sru::pdf::StringObject>& PdfPage::getObjects() const { return objs; }
+auto PdfPage::getObjects() const -> const std::vector<sru::pdf::StringObject>& { return objs; }
+auto PdfPage::getObjects() -> std::vector<sru::pdf::StringObject>& { return objs; }
 auto PdfPage::getRaw() const -> const std::string& { return raw; }
 auto PdfPage::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<StringObject>> {
     std::vector<std::reference_wrapper<StringObject>> wrapped{};
@@ -133,5 +134,51 @@ auto PdfPage::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<Str
         }
     }
     return wrapped;
+}
+
+auto PdfPage::db_getObjects() -> const std::vector<StringObject>& { return objs; }
+auto PdfPage::db_updateObject(int id, StringObject obj) -> bool {
+    if (id >= objs.size()) {
+        return false;
+    }
+    update_staging.erase(id);
+    update_staging.emplace(id, std::move(obj));
+    return true;
+}
+auto PdfPage::db_deleteObject(int id) -> bool {
+    if (id >= objs.size()) {
+        return false;
+    }
+    delete_staging.emplace_back(id);
+    return true;
+}
+// might be bad if dupes get inserted
+auto PdfPage::db_insertObject(const StringObject& obj) -> void { insert_staging.emplace_back(obj); }
+auto PdfPage::db_commit() -> bool {
+    for (auto& pair : update_staging) {
+        const auto& orig = objs[pair.first];
+        if (auto pos = raw.find(orig.toString()); pos != std::string::npos) {
+            raw.replace(pos, orig.toString().size(),
+                        "\n" + pair.second.getColor().toString() + "\n" + pair.second.toString() + orig.getColor().toString() + "\n");
+            objs[pair.first] = std::move(pair.second);
+        } else {
+            return false;
+        }
+    }
+    for (auto& obj : insert_staging) {
+        raw.append("\n" + obj.getColor().toString() + "\n" + obj.toString());
+        objs.emplace_back(std::move(obj));
+    }
+    std::sort(delete_staging.begin(), delete_staging.end(), std::greater<>());
+    delete_staging.erase(std::unique(delete_staging.begin(), delete_staging.end()), delete_staging.end());
+    for (auto& obj_id : delete_staging) {
+        if (auto pos = raw.find(objs[obj_id].toString()); pos != std::string::npos) {
+            raw.replace(pos, objs[obj_id].toString().size(), "");
+            objs.erase(objs.begin() + obj_id);
+        } else {
+            return false;
+        }
+    }
+    return true;
 }
 } // namespace sru::pdf

@@ -13,8 +13,6 @@ class StringObject {
     sru::util::Coordinate position;
     std::string content;
 
-    bool modified = false;
-
   public:
     StringObject(sru::util::Color color, int text_type, double font_size, std::string transform, sru::util::Coordinate position, std::string content);
 
@@ -24,8 +22,9 @@ class StringObject {
     [[nodiscard]] auto getPosition() const -> const sru::util::Coordinate&;
     [[nodiscard]] auto getContent() const -> const std::string&;
     [[nodiscard]] auto toString() const -> std::string;
-    [[nodiscard]] auto isModified() const -> bool;
+    auto setColor(float r, float g, float b) -> void;
     auto setContent(const std::string& new_content, float justify = 0) -> void;
+    auto setTextType(int type) -> void;
     auto translateX(float amount) -> void;
     auto translateY(float amount) -> void;
 };
