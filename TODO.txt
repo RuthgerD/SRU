@@ -1,16 +1,17 @@
 SRU 2.0: Now with less speculation!
 TODO LIST today:
-Coordinate helpers
-object writing
+manage marked - stickied - anchor objects in with db
+write calculated objects to final
 
 TODO LIST for alpha:
-actual object write system
+
 graph generation
-numbering support in calculations
+final pdf building
 userinput in calculations
-pdf sorting based on a special object config key (user configurable)
+quick export
 
 TODO LIST for beta:
+Coordinate helpers
 add patterns in the schema to restrict modes and others
 pdf file to doc convertion
 config defaulting to reduce config size
@@ -20,8 +21,10 @@ Ryan magic
 global configs to disable stuff
 good logging system
 sru::util::cmd stderr checking
+refactor calculate so that there is an option to only call calculate for one config
 
 TODO LIST for stable:
+fix or make limitation clear that capital U and W (only in text type = 1) cant be displayed for some reason
 verify and compare results against v1 to make sure all edge cases are handled properly (also check source code of v1)
 
 TODO LIST for later:
@@ -47,4 +50,5 @@ create special collumn object with name and vector of values (ints in our case b
  to generate the graph we need to get the starting data from somewhere (perhaps save the first time entry).
 
 graph generation:
+
 

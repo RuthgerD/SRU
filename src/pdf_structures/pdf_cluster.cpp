@@ -51,7 +51,6 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
         }
         return ret;
     });
-    calculate();
 }
 auto PdfCluster::exportTest() -> void {
     sru::util::QFileWrite(pdf_files.front().getRaw(), std::filesystem::current_path().append("testing_export.pdf"));
@@ -162,8 +161,9 @@ auto PdfCluster::calculate() -> std::unordered_map<int, std::vector<sru::pdf::St
                     if (mode == "USER_INPUT") {
                         // TODO: implement
                     }
-
-                    reference = new_content.front();
+                    if (!new_content.empty()){
+                        reference = new_content.front();
+                    }
                 }
 
                 std::vector<sru::pdf::StringObject> new_objects;
