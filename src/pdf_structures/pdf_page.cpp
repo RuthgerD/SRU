@@ -162,6 +162,11 @@ auto PdfPage::db_deleteObject(int id) -> bool {
 }
 // might be bad if dupes get inserted
 auto PdfPage::db_insertObject(const StringObject& obj) -> void { insert_staging.emplace_back(obj); }
+auto PdfPage::db_clear_staging() -> void {
+    update_staging.clear();
+    insert_staging.clear();
+    delete_staging.clear();
+}
 auto PdfPage::db_commit() -> bool {
     for (auto& pair : update_staging) {
         const auto& orig = objs[pair.first];
@@ -170,6 +175,7 @@ auto PdfPage::db_commit() -> bool {
                         "\n" + pair.second.getColor().toString() + "\n" + pair.second.toString() + orig.getColor().toString() + "\n");
             objs[pair.first] = std::move(pair.second);
         } else {
+            db_clear_staging();
             return false;
         }
     }
@@ -184,12 +190,11 @@ auto PdfPage::db_commit() -> bool {
             raw.replace(pos, objs[obj_id].toString().size(), "");
             objs.erase(objs.begin() + obj_id);
         } else {
+            db_clear_staging();
             return false;
         }
     }
-    update_staging.clear();
-    insert_staging.clear();
-    delete_staging.clear();
+    db_clear_staging();
     return true;
 }
 } // namespace sru::pdf

@@ -43,6 +43,7 @@ class PdfPage {
     auto db_deleteObject(int id) -> bool;
     auto db_insertObject(const StringObject& obj) -> void;
     auto db_commit() -> bool;
+    auto db_clear_staging() -> void;
     auto getConfig() const -> PageConfig;
     auto getMarkedObjects(int id) -> std::vector<std::reference_wrapper<StringObject>>;
 
