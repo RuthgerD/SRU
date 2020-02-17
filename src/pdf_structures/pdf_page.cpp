@@ -95,7 +95,7 @@ void PdfPage::indexObjects() {
                                     if (stickied_objs.find(sticky_id) == stickied_objs.end() && sticky_id >= 0) {
                                         stickied_objs.emplace(sticky_id, std::vector<int>{});
                                     }
-                                    marked_objs.at(sticky_id).emplace_back(&comp_obj - objs.data());
+                                    stickied_objs.at(sticky_id).emplace_back(&comp_obj - objs.data());
                                 }
                                 ++captured_count;
                             }
@@ -158,6 +158,27 @@ auto PdfPage::db_deleteObject(int id) -> bool {
         return false;
     }
     delete_staging.emplace_back(id);
+    // stickies fellow their "parent" to death, so gather them and add to delete_staging
+    std::vector<int> tmp{};
+    // ugly backwards search :(
+    bool found = false;
+    for (auto& pair1 : marked_objs) {
+        for (auto& x : pair1.second) {
+            if (x == id) {
+                if (stickied_objs.find(pair1.first) != stickied_objs.end()) {
+                    auto ids = stickied_objs[pair1.first];
+                    std::copy(ids.begin(), ids.end(), std::back_inserter(tmp));
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (found) {
+            break;
+        }
+    }
+
+    std::copy(tmp.begin(), tmp.end(), std::back_inserter(delete_staging));
     return true;
 }
 // might be bad if dupes get inserted
