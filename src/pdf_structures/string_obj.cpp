@@ -27,4 +27,5 @@ auto StringObject::setColor(float r, float g, float b) -> void {
     color.b = b;
 }
 auto StringObject::setTextType(int type) -> void { text_type = type; }
+auto StringObject::setFontSize(float size) -> void { font_size = size; }
 } // namespace sru::pdf

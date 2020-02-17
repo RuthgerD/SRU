@@ -25,6 +25,7 @@ class StringObject {
     auto setColor(float r, float g, float b) -> void;
     auto setContent(const std::string& new_content, float justify = 0) -> void;
     auto setTextType(int type) -> void;
+    auto setFontSize(float size) -> void;
     auto translateX(float amount) -> void;
     auto translateY(float amount) -> void;
 };
