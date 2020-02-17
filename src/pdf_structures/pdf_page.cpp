@@ -14,7 +14,7 @@ void PdfPage::indexObjects() {
     marked_objs.clear();
     stickied_objs.clear();
     anchor_objs.clear();
-    if (const auto found = sru::util::regex_accel[config.obj_regex](raw); found) {
+    if (const auto found = sru::util::re_search(config.obj_regex, raw); found) {
         auto color = sru::util::Color{0, 0, 0};
         for (const auto& x : *found) {
 
@@ -37,10 +37,12 @@ void PdfPage::indexObjects() {
                 auto conf_y = anchor_conf.position.getY();
                 if (anchor_conf.is_virtual || (std::fabs(conf_y) / conf_y) * obj.getPosition().getY() >= conf_y ||
                     (std::fabs(conf_x) / conf_x) * obj.getPosition().getX() <= conf_x ||
-                    !sru::util::re_match(anchor_conf.content_id, obj.getContent()) || !anchor_conf.save_anchor) {
+                    !sru::util::re_match(anchor_conf.content_id, obj.getContent())) {
                     continue;
                 }
-                anchor_objs.emplace(anchor_conf_id, &obj - objs.data());
+                if (anchor_conf.save_anchor) {
+                    anchor_objs.emplace(anchor_conf_id, &obj - objs.data());
+                }
                 anchor_positions.emplace(anchor_conf_id, obj.getPosition());
             }
         }
@@ -55,7 +57,7 @@ void PdfPage::indexObjects() {
     for (const auto anchor_pair : anchor_positions) {
         if (const auto anchor_conf = getAnchorConfig(anchor_pair.first); anchor_conf) {
             const auto& anchor_obj = anchor_pair.second;
-            for (auto object_conf_id : anchor_conf.value().sub_groups) {
+            for (auto object_conf_id : anchor_conf->sub_groups) {
                 if (const auto object_conf_opt = getObjectConfig(object_conf_id); object_conf_opt) {
                     const auto& object_conf = object_conf_opt.value();
 
@@ -78,7 +80,8 @@ void PdfPage::indexObjects() {
 
                         // TODO: use sru::util::Coordinate when its implemented
                         if ((comp_x < max_x && comp_x > ref_x && comp_y >= max_y && comp_y <= ref_y) ||
-                            (comp_x <= max_x && comp_x >= ref_x && comp_y > max_y && comp_y < ref_y)) {
+                            (comp_x <= max_x && comp_x >= ref_x && comp_y > max_y && comp_y < ref_y) ||
+                            (comp_x == ref_x && comp_y == ref_y && !anchor_conf->save_anchor)) {
                             if (captured_count == object_count) {
                                 break;
                             }

@@ -1,226 +1,320 @@
 {
-  "date_provider": 3,
-  "pages": [
-    {
-      "page_name": "page any",
-      "priority": 3,
-      "mutate_in_final": "none",
-      "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET",
-      "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET)",
-      "groups": []
-    },
-    {
-      "page_name": "page 1",
-      "priority": 0,
-      "mutate_in_final": "none",
-      "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page 1)\\)Tj\\nET",
-      "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
-      "groups": [
-        0,
-        1,
-        2,
-        3
-      ]
-    },
-    {
-      "page_name": "page 1+",
-      "priority": 1,
-      "mutate_in_final": "none",
-      "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page 2)\\)Tj\\nET",
-      "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
-      "groups": [
-      ]
-    },
-    {
-      "page_name": "Numerical overview of the arrhythmia",
-      "priority": 0,
-      "mutate_in_final": "none",
-      "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Numerical overview of the arrhythmia)\\)Tj\\nET",
-      "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
-      "groups": [
-      ]
-    },
-    {
-      "page_name": "example pages",
-      "priority": 0,
-      "mutate_in_final": "append",
-      "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*)\\)Tj\\nET",
-      "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*)\\)Tj\\nET)",
-      "groups": []
-    }
-  ],
-  "anchors": [
-    {
-      "id": 0,
-      "is_virtual": false,
-      "x": 0,
-      "y": 842,
-      "anchor_name": "Bradycardias",
-      "content_id": "Bradycardias:",
-      "content_": "Bradycardias",
-      "content_alt": "",
-      "save_anchor": true,
-      "sub_groups": [
-        1
-      ]
-    },
-    {
-      "id": 1,
-      "is_virtual": false,
-      "x": 0,
-      "y": 842,
-      "anchor_name": "Min heartrate",
-      "content_id": "Min:",
-      "content_": "Min:",
-      "content_alt": "",
-      "save_anchor": true,
-      "sub_groups": [
-        0
-      ]
-    },
-    {
-      "id": 2,
-      "is_virtual": true,
-      "x": 340.85,
-      "y": 698.45,
-      "anchor_name": "First name",
-      "content_id": "",
-      "content_": "",
-      "content_alt": "",
-      "save_anchor": false,
-      "sub_groups": [
-        2
-      ]
-    },
-    {
-      "id": 3,
-      "is_virtual": true,
-      "x": 226.67,
-      "y": 338.9,
-      "anchor_name": "Start:",
-      "content_id": "",
-      "content_": "",
-      "content_alt": "",
-      "save_anchor": false,
-      "sub_groups": [
-        3
-      ]
-    }
-  ],
-  "objects": [
-    {
-      "id": 0,
-      "object_name": "heart rate",
-      "text_justify": 0,
-      "maximum_values": -1,
-      "y_object_spacing": 0,
-      "round_cut_off": 0,
-      "decimal_points": 0,
-      "calc_modes": [
-        "ADD"
-      ],
-      "avrg_self": false,
-      "avrg_source_id": -1,
-      "avrg_base_id": -1,
-      "avrg_multiplier": 0,
-      "overflow_threshold": 0,
-      "sort_settings": [
-        true
-      ],
-      "re_extract_order": [
-        1
-      ],
-      "regexs": [
-        "([0-9]+?)/min"
-      ],
-      "margin_x": 150,
-      "margin_y": 0,
-      "object_count": 1,
-      "sticky_id": -1
-    },
-    {
-      "id": 1,
-      "object_name": "list",
-      "text_justify": 0,
-      "maximum_values": 3,
-      "y_object_spacing": 0,
-      "round_cut_off": 0,
-      "decimal_points": 0,
-      "calc_modes": [
-        "SORT"
-      ],
-      "avrg_self": false,
-      "avrg_source_id": -1,
-      "avrg_base_id": -1,
-      "avrg_multiplier": 0,
-      "overflow_threshold": 0,
-      "sort_settings": [
-        true,
-        false
-      ],
-      "re_extract_order": [
-        2,
-        1
-      ],
-      "regexs": [
-        "(.*?)s, .*\\. (.*?)/min"
-      ],
-      "margin_x": 20,
-      "margin_y": -40,
-      "object_count": 3,
-      "sticky_id": -1
-    },
-    {
-      "id": 2,
-      "object_name": "first name",
-      "text_justify": 0,
-      "maximum_values": -1,
-      "y_object_spacing": 0,
-      "round_cut_off": 0,
-      "decimal_points": 0,
-      "calc_modes": [
-      ],
-      "avrg_self": false,
-      "avrg_source_id": -1,
-      "avrg_base_id": -1,
-      "avrg_multiplier": 0,
-      "overflow_threshold": 0,
-      "sort_settings": [
-      ],
-      "re_extract_order": [
-      ],
-      "regexs": [
-      ],
-      "margin_x": 150,
-      "margin_y": 0,
-      "object_count": 1,
-      "sticky_id": -1
-    },
-    {
-      "id": 3,
-      "object_name": "begin date",
-      "text_justify": 0,
-      "maximum_values": -1,
-      "y_object_spacing": 0,
-      "round_cut_off": 0,
-      "decimal_points": 0,
-      "calc_modes": [
-      ],
-      "avrg_self": false,
-      "avrg_source_id": -1,
-      "avrg_base_id": -1,
-      "avrg_multiplier": 0,
-      "overflow_threshold": 0,
-      "sort_settings": [
-      ],
-      "re_extract_order": [
-      ],
-      "regexs": [
-      ],
-      "margin_x": 200,
-      "margin_y": 0,
-      "object_count": 1,
-      "sticky_id": -1
-    }
-  ]
+    "date_provider": 3,
+    "pages": [
+        {
+            "page_name": "page any",
+            "priority": 3,
+            "mutate_in_final": "none",
+            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET",
+            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET)",
+            "groups": [
+                5
+            ]
+        },
+        {
+            "page_name": "page 1",
+            "priority": 0,
+            "mutate_in_final": "none",
+            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page 1)\\)Tj\\nET",
+            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
+            "groups": [
+                0,
+                1,
+                2,
+                3,
+                5
+            ]
+        },
+        {
+            "page_name": "page 1+",
+            "priority": 1,
+            "mutate_in_final": "none",
+            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page 2)\\)Tj\\nET",
+            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
+            "groups": [
+                5
+            ]
+        },
+        {
+            "page_name": "Numerical overview of the arrhythmia",
+            "priority": 0,
+            "mutate_in_final": "none",
+            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Numerical overview of the arrhythmia)\\)Tj\\nET",
+            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
+            "groups": [
+                5
+            ]
+        },
+        {
+            "page_name": "example pages",
+            "priority": 0,
+            "mutate_in_final": "append",
+            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*)\\)Tj\\nET",
+            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*|Page [0-9]*)\\)Tj\\nET)",
+            "groups": [
+                4,
+                5
+            ]
+        }
+    ],
+    "anchors": [
+        {
+            "id": 0,
+            "is_virtual": false,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Bradycardias",
+            "content_id": "Bradycardias:",
+            "content_": "Bradycardias",
+            "content_alt": "",
+            "save_anchor": true,
+            "sub_groups": [
+                1
+            ]
+        },
+        {
+            "id": 1,
+            "is_virtual": false,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Min heartrate",
+            "content_id": "Min:",
+            "content_": "Min:",
+            "content_alt": "",
+            "save_anchor": true,
+            "sub_groups": [
+                0
+            ]
+        },
+        {
+            "id": 2,
+            "is_virtual": true,
+            "x": 340.85,
+            "y": 698.45,
+            "anchor_name": "First name",
+            "content_id": "",
+            "content_": "",
+            "content_alt": "",
+            "save_anchor": false,
+            "sub_groups": [
+                2
+            ]
+        },
+        {
+            "id": 3,
+            "is_virtual": false,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Start:",
+            "content_id": "Start:",
+            "content_": "",
+            "content_alt": "",
+            "save_anchor": false,
+            "sub_groups": [
+                3
+            ]
+        },
+        {
+            "id": 4,
+            "is_virtual": false,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Example no",
+            "content_id": "Example No.: (.*)",
+            "content_": "",
+            "content_alt": "",
+            "save_anchor": false,
+            "sub_groups": [
+                4
+            ]
+        },
+        {
+            "id": 5,
+            "is_virtual": false,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Page no",
+            "content_id": "Page [0-9]*",
+            "content_": "",
+            "content_alt": "",
+            "save_anchor": false,
+            "sub_groups": [
+                5
+            ]
+        }
+    ],
+    "objects": [
+        {
+            "id": 0,
+            "object_name": "heart rate",
+            "text_justify": 0,
+            "maximum_values": -1,
+            "y_object_spacing": 0,
+            "round_cut_off": 0,
+            "decimal_points": 0,
+            "calc_modes": [
+                "ADD"
+            ],
+            "avrg_self": false,
+            "avrg_source_id": -1,
+            "avrg_base_id": -1,
+            "avrg_multiplier": 0,
+            "overflow_threshold": 0,
+            "sort_settings": [
+                true
+            ],
+            "re_extract_order": [
+                1
+            ],
+            "regexs": [
+                "([0-9]+?)/min"
+            ],
+            "margin_x": 150,
+            "margin_y": 0,
+            "object_count": 1,
+            "sticky_id": -1
+        },
+        {
+            "id": 1,
+            "object_name": "list",
+            "text_justify": 0,
+            "maximum_values": 3,
+            "y_object_spacing": 0,
+            "round_cut_off": 0,
+            "decimal_points": 0,
+            "calc_modes": [
+                "SORT"
+            ],
+            "avrg_self": false,
+            "avrg_source_id": -1,
+            "avrg_base_id": -1,
+            "avrg_multiplier": 0,
+            "overflow_threshold": 0,
+            "sort_settings": [
+                true,
+                false
+            ],
+            "re_extract_order": [
+                2,
+                1
+            ],
+            "regexs": [
+                "(.*?)s, .*\\. (.*?)/min"
+            ],
+            "margin_x": 20,
+            "margin_y": -40,
+            "object_count": 3,
+            "sticky_id": -1
+        },
+        {
+            "id": 2,
+            "object_name": "first name",
+            "text_justify": 0,
+            "maximum_values": -1,
+            "y_object_spacing": 0,
+            "round_cut_off": 0,
+            "decimal_points": 0,
+            "calc_modes": [
+            ],
+            "avrg_self": false,
+            "avrg_source_id": -1,
+            "avrg_base_id": -1,
+            "avrg_multiplier": 0,
+            "overflow_threshold": 0,
+            "sort_settings": [
+            ],
+            "re_extract_order": [
+            ],
+            "regexs": [
+            ],
+            "margin_x": 150,
+            "margin_y": 0,
+            "object_count": 1,
+            "sticky_id": -1
+        },
+        {
+            "id": 3,
+            "object_name": "begin date",
+            "text_justify": 0,
+            "maximum_values": -1,
+            "y_object_spacing": 0,
+            "round_cut_off": 0,
+            "decimal_points": 0,
+            "calc_modes": [
+            ],
+            "avrg_self": false,
+            "avrg_source_id": -1,
+            "avrg_base_id": -1,
+            "avrg_multiplier": 0,
+            "overflow_threshold": 0,
+            "sort_settings": [
+            ],
+            "re_extract_order": [
+            ],
+            "regexs": [
+            ],
+            "margin_x": 150,
+            "margin_y": 0,
+            "object_count": 1,
+            "sticky_id": -1
+        },
+        {
+            "id": 4,
+            "object_name": "example numbering",
+            "text_justify": 0,
+            "maximum_values": -1,
+            "y_object_spacing": 0,
+            "round_cut_off": 0,
+            "decimal_points": 0,
+            "calc_modes": [
+                "NUMBERING"
+            ],
+            "avrg_self": false,
+            "avrg_source_id": -1,
+            "avrg_base_id": -1,
+            "avrg_multiplier": 0,
+            "overflow_threshold": 0,
+            "sort_settings": [
+            ],
+            "re_extract_order": [
+                1
+            ],
+            "regexs": [
+                "Example No.: ([0-9]*)"
+            ],
+            "margin_x": 150,
+            "margin_y": 0,
+            "object_count": 1,
+            "sticky_id": -1
+        },
+        {
+            "id": 5,
+            "object_name": "page numbering",
+            "text_justify": 0,
+            "maximum_values": -1,
+            "y_object_spacing": 0,
+            "round_cut_off": 0,
+            "decimal_points": 0,
+            "calc_modes": [
+                "NUMBERING"
+            ],
+            "avrg_self": false,
+            "avrg_source_id": -1,
+            "avrg_base_id": -1,
+            "avrg_multiplier": 0,
+            "overflow_threshold": 0,
+            "sort_settings": [
+            ],
+            "re_extract_order": [
+                1
+            ],
+            "regexs": [
+                "Page ([0-9]*)"
+            ],
+            "margin_x": 150,
+            "margin_y": 10,
+            "object_count": 1,
+            "sticky_id": -1
+        }
+    ]
 }
