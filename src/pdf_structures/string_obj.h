@@ -28,6 +28,7 @@ class StringObject {
     auto setFontSize(float size) -> void;
     auto translateX(float amount) -> void;
     auto translateY(float amount) -> void;
+    auto setPosition(float x, float y) -> void;
 };
 
 } // namespace sru::pdf

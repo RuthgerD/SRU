@@ -46,7 +46,7 @@ class PdfPage {
     auto db_clear_staging() -> void;
     auto getConfig() const -> PageConfig;
     auto getMarkedObjects(int id) -> std::vector<std::reference_wrapper<StringObject>>;
-
+    auto getAnchorPositions() const -> const std::unordered_map<int, sru::util::Coordinate>&;
     auto getRaw() const -> const std::string&;
     void indexObjects();
     void printObjects() const;

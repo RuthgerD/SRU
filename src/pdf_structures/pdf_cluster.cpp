@@ -3,7 +3,6 @@
 namespace sru::pdf {
 PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
     std::vector<std::future<std::optional<sru::pdf::PdfFile>>> result;
-
     for (int i = 0; i < pdf_file_paths.size() - 1; i++) {
         const auto path = pdf_file_paths[i];
         result.push_back(std::async(std::launch::async, [path]() {
@@ -53,7 +52,45 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
     });
 }
 auto PdfCluster::exportTest() -> void {
-    sru::util::QFileWrite(pdf_files.front().getRaw(), std::filesystem::current_path().append("testing_export.pdf"));
+    for (auto& x : pdf_files.front().getPages()) {
+        x.second.printObjects();
+    }
+
+    auto final_pdf = pdf_files.front();
+    auto& first_page = final_pdf.getPage(0).second;
+    std::cout << "-----" << std::endl;
+    for (auto& [key, val] : calculate()) {
+        std::cout << " * " << getObjectConfig(key.second)->name << std::endl;
+        auto anchor_id = key.first;
+        auto object_id = key.second;
+        auto object_conf = *getObjectConfig(key.second);
+        auto base = first_page.getAnchorPositions().at(anchor_id).getY();
+        int offset = object_conf.y_object_spacing;
+        for (auto& x : val) {
+            std::cout << " " << x.getContent() << std::endl;
+            x.setPosition(x.getPosition().getX(), base+(offset*(&x - val.data()+1)));
+            first_page.db_insertObject(x);
+        }
+        for (auto& x : first_page.db_getMarkedObjects(key.second)) {
+            first_page.db_deleteObject(x);
+        }
+    }
+    first_page.db_commit();
+    // calculate();
+
+    std::vector<PdfPage> to_be;
+    // NOT SORTED
+    for (int i = 1; i < pdf_files.size(); ++i){
+        for (const auto& x : pdf_files[i].getPages()) {
+            if (x.second.getConfig().mutate_in_final == "append") {
+                to_be.push_back(x.second);
+            }
+        }
+    }
+    final_pdf.insertPages(std::move(to_be), 999);
+    final_pdf.refreshNumbering();
+
+    sru::util::QFileWrite(std::move(final_pdf.getRaw()), std::filesystem::current_path().append("testing_export.pdf"));
 }
 
 auto PdfCluster::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<sru::pdf::StringObject>> {
@@ -65,24 +102,24 @@ auto PdfCluster::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<
     return total;
 }
 
-auto PdfCluster::calculate() -> std::unordered_map<int, std::vector<sru::pdf::StringObject>> {
+auto PdfCluster::calculate() -> std::unordered_map<std::pair<int, int>, std::vector<sru::pdf::StringObject>, boost::hash<std::pair<int,int>>> {
     std::unordered_map<int, std::vector<float>> calculated;
-    std::unordered_map<int, std::vector<sru::pdf::StringObject>> new_objects_map;
+    std::unordered_map<std::pair<int, int>, std::vector<sru::pdf::StringObject>, boost::hash<std::pair<int,int>>> new_objects_map;
 
     for (const auto& anchor_conf : AnchorConfigPool) {
-        std::cout << "Anchor: " << anchor_conf.name << std::endl;
+        //std::cout << "Anchor: " << anchor_conf.name << std::endl;
         for (const auto& object_conf_id : anchor_conf.sub_groups) {
             if (const auto& object_conf_opt = getObjectConfig(object_conf_id); object_conf_opt) {
                 const auto& object_conf = *object_conf_opt;
                 const auto total_objects = getMarkedObjects(object_conf_id);
                 if (total_objects.empty()) {
-                    std::cout << "No objects found for " << object_conf.name << std::endl;
+                    //std::cout << "No objects found for " << object_conf.name << std::endl;
                     continue;
                 }
                 auto modes = object_conf.calc_modes;
                 auto regexs = object_conf.regexs;
                 if (modes.size() != regexs.size()) {
-                    std::cout << "Not enough regexs supplied for " << object_conf.name << std::endl;
+                    //std::cout << "Not enough regexs supplied for " << object_conf.name << std::endl;
                     continue;
                 }
 
@@ -178,12 +215,13 @@ auto PdfCluster::calculate() -> std::unordered_map<int, std::vector<sru::pdf::St
                         } else {
                             tmp = &provided_objects[j];
                         }
+
                         sru::pdf::StringObject new_obj{tmp->get()};
 
                         new_obj.setContent(new_content[j], object_conf.text_justify);
                         new_objects.push_back(std::move(new_obj));
                     }
-                    new_objects_map.emplace(object_conf_id, new_objects);
+                    new_objects_map.emplace(std::pair{anchor_conf.id, object_conf_id}, new_objects);
                 }
             } else {
                 std::cout << "Obj conf id: " << object_conf_id << " not found." << std::endl;

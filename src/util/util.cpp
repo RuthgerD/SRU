@@ -227,9 +227,9 @@ auto multi_re_place(const std::string& regex, std::string& base, std::vector<std
 }
 // TODO: ABSOLUTELY GARBAGE PLEASE LEARN TO USE FMT PROPERLY
 auto to_string(const float& value, int decimal_point) -> std::string {
-    int accuracy = std::pow(10, decimal_point+1);
-    float rounded = value + ((5.0/9.0)/accuracy);
-    auto str = fmt::format("{:." + std::to_string(decimal_point) + "f}",rounded);
+    int accuracy = std::pow(10, decimal_point + 1);
+    float rounded = value + ((5.0 / 9.0) / accuracy);
+    auto str = fmt::format("{:." + std::to_string(decimal_point) + "f}", rounded);
     while (str.back() == '0') {
         str.pop_back();
     }

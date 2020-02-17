@@ -9,6 +9,7 @@
 namespace sru::pdf {
 PdfPage::PdfPage(std::string raw, const PageConfig& config) : raw{std::move(raw)}, config{config} {}
 auto PdfPage::getConfig() const -> PageConfig { return config; }
+auto PdfPage::getAnchorPositions() const -> const std::unordered_map<int, sru::util::Coordinate>& { return anchor_positions; }
 void PdfPage::indexObjects() {
     objs.clear();
     marked_objs.clear();
@@ -185,9 +186,7 @@ auto PdfPage::db_commit() -> bool {
         objs.emplace_back(std::move(obj));
     }
 
-    // stickies fellow their "parent" to death, so gather them and add to delete_staging
     for (auto id : delete_staging) {
-
         sru::util::erase_if(stickied_objs, [&](auto& key, auto& val) {
             for (auto& [key, val] : marked_objs) {
                 for (auto& x : val) {

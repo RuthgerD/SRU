@@ -206,7 +206,7 @@
             "object_name": "list",
             "text_justify": 0,
             "maximum_values": 3,
-            "y_object_spacing": 0,
+            "y_object_spacing": -11.33,
             "round_cut_off": 0,
             "decimal_points": 0,
             "calc_modes": [
@@ -218,8 +218,8 @@
             "avrg_multiplier": 0,
             "overflow_threshold": 0,
             "sort_settings": [
-                true,
-                false
+                false,
+                true
             ],
             "re_extract_order": [
                 2,

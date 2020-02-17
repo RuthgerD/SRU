@@ -145,7 +145,6 @@ auto PdfFile::refreshNumbering() -> void {
                 auto oldstr = copy.getContent();
                 sru::util::multi_re_place(numbering_confs[i].regexs[0], oldstr, {std::to_string(count[i] + 1)});
                 copy.setContent(oldstr);
-                copy.setColor(1,0,0);
                 page.second.db_updateObject(id, copy);
                 ++count[i];
             }

@@ -11,6 +11,7 @@
 #include <vector>
 #include <utility>
 #include <ctime>
+#include <boost/functional/hash.hpp>
 
 namespace sru::pdf {
 class PdfCluster {
@@ -20,7 +21,7 @@ class PdfCluster {
   public:
     explicit PdfCluster(std::vector<std::filesystem::path> pdf_file_paths);
     [[nodiscard]] auto getMarkedObjects(int id) -> std::vector<std::reference_wrapper<sru::pdf::StringObject>>;
-    auto calculate() -> std::unordered_map<int, std::vector<sru::pdf::StringObject>>;
+    auto calculate() -> std::unordered_map<std::pair<int, int>, std::vector<sru::pdf::StringObject>, boost::hash<std::pair<int,int>>>;
     auto exportTest() -> void;
 };
 } // namespace sru::pdf
