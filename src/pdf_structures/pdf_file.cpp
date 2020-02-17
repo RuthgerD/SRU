@@ -59,6 +59,7 @@ auto PdfFile::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<sru
 }
 auto PdfFile::getPath() const -> const std::filesystem::path& { return path; }
 auto PdfFile::getPageCount() const -> int { return total_pages; }
+auto PdfFile::getRealPageCount() const -> int { return real_pages; }
 auto PdfFile::deletePage(unsigned int page_no) -> bool {
     if (auto tmp = std::find_if(pages.begin(), pages.end(), [page_no](const auto& x) { return x.first == page_no; }); tmp != pages.end()) {
         return deletePage(tmp->second);

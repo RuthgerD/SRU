@@ -110,10 +110,14 @@ auto insert_page(const sru::pdf::PdfFile& pdf_file_out, unsigned int page_no, co
     }
 }
 auto change_size(const sru::pdf::PdfFile& pdf_file, int size) -> bool {
-    // TODO: remove this lazy limitation
-    if (size > pdf_file.getPageCount() | size < -pdf_file.getPageCount()) {
-        std::cout << "qpdf: cant change size beyond original limits!" << std::endl;
-        return false;
+    auto page_count = pdf_file.getRealPageCount();
+    if (size > page_count) {
+        change_size(pdf_file, page_count);
+        size -= page_count;
+    }
+    if (size < -page_count) {
+        change_size(pdf_file, -page_count);
+        size += page_count;
     }
     const auto abs_pdf_file = std::filesystem::absolute(pdf_file.getPath().lexically_normal());
     std::string command{};
