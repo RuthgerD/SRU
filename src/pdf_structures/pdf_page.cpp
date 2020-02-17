@@ -56,6 +56,7 @@ void PdfPage::indexObjects() {
     for (const auto anchor_pair : anchor_positions) {
         if (const auto anchor_conf = getAnchorConfig(anchor_pair.first); anchor_conf) {
             const auto& anchor_obj = anchor_pair.second;
+            int count_start = 0;
             for (auto object_conf_id : anchor_conf->sub_groups) {
                 if (const auto object_conf_opt = getObjectConfig(object_conf_id); object_conf_opt) {
                     const auto& object_conf = object_conf_opt.value();
@@ -69,7 +70,6 @@ void PdfPage::indexObjects() {
                     const int object_count = object_conf.object_count;
                     int sticky_id = object_conf.sticky_id;
 
-                    int count_start = 0;
                     int found_count = 0;
                     int captured_count = 0;
 

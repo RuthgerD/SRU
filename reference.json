@@ -83,7 +83,8 @@
             "content_alt": "",
             "save_anchor": true,
             "sub_groups": [
-                0
+                0,
+                99
             ]
         },
         {
@@ -95,7 +96,7 @@
             "content_id": "",
             "content_": "",
             "content_alt": "",
-            "save_anchor": false,
+            "save_anchor": true,
             "sub_groups": [
                 2
             ]
@@ -109,7 +110,7 @@
             "content_id": "Start:",
             "content_": "",
             "content_alt": "",
-            "save_anchor": false,
+            "save_anchor": true,
             "sub_groups": [
                 3
             ]
@@ -173,6 +174,32 @@
             "margin_y": 0,
             "object_count": 1,
             "sticky_id": -1
+        },
+        {
+            "id": 99,
+            "object_name": "min heart rate date",
+            "text_justify": 0,
+            "maximum_values": -1,
+            "y_object_spacing": 0,
+            "round_cut_off": 0,
+            "decimal_points": 0,
+            "calc_modes": [
+            ],
+            "avrg_self": false,
+            "avrg_source_id": -1,
+            "avrg_base_id": -1,
+            "avrg_multiplier": 0,
+            "overflow_threshold": 0,
+            "sort_settings": [
+            ],
+            "re_extract_order": [
+            ],
+            "regexs": [
+            ],
+            "margin_x": 150,
+            "margin_y": 0,
+            "object_count": 1,
+            "sticky_id": 0
         },
         {
             "id": 1,
