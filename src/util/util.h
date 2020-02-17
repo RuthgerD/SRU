@@ -61,6 +61,16 @@ auto svto(const std::string_view& sv) -> T {
     auto value = boost::convert<T>(sv, boost::cnv::strtol());
     return value.get();
 }
+template< class Key, class T, class Hash, class KeyEqual, class Alloc, class Pred >
+auto erase_if(std::unordered_map<Key,T,Hash,KeyEqual,Alloc>& c, Pred pred) -> void {
+    for (auto i = c.begin(), last = c.end(); i != last; ) {
+        if (pred(i->first, i->second)) {
+            i = c.erase(i);
+        } else {
+            ++i;
+        }
+    }
+}
 auto to_string(const float& value, int decimal_point) -> std::string;
 auto to_string(const float& value, float cut_off, int decimal_point) -> std::string;
 } // namespace sru::util
