@@ -140,6 +140,12 @@ auto PdfPage::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<Str
 }
 
 auto PdfPage::db_getObjects() -> const std::vector<StringObject>& { return objs; }
+auto PdfPage::db_getMarkedObjects(int id) -> std::vector<int> {
+    if (marked_objs.find(id) != marked_objs.end()) {
+        return marked_objs[id];
+    }
+    return {};
+}
 auto PdfPage::db_updateObject(int id, StringObject obj) -> bool {
     if (id >= objs.size()) {
         return false;

@@ -38,6 +38,7 @@ class PdfPage {
     auto getObjects() const -> const std::vector<sru::pdf::StringObject>&;
     auto getObjects() -> std::vector<sru::pdf::StringObject>&;
     auto db_getObjects() -> const std::vector<StringObject>&;
+    auto db_getMarkedObjects(int id) -> std::vector<int>;
     auto db_updateObject(int id, StringObject obj) -> bool;
     auto db_deleteObject(int id) -> bool;
     auto db_insertObject(const StringObject& obj) -> void;
