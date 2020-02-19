@@ -121,6 +121,8 @@ auto main(int argc, char** argv) -> int {
                                        regexs,
                                        obb["margin_x"].GetFloat(),
                                        obb["margin_y"].GetFloat(),
+                                       obb["anchor_margin_x"].GetInt(),
+                                       obb["anchor_margin_y"].GetInt(),
                                        obb["object_count"].GetInt(),
                                        obb["sticky_id"].GetInt()};
         sru::pdf::ObjectConfigPool.push_back(std::move(testing));
@@ -139,7 +141,6 @@ auto main(int argc, char** argv) -> int {
     cache_path.append("cache");
     sru::qpdf::set_cache_path(cache_path);
     auto cluster = sru::pdf::PdfCluster{pdf_file_paths};
-
     cluster.exportTest();
 
     const auto end = std::chrono::steady_clock::now();

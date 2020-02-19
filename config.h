@@ -185,6 +185,8 @@ constexpr auto SRU_SCHEMA = R"({
                     "regexs",
                     "margin_x",
                     "margin_y",
+                    "anchor_margin_y",
+                    "anchor_margin_x",
                     "object_count",
                     "sticky_id"
                 ],
@@ -299,6 +301,16 @@ constexpr auto SRU_SCHEMA = R"({
                         "$id": "#/properties/objects/properties/items/properties/margin_y",
                         "type": "number",
                         "title": "The margin_y Schema"
+                    },
+                    "anchor_margin_x": {
+                        "$id": "#/properties/objects/properties/items/properties/anchor_margin_x",
+                        "type": "integer",
+                        "title": "The anchor_margin_x Schema"
+                    },
+                    "anchor_margin_y": {
+                        "$id": "#/properties/objects/properties/items/properties/anchor_margin_y",
+                        "type": "integer",
+                        "title": "The anchor_margin_y Schema"
                     },
                     "object_count": {
                         "$id": "#/properties/objects/properties/items/properties/object_count",

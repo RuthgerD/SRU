@@ -65,8 +65,15 @@ void PdfPage::indexObjects() {
                     const float& ref_x = anchor_obj.getX();
                     const float& ref_y = anchor_obj.getY();
 
-                    const float max_x = ref_x + object_conf.margin_x;
-                    const float max_y = ref_y + object_conf.margin_y;
+                    float max_x = ref_x + object_conf.margin_x;
+                    float max_y = ref_y + object_conf.margin_y;
+
+                    if (auto anchor_margin = anchor_positions.find(object_conf.anchor_margin_x); anchor_margin != anchor_positions.end()) {
+                        max_x = anchor_margin->second.getX()-1;
+                    }
+                    if (auto anchor_margin = anchor_positions.find(object_conf.anchor_margin_y); anchor_margin != anchor_positions.end()) {
+                        max_y = anchor_margin->second.getY()-1;
+                    }
 
                     const int object_count = object_conf.object_count;
                     int sticky_id = object_conf.sticky_id;

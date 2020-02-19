@@ -32,6 +32,8 @@ struct ObjectConfig {
 
     float margin_x;
     float margin_y;
+    int anchor_margin_x;
+    int anchor_margin_y;
     int object_count;
     int sticky_id;
 };

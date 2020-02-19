@@ -172,6 +172,8 @@
             ],
             "margin_x": 150,
             "margin_y": 0,
+            "anchor_margin_x": 3,
+            "anchor_margin_y": -1,
             "object_count": 1,
             "sticky_id": -1
         },
@@ -198,6 +200,8 @@
             ],
             "margin_x": 150,
             "margin_y": 0,
+            "anchor_margin_x": 3,
+            "anchor_margin_y": -1,
             "object_count": 1,
             "sticky_id": 0
         },
@@ -230,6 +234,8 @@
             ],
             "margin_x": 20,
             "margin_y": -40,
+            "anchor_margin_x": -1,
+            "anchor_margin_y": -1,
             "object_count": 3,
             "sticky_id": -1
         },
@@ -256,6 +262,8 @@
             ],
             "margin_x": 150,
             "margin_y": 0,
+            "anchor_margin_x": -1,
+            "anchor_margin_y": -1,
             "object_count": 1,
             "sticky_id": -1
         },
@@ -282,6 +290,8 @@
             ],
             "margin_x": 150,
             "margin_y": 0,
+            "anchor_margin_x": -1,
+            "anchor_margin_y": -1,
             "object_count": 1,
             "sticky_id": -1
         },
@@ -311,6 +321,8 @@
             ],
             "margin_x": 150,
             "margin_y": 0,
+            "anchor_margin_x": -1,
+            "anchor_margin_y": -1,
             "object_count": 1,
             "sticky_id": -1
         },
@@ -339,7 +351,9 @@
                 "Page ([0-9]*)"
             ],
             "margin_x": 150,
-            "margin_y": 10,
+            "margin_y": 0,
+            "anchor_margin_x": -1,
+            "anchor_margin_y": -1,
             "object_count": 1,
             "sticky_id": -1
         }
