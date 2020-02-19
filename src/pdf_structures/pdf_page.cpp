@@ -62,18 +62,24 @@ void PdfPage::indexObjects() {
                 if (const auto object_conf_opt = getObjectConfig(object_conf_id); object_conf_opt) {
                     const auto& object_conf = object_conf_opt.value();
 
-                    const float& ref_x = anchor_obj.getX();
-                    const float& ref_y = anchor_obj.getY();
+                    float ref_x = anchor_obj.getX();
+                    float ref_y = anchor_obj.getY();
 
                     float max_x = ref_x + object_conf.margin_x;
                     float max_y = ref_y + object_conf.margin_y;
 
                     if (auto anchor_margin = anchor_positions.find(object_conf.anchor_margin_x); anchor_margin != anchor_positions.end()) {
-                        max_x = anchor_margin->second.getX()-1;
+                        max_x = anchor_margin->second.getX();
                     }
                     if (auto anchor_margin = anchor_positions.find(object_conf.anchor_margin_y); anchor_margin != anchor_positions.end()) {
-                        max_y = anchor_margin->second.getY()-1;
+                        max_y = anchor_margin->second.getY();
                     }
+
+                    const float x1 = ref_x < max_x ? ref_x : max_x;
+                    const float y1 = ref_y > max_y ? ref_y : max_y;
+
+                    const float x2 = ref_x > max_x ? ref_x : max_x;
+                    const float y2 = ref_y < max_y ? ref_y : max_y;
 
                     const int object_count = object_conf.object_count;
                     int sticky_id = object_conf.sticky_id;
@@ -86,8 +92,8 @@ void PdfPage::indexObjects() {
                         const float comp_y = std::fabs(comp_obj.getPosition().getY());
 
                         // TODO: use sru::util::Coordinate when its implemented
-                        if ((comp_x < max_x && comp_x > ref_x && comp_y >= max_y && comp_y <= ref_y) ||
-                            (comp_x <= max_x && comp_x >= ref_x && comp_y > max_y && comp_y < ref_y) ||
+                        if (((y1 >= comp_y && x1 < comp_x && x2 > comp_x && y2 <= comp_y) ||
+                             (y1 > comp_y && x1 <= comp_x && x2 >= comp_x && y2 < comp_y)) ||
                             (comp_x == ref_x && comp_y == ref_y && !anchor_conf->save_anchor)) {
                             if (captured_count == object_count) {
                                 break;
