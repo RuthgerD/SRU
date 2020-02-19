@@ -23,5 +23,6 @@ class PdfCluster {
     [[nodiscard]] auto getMarkedObjects(int id) -> std::vector<std::reference_wrapper<sru::pdf::StringObject>>;
     auto calculate() -> std::unordered_map<std::pair<int, int>, std::vector<sru::pdf::StringObject>, boost::hash<std::pair<int,int>>>;
     auto exportTest() -> void;
+    auto refreshNumbering(PdfFile& file) -> void;
 };
 } // namespace sru::pdf

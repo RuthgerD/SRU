@@ -88,9 +88,36 @@ auto PdfCluster::exportTest() -> void {
         }
     }
     final_pdf.insertPages(std::move(to_be), 999);
-    final_pdf.refreshNumbering();
+    refreshNumbering(final_pdf);
 
     sru::util::QFileWrite(std::move(final_pdf.getRaw()), std::filesystem::current_path().append("testing_export.pdf"));
+}
+
+auto PdfCluster::refreshNumbering(PdfFile& file) -> void {
+    std::vector<ObjectConfig> numbering_confs{};
+    for(const auto& conf : ObjectConfigPool) {
+        if (conf.calc_modes.size() == 1 && conf.regexs.size() == 1){
+            if (conf.calc_modes.front() == "NUMBERING") {
+                numbering_confs.push_back(conf);
+            }
+        }
+    }
+    std::vector<int> count(numbering_confs.size());
+    for (auto& page : file.getPages()) {
+        for (int i = 0; i < numbering_confs.size(); ++i){
+            auto objs = page.second.db_getObjects();
+            auto mrked_objs = page.second.db_getMarkedObjects(numbering_confs[i].id);
+            for (auto id : mrked_objs) {
+                auto copy = objs[id];
+                auto oldstr = copy.getContent();
+                sru::util::multi_re_place(numbering_confs[i].regexs[0], oldstr, {std::to_string(count[i] + 1)});
+                copy.setContent(oldstr);
+                page.second.db_updateObject(id, copy);
+                ++count[i];
+            }
+        }
+        page.second.db_commit();
+    }
 }
 
 auto PdfCluster::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<sru::pdf::StringObject>> {

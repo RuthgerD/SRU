@@ -38,6 +38,5 @@ class PdfFile {
     auto insertPage(PdfPage new_page, unsigned int new_page_no) -> void;
     auto insertPages(std::vector<std::pair<unsigned int, PdfPage>> new_pages, unsigned int new_page_no) -> void;
     auto insertPages(std::vector<PdfPage> new_pages, unsigned int new_page_no) -> void;
-    auto refreshNumbering() -> void;
 };
 } // namespace sru::pdf
