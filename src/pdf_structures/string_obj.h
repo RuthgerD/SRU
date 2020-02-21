@@ -6,12 +6,12 @@
 
 namespace sru::pdf {
 class StringObject {
-    sru::util::Color color;
-    int text_type;
-    double font_size;
-    std::string transform; // only used to reconstruct original atm.
-    sru::util::Coordinate position;
-    std::string content;
+    sru::util::Color color_;
+    int text_type_;
+    double font_size_;
+    std::string transform_; // only used to reconstruct original atm.
+    sru::util::Coordinate position_;
+    std::string content_;
 
   public:
     StringObject(sru::util::Color color, int text_type, double font_size, std::string transform, sru::util::Coordinate position, std::string content);

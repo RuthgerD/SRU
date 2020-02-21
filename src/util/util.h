@@ -21,7 +21,7 @@ class StringObject;
 
 namespace sru::util {
 class Coordinate {
-    float x, y;
+    float x_, y_;
 
   public:
     // TODO: contexpr
@@ -34,7 +34,7 @@ class Coordinate {
     auto translateY(float amount) -> void;
 };
 struct Color {
-    float r, g, b;
+    float r_, g_, b_;
     Color(float r, float g, float b);
     [[nodiscard]] auto toString() const -> std::string;
 };

@@ -16,7 +16,7 @@
 namespace sru::pdf {
 class PdfCluster {
 
-    std::vector<sru::pdf::PdfFile> pdf_files;
+    std::vector<sru::pdf::PdfFile> pdf_files_;
 
   public:
     explicit PdfCluster(std::vector<std::filesystem::path> pdf_file_paths);

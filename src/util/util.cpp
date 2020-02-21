@@ -11,12 +11,12 @@
 #include <type_traits>
 
 namespace sru::util {
-auto Coordinate::getX() -> float& { return x; }
-auto Coordinate::getX() const noexcept -> float { return x; }
-auto Coordinate::getY() -> float& { return y; }
-auto Coordinate::getY() const noexcept -> float { return y; }
-auto Coordinate::translateX(float amount) -> void { x += amount; }
-auto Coordinate::translateY(float amount) -> void { y += amount; }
+auto Coordinate::getX() -> float& { return x_; }
+auto Coordinate::getX() const noexcept -> float { return x_; }
+auto Coordinate::getY() -> float& { return y_; }
+auto Coordinate::getY() const noexcept -> float { return y_; }
+auto Coordinate::translateX(float amount) -> void { x_ += amount; }
+auto Coordinate::translateY(float amount) -> void { y_ += amount; }
 auto QFileRead(const std::filesystem::path& path) -> std::optional<std::string> {
     if (auto f = std::fopen(path.lexically_normal().c_str(), "r"); f) {
         std::fseek(f, 0, SEEK_END);
@@ -38,9 +38,9 @@ auto QFileWrite(const std::string& content, const std::filesystem::path& path) -
     }
     return false;
 }
-Coordinate::Coordinate(float x, float y) : x{x}, y{y} {}
-auto Color::toString() const -> std::string { return std::to_string(r) + ' ' + std::to_string(g) + ' ' + std::to_string(b) + ' ' + "rg"; }
-Color::Color(float r, float g, float b) : r{r}, g{g}, b{b} {}
+Coordinate::Coordinate(float x, float y) : x_{x}, y_{y} {}
+auto Color::toString() const -> std::string { return std::to_string(r_) + ' ' + std::to_string(g_) + ' ' + std::to_string(b_) + ' ' + "rg"; }
+Color::Color(float r, float g, float b) : r_{r}, g_{g}, b_{b} {}
 auto cmd(const std::string& command) -> int {
     // std::cout << "RUNNING COMMAND: " << command << "\n";
     std::system(command.c_str());

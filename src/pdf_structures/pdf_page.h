@@ -1,11 +1,8 @@
 #pragma once
-#include "../util/re_accel.h"
 #include "../util/util.h"
 #include "page_config.h"
 #include "string_obj.h"
 #include <chrono>
-#include <ctll.hpp>
-#include <ctre.hpp>
 #include <functional>
 #include <iostream>
 #include <map>
@@ -17,17 +14,17 @@
 
 namespace sru::pdf {
 class PdfPage {
-    std::string raw;
-    std::vector<sru::pdf::StringObject> objs;
-    std::unordered_map<int, std::vector<int>> marked_objs;
-    std::unordered_map<int, std::vector<int>> stickied_objs;
-    std::unordered_map<int, int> anchor_objs;
-    std::unordered_map<int, sru::util::Coordinate> anchor_positions;
+    std::string raw_;
+    std::vector<sru::pdf::StringObject> objs_;
+    std::unordered_map<int, std::vector<int>> marked_objs_;
+    std::unordered_map<int, std::vector<int>> stickied_objs_;
+    std::unordered_map<int, int> anchor_objs_;
+    std::unordered_map<int, sru::util::Coordinate> anchor_positions_;
 
-    std::unordered_map<int, StringObject> update_staging;
-    std::vector<int> delete_staging;
-    std::vector<StringObject> insert_staging;
-    PageConfig config;
+    std::unordered_map<int, StringObject> update_staging_;
+    std::vector<int> delete_staging_;
+    std::vector<StringObject> insert_staging_;
+    PageConfig config_;
 
   public:
     PdfPage(const PdfPage& oth) = default;

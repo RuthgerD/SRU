@@ -20,15 +20,15 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
         const auto& deflated_path = *deflated_path_opt;
         if (const auto tmp_opt = sru::util::QFileRead(deflated_path); tmp_opt) {
             const auto& tmp = *tmp_opt;
-            pdf_files.emplace_back(tmp, deflated_path);
+            pdf_files_.emplace_back(tmp, deflated_path);
         }
     }
     for (auto& x : result) {
         if (auto tmp = x.get(); tmp) {
-            pdf_files.emplace_back(std::move(*tmp));
+            pdf_files_.emplace_back(std::move(*tmp));
         }
     }
-    std::sort(pdf_files.begin(), pdf_files.end(), [](PdfFile& a, PdfFile& b) {
+    std::sort(pdf_files_.begin(), pdf_files_.end(), [](PdfFile& a, PdfFile& b) {
         bool ret = false;
         auto a_date = a.getMarkedObjects(DATE_PROVIDER);
         auto b_date = b.getMarkedObjects(DATE_PROVIDER);
@@ -52,18 +52,18 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
     });
 }
 auto PdfCluster::exportTest() -> void {
-    for (auto& x : pdf_files.front().getPages()) {
+    for (auto& x : pdf_files_.at(2).getPages()) {
         x.second.printObjects();
     }
 
-    auto final_pdf = pdf_files.front();
+    auto final_pdf = pdf_files_.front();
 
     for (auto& [page_no, page] : final_pdf.getPages()) {
         for (auto& [anchor_conf_id, val] : page.getAnchorPositions()) {
             auto anchor_conf = *getAnchorConfig(anchor_conf_id); // if the page got it then we dont need to check :)
             for (auto& object_conf_id : anchor_conf.sub_groups) {
                 auto object_conf = *getObjectConfig(object_conf_id);
-                auto total_objs = getMarkedObjects(object_conf_id, pdf_files); // get ALL objects from all the files that follow the same config
+                auto total_objs = getMarkedObjects(object_conf_id, pdf_files_); // get ALL objects from all the files that follow the same config
 
                 auto new_objs = calculateObject(object_conf, total_objs);
 
@@ -89,6 +89,7 @@ auto PdfCluster::exportTest() -> void {
         page.db_commit();
     }
 
+    /*
     std::vector<PdfPage> to_be;
     // NOT SORTED
     for (int i = 1; i < pdf_files.size(); ++i) {
@@ -98,8 +99,9 @@ auto PdfCluster::exportTest() -> void {
             }
         }
     }
-    final_pdf.insertPages(std::move(to_be), 999);
 
+    final_pdf.insertPages(std::move(to_be), 999);
+    */
     refreshNumbering(final_pdf);
 
     const auto raw = final_pdf.getRaw();

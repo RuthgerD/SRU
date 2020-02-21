@@ -7,30 +7,30 @@
 #include <vector>
 
 namespace sru::pdf {
-PdfPage::PdfPage(std::string raw, const PageConfig& config) : raw{std::move(raw)}, config{config} {}
-auto PdfPage::getConfig() const -> PageConfig { return config; }
-auto PdfPage::getAnchorPositions() const -> const std::unordered_map<int, sru::util::Coordinate>& { return anchor_positions; }
+PdfPage::PdfPage(std::string raw, const PageConfig& config) : raw_{std::move(raw)}, config_{config} {}
+auto PdfPage::getConfig() const -> PageConfig { return config_; }
+auto PdfPage::getAnchorPositions() const -> const std::unordered_map<int, sru::util::Coordinate>& { return anchor_positions_; }
 void PdfPage::indexObjects() {
-    objs.clear();
-    marked_objs.clear();
-    stickied_objs.clear();
-    anchor_objs.clear();
-    if (const auto found = sru::util::re_search(config.obj_regex, raw); found) {
+    objs_.clear();
+    marked_objs_.clear();
+    stickied_objs_.clear();
+    anchor_objs_.clear();
+    if (const auto found = sru::util::re_search(config_.obj_regex, raw_); found) {
         auto color = sru::util::Color{0, 0, 0};
         for (const auto& x : *found) {
 
             if (x[1] == "") {
-                objs.emplace_back(color, sru::util::svto<int>(x[4]), sru::util::svto<float>(x[5]), std::string{x[6]},
+                objs_.emplace_back(color, sru::util::svto<int>(x[4]), sru::util::svto<float>(x[5]), std::string{x[6]},
                                   sru::util::Coordinate{sru::util::svto<float>(x[7]), sru::util::svto<float>(x[8])}, std::string{x[9]});
             } else {
-                color.r = sru::util::svto<float>(x[1]);
-                color.g = sru::util::svto<float>(x[2]);
-                color.b = sru::util::svto<float>(x[3]);
+                color.r_ = sru::util::svto<float>(x[1]);
+                color.g_ = sru::util::svto<float>(x[2]);
+                color.b_ = sru::util::svto<float>(x[3]);
             }
         }
     }
-    for (auto& obj : objs) {
-        for (auto anchor_conf_id : config.groups) {
+    for (auto& obj : objs_) {
+        for (auto anchor_conf_id : config_.groups) {
             if (const auto anchor_conf_opt = getAnchorConfig(anchor_conf_id); anchor_conf_opt) {
                 const auto& anchor_conf = *anchor_conf_opt;
                 auto conf_x = anchor_conf.position.getX();
@@ -41,20 +41,20 @@ void PdfPage::indexObjects() {
                     continue;
                 }
                 if (anchor_conf.save_anchor) {
-                    anchor_objs.emplace(anchor_conf_id, &obj - objs.data());
+                    anchor_objs_.emplace(anchor_conf_id, &obj - objs_.data());
                 }
-                anchor_positions.emplace(anchor_conf_id, obj.getPosition());
+                anchor_positions_.emplace(anchor_conf_id, obj.getPosition());
             }
         }
     }
-    for (const auto& anchor_conf_id : config.groups) {
+    for (const auto& anchor_conf_id : config_.groups) {
         if (const auto anchor_conf = getAnchorConfig(anchor_conf_id); anchor_conf) {
             if (anchor_conf->is_virtual) {
-                anchor_positions.emplace(anchor_conf_id, anchor_conf->position);
+                anchor_positions_.emplace(anchor_conf_id, anchor_conf->position);
             }
         }
     }
-    for (const auto anchor_pair : anchor_positions) {
+    for (const auto anchor_pair : anchor_positions_) {
         if (const auto anchor_conf = getAnchorConfig(anchor_pair.first); anchor_conf) {
             const auto& anchor_obj = anchor_pair.second;
             int count_start = 0;
@@ -68,10 +68,10 @@ void PdfPage::indexObjects() {
                     float max_x = ref_x + object_conf.margin_x;
                     float max_y = ref_y + object_conf.margin_y;
 
-                    if (auto anchor_margin = anchor_positions.find(object_conf.anchor_margin_x); anchor_margin != anchor_positions.end()) {
+                    if (auto anchor_margin = anchor_positions_.find(object_conf.anchor_margin_x); anchor_margin != anchor_positions_.end()) {
                         max_x = anchor_margin->second.getX();
                     }
-                    if (auto anchor_margin = anchor_positions.find(object_conf.anchor_margin_y); anchor_margin != anchor_positions.end()) {
+                    if (auto anchor_margin = anchor_positions_.find(object_conf.anchor_margin_y); anchor_margin != anchor_positions_.end()) {
                         max_y = anchor_margin->second.getY();
                     }
 
@@ -87,7 +87,7 @@ void PdfPage::indexObjects() {
                     int found_count = 0;
                     int captured_count = 0;
 
-                    for (auto& comp_obj : objs) {
+                    for (auto& comp_obj : objs_) {
                         const float comp_x = std::fabs(comp_obj.getPosition().getX());
                         const float comp_y = std::fabs(comp_obj.getPosition().getY());
 
@@ -100,16 +100,16 @@ void PdfPage::indexObjects() {
                             }
                             if (found_count >= count_start) {
                                 if (sticky_id < 0) {
-                                    if (marked_objs.find(object_conf_id) == marked_objs.end()) {
+                                    if (marked_objs_.find(object_conf_id) == marked_objs_.end()) {
 
-                                        marked_objs.emplace(object_conf_id, std::vector<int>{});
+                                        marked_objs_.emplace(object_conf_id, std::vector<int>{});
                                     }
-                                    marked_objs.at(object_conf_id).emplace_back(&comp_obj - objs.data());
+                                    marked_objs_.at(object_conf_id).emplace_back(&comp_obj - objs_.data());
                                 } else {
-                                    if (stickied_objs.find(sticky_id) == stickied_objs.end() && sticky_id >= 0) {
-                                        stickied_objs.emplace(sticky_id, std::vector<int>{});
+                                    if (stickied_objs_.find(sticky_id) == stickied_objs_.end() && sticky_id >= 0) {
+                                        stickied_objs_.emplace(sticky_id, std::vector<int>{});
                                     }
-                                    stickied_objs.at(sticky_id).emplace_back(&comp_obj - objs.data());
+                                    stickied_objs_.at(sticky_id).emplace_back(&comp_obj - objs_.data());
                                 }
                                 ++captured_count;
                             }
@@ -123,97 +123,97 @@ void PdfPage::indexObjects() {
     }
 }
 void PdfPage::printObjects() const {
-    if (anchor_positions.empty()) {
+    if (anchor_positions_.empty()) {
         std::cout << "page: no objects to display" << std::endl;
     }
-    for (auto anchor_pair : anchor_positions) {
+    for (auto anchor_pair : anchor_positions_) {
         if (auto conf = getAnchorConfig(anchor_pair.first)) {
             std::cout << conf.value().name << ":\n";
             for (auto id : conf.value().sub_groups) {
-                if (marked_objs.find(id) != marked_objs.end()) {
-                    for (auto& obj : marked_objs.at(id)) {
-                        std::cout << "* " << objs[obj].getContent() << "\n";
+                if (marked_objs_.find(id) != marked_objs_.end()) {
+                    for (auto& obj : marked_objs_.at(id)) {
+                        std::cout << "* " << objs_[obj].getContent() << "\n";
                     }
                 }
             }
         }
     }
 }
-auto PdfPage::getObjects() const -> const std::vector<sru::pdf::StringObject>& { return objs; }
-auto PdfPage::getObjects() -> std::vector<sru::pdf::StringObject>& { return objs; }
-auto PdfPage::getRaw() const -> const std::string& { return raw; }
+auto PdfPage::getObjects() const -> const std::vector<sru::pdf::StringObject>& { return objs_; }
+auto PdfPage::getObjects() -> std::vector<sru::pdf::StringObject>& { return objs_; }
+auto PdfPage::getRaw() const -> const std::string& { return raw_; }
 auto PdfPage::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<StringObject>> {
     std::vector<std::reference_wrapper<StringObject>> wrapped{};
-    if (marked_objs.find(id) != marked_objs.end()) {
-        for (const int& x : marked_objs.at(id)) {
-            wrapped.emplace_back(objs[x]);
+    if (marked_objs_.find(id) != marked_objs_.end()) {
+        for (const int& x : marked_objs_.at(id)) {
+            wrapped.emplace_back(objs_[x]);
         }
     }
     return wrapped;
 }
 
-auto PdfPage::db_getObjects() -> const std::vector<StringObject>& { return objs; }
+auto PdfPage::db_getObjects() -> const std::vector<StringObject>& { return objs_; }
 auto PdfPage::db_getMarkedObjects(int id) -> std::vector<int> {
-    if (marked_objs.find(id) != marked_objs.end()) {
-        return marked_objs[id];
+    if (marked_objs_.find(id) != marked_objs_.end()) {
+        return marked_objs_[id];
     }
     return {};
 }
 auto PdfPage::db_updateObject(int id, StringObject obj) -> bool {
-    if (id >= objs.size()) {
+    if (id >= objs_.size()) {
         return false;
     }
-    update_staging.erase(id);
-    update_staging.emplace(id, std::move(obj));
+    update_staging_.erase(id);
+    update_staging_.emplace(id, std::move(obj));
     return true;
 }
 auto PdfPage::db_deleteObject(int id) -> bool {
-    if (id >= objs.size()) {
+    if (id >= objs_.size()) {
         return false;
     }
-    delete_staging.emplace_back(id);
+    delete_staging_.emplace_back(id);
 
     return true;
 }
 // might be bad if dupes get inserted
-auto PdfPage::db_insertObject(const StringObject& obj) -> void { insert_staging.emplace_back(obj); }
+auto PdfPage::db_insertObject(const StringObject& obj) -> void { insert_staging_.emplace_back(obj); }
 auto PdfPage::db_clear_staging() -> void {
-    update_staging.clear();
-    insert_staging.clear();
-    delete_staging.clear();
+    update_staging_.clear();
+    insert_staging_.clear();
+    delete_staging_.clear();
 }
 auto PdfPage::db_commit() -> bool {
-    for (auto& pair : update_staging) {
-        const auto& orig = objs[pair.first];
-        if (auto pos = raw.find(orig.toString()); pos != std::string::npos) {
-            raw.replace(pos, orig.toString().size(),
+    for (auto& pair : update_staging_) {
+        const auto& orig = objs_[pair.first];
+        if (auto pos = raw_.find(orig.toString()); pos != std::string::npos) {
+            raw_.replace(pos, orig.toString().size(),
                         "\n" + pair.second.getColor().toString() + "\n" + pair.second.toString() + orig.getColor().toString() + "\n");
-            objs[pair.first] = std::move(pair.second);
+            objs_[pair.first] = std::move(pair.second);
         } else {
             db_clear_staging();
             return false;
         }
     }
-    for (auto& obj : insert_staging) {
-        raw.append("\n" + obj.getColor().toString() + "\n" + obj.toString());
-        objs.emplace_back(std::move(obj));
+    for (auto& obj : insert_staging_) {
+        raw_.append("\n" + obj.getColor().toString() + "\n" + obj.toString());
+        objs_.emplace_back(std::move(obj));
     }
 
-    for (auto id : delete_staging) {
-        sru::util::erase_if(stickied_objs, [&](auto& key, auto& val) {
-            for (auto& [mkey, mval] : marked_objs) {
+    for (auto id : delete_staging_) {
+        sru::util::erase_if(stickied_objs_, [&](auto& key, auto& val) {
+            for (auto& [mkey, mval] : marked_objs_) {
                 for (auto& x : mval) {
                     if (x == id) {
-                        const auto start = delete_staging.size();
-                        delete_staging.resize(start + val.size());
-                        std::copy(val.begin(), val.end(), delete_staging.begin() + start);
+                        const auto start = delete_staging_.size();
+                        delete_staging_.resize(start + val.size());
+                        std::copy(val.begin(), val.end(), delete_staging_.begin() + start);
                         return true;
                     }
                 }
             }
             return false;
         });
-        sru::util::erase_if(marked_objs, [&](auto& key, auto& val) {
+        sru::util::erase_if(marked_objs_, [&](auto& key, auto& val) {
             for (auto& x : val) {
                 if (x == id) {
                     val.erase(val.begin() + (&x - val.data()));
@@ -221,30 +221,30 @@ auto PdfPage::db_commit() -> bool {
             }
             return val.empty();
         });
-        sru::util::erase_if(anchor_objs, [&](auto& key, auto& val) {
+        sru::util::erase_if(anchor_objs_, [&](auto& key, auto& val) {
           return val == id;
         });
     }
     //
-    std::sort(delete_staging.begin(), delete_staging.end(), std::greater<>());
-    delete_staging.erase(std::unique(delete_staging.begin(), delete_staging.end()), delete_staging.end());
+    std::sort(delete_staging_.begin(), delete_staging_.end(), std::greater<>());
+    delete_staging_.erase(std::unique(delete_staging_.begin(), delete_staging_.end()), delete_staging_.end());
 
     auto delta_adj = [&](auto& map) {
         for (auto& [key, val] : map) {
             for (auto& x : val)
-                x -= std::distance(delete_staging.begin(), std::upper_bound(delete_staging.begin(), delete_staging.end(), x));
+                x -= std::distance(delete_staging_.begin(), std::upper_bound(delete_staging_.begin(), delete_staging_.end(), x));
         }
     };
-    delta_adj(marked_objs);
-    delta_adj(stickied_objs);
-    for (auto& [key, val] : anchor_objs) {
-        val -= std::distance(delete_staging.begin(), std::upper_bound(delete_staging.begin(), delete_staging.end(), val));
+    delta_adj(marked_objs_);
+    delta_adj(stickied_objs_);
+    for (auto& [key, val] : anchor_objs_) {
+        val -= std::distance(delete_staging_.begin(), std::upper_bound(delete_staging_.begin(), delete_staging_.end(), val));
     }
 
-    for (auto& obj_id : delete_staging) {
-        if (auto pos = raw.find(objs[obj_id].toString()); pos != std::string::npos) {
-            raw.replace(pos, objs[obj_id].toString().size(), "");
-            objs.erase(objs.begin() + obj_id);
+    for (auto& obj_id : delete_staging_) {
+        if (auto pos = raw_.find(objs_[obj_id].toString()); pos != std::string::npos) {
+            raw_.replace(pos, objs_[obj_id].toString().size(), "");
+            objs_.erase(objs_.begin() + obj_id);
         } else {
             db_clear_staging();
             return false;

@@ -1,4 +1,5 @@
 #include "re_accel.h"
+#include <ctre.hpp>
 
 namespace sru::util {
 

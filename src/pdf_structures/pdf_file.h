@@ -1,13 +1,9 @@
 #pragma once
-#include "../util/re_accel.h"
 #include "../util/util.h"
 #include "anchor_config.h"
 #include "pdf_page.h"
 #include "string_obj.h"
-#include <boost/regex.hpp>
 #include <chrono>
-#include <ctll.hpp>
-#include <ctre.hpp>
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -15,12 +11,12 @@
 
 namespace sru::pdf {
 class PdfFile {
-    std::string raw;
-    unsigned int total_pages;
-    std::vector<std::pair<unsigned int, PdfPage>> pages;
+    std::string raw_;
+    unsigned int total_pages_;
+    std::vector<std::pair<unsigned int, PdfPage>> pages_;
 
-    std::filesystem::path path;
-    unsigned int real_pages;
+    std::filesystem::path path_;
+    unsigned int real_pages_;
 
   public:
     explicit PdfFile(const std::string& raw, std::filesystem::path path);
