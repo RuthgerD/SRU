@@ -1,8 +1,8 @@
 #include "config.h"
-#include "src/pdf_structures/anchor_config.h"
-#include "src/pdf_structures/object_config.h"
-#include "src/pdf_structures/page_config.h"
-#include "src/pdf_structures/pdf_cluster.h"
+#include "src/pdf/anchor_config.h"
+#include "src/pdf/object_config.h"
+#include "src/pdf/page_config.h"
+#include "src/pdf/pdf_cluster.h"
 #include "src/util/util.h"
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/program_options.hpp>

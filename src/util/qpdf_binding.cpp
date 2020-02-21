@@ -1,5 +1,5 @@
 #include "qpdf_binding.h"
-#include "../pdf_structures/pdf_file.h"
+#include "../pdf/pdf_file.h"
 #include "util.h"
 #include <filesystem>
 #include <string>

@@ -1,5 +1,5 @@
 #include "util.h"
-#include "../pdf_structures/string_obj.h"
+#include "../pdf/string_obj.h"
 
 namespace sru::util {
 auto Coordinate::getX() -> float& { return x_; }
