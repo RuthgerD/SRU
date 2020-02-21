@@ -32,8 +32,6 @@ class PdfPage {
     PdfPage& operator=(const PdfPage& oth) = default;
     PdfPage& operator=(PdfPage&&) = default;
     PdfPage(std::string raw, const PageConfig& config);
-    auto getObjects() const -> const std::vector<sru::pdf::StringObject>&;
-    auto getObjects() -> std::vector<sru::pdf::StringObject>&;
     auto db_getObjects() -> const std::vector<StringObject>&;
     auto db_getMarkedObjects(int id) -> std::vector<int>;
     auto db_updateObject(int id, StringObject obj) -> bool;
@@ -41,8 +39,8 @@ class PdfPage {
     auto db_insertObject(const StringObject& obj) -> void;
     auto db_commit() -> bool;
     auto db_clear_staging() -> void;
+    auto db_get(unsigned int id) const -> const StringObject&;
     auto getConfig() const -> PageConfig;
-    auto getMarkedObjects(int id) -> std::vector<std::reference_wrapper<StringObject>>;
     auto getAnchorPositions() const -> const std::unordered_map<int, sru::util::Coordinate>&;
     auto getRaw() const -> const std::string&;
     void indexObjects();

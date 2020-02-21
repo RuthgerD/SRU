@@ -37,7 +37,7 @@ auto operator!=(const sru::pdf::PdfPage& a, const sru::pdf::PdfPage& b) noexcept
 auto PdfFile::getPages() const -> const std::vector<std::pair<unsigned int, PdfPage>>& { return pages_; }
 auto PdfFile::getPages() -> std::vector<std::pair<unsigned int, PdfPage>>& { return pages_; }
 
-// TODO: duplicate code
+// TODO: duplicate code also maybe not needed
 auto PdfFile::getPage(unsigned int page_no) -> std::pair<unsigned int, PdfPage>& {
     if (auto tmp = std::find_if(pages_.begin(), pages_.end(), [page_no](const auto& x) { return x.first == page_no; }); tmp != pages_.end()) {
         return *tmp;
@@ -50,13 +50,15 @@ auto PdfFile::getPage(unsigned int page_no) const -> const std::pair<unsigned in
     }
     return pages_.back();
 }
-auto PdfFile::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<sru::pdf::StringObject>> {
-    std::vector<std::reference_wrapper<sru::pdf::StringObject>> total{};
-    for (auto& page : pages_) {
-        auto tmp = page.second.getMarkedObjects(id);
-        total.insert(total.end(), std::make_move_iterator(tmp.begin()), std::make_move_iterator(tmp.end()));
+auto PdfFile::getMarkedObjects(int id) -> std::vector<std::pair<int, std::vector<int>>> {
+    std::vector<std::pair<int, std::vector<int>>> ret;
+    for (auto& [page_no, page] : pages_) {
+        auto mkrd = page.db_getMarkedObjects(id);
+        if (!mkrd.empty()){
+            ret.emplace_back(page_no, std::move(mkrd));
+        }
     }
-    return total;
+    return ret;
 }
 auto PdfFile::getPath() const -> const std::filesystem::path& { return path_; }
 auto PdfFile::getPageCount() const -> int { return total_pages_; }
@@ -81,14 +83,6 @@ auto PdfFile::deletePage(const sru::pdf::PdfPage& page) -> bool {
     return false;
 }
 auto PdfFile::insertPage(PdfPage new_page, unsigned int new_page_no) -> void { insertPages({std::move(new_page)}, new_page_no); }
-auto PdfFile::insertPages(std::vector<std::pair<unsigned int, PdfPage>> new_pages, unsigned int new_page_no) -> void {
-    std::vector<PdfPage> new_pages_unpacked;
-    pages_.reserve(new_pages.size());
-    for (auto& page : new_pages) {
-        new_pages_unpacked.push_back(std::move(page.second));
-    }
-    insertPages(std::move(new_pages_unpacked), new_page_no);
-}
 auto PdfFile::insertPages(std::vector<PdfPage> new_pages, unsigned int new_page_no) -> void {
     // maybe assert?
     if (new_page_no > pages_.size()) {
@@ -106,8 +100,6 @@ auto PdfFile::insertPages(std::vector<PdfPage> new_pages, unsigned int new_page_
     }
 }
 auto PdfFile::getRaw() -> std::string {
-    // TODO: possible performance issues:
-    // TODO: * Dont overwrite pages if they are unchanged
     // TODO: * Dont scan every loop and keep an offset instead
     if (total_pages_ != real_pages_) {
         sru::qpdf::change_size(*this, (int)total_pages_ - (int)real_pages_);

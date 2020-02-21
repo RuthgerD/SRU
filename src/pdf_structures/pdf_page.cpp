@@ -21,7 +21,7 @@ void PdfPage::indexObjects() {
 
             if (x[1] == "") {
                 objs_.emplace_back(color, sru::util::svto<int>(x[4]), sru::util::svto<float>(x[5]), std::string{x[6]},
-                                  sru::util::Coordinate{sru::util::svto<float>(x[7]), sru::util::svto<float>(x[8])}, std::string{x[9]});
+                                   sru::util::Coordinate{sru::util::svto<float>(x[7]), sru::util::svto<float>(x[8])}, std::string{x[9]});
             } else {
                 color.r_ = sru::util::svto<float>(x[1]);
                 color.g_ = sru::util::svto<float>(x[2]);
@@ -153,6 +153,10 @@ auto PdfPage::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<Str
 }
 
 auto PdfPage::db_getObjects() -> const std::vector<StringObject>& { return objs_; }
+auto PdfPage::db_get(unsigned int id) const -> const StringObject& {
+    assert(id < objs_.size());
+    return objs_[id];
+}
 auto PdfPage::db_getMarkedObjects(int id) -> std::vector<int> {
     if (marked_objs_.find(id) != marked_objs_.end()) {
         return marked_objs_[id];
@@ -187,7 +191,7 @@ auto PdfPage::db_commit() -> bool {
         const auto& orig = objs_[pair.first];
         if (auto pos = raw_.find(orig.toString()); pos != std::string::npos) {
             raw_.replace(pos, orig.toString().size(),
-                        "\n" + pair.second.getColor().toString() + "\n" + pair.second.toString() + orig.getColor().toString() + "\n");
+                         "\n" + pair.second.getColor().toString() + "\n" + pair.second.toString() + orig.getColor().toString() + "\n");
             objs_[pair.first] = std::move(pair.second);
         } else {
             db_clear_staging();
@@ -221,9 +225,7 @@ auto PdfPage::db_commit() -> bool {
             }
             return val.empty();
         });
-        sru::util::erase_if(anchor_objs_, [&](auto& key, auto& val) {
-          return val == id;
-        });
+        sru::util::erase_if(anchor_objs_, [&](auto& key, auto& val) { return val == id; });
     }
     //
     std::sort(delete_staging_.begin(), delete_staging_.end(), std::greater<>());

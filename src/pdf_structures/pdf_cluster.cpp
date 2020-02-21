@@ -32,11 +32,14 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
         // TODO: dont hardcode
         auto DATE_FORMAT = "%d.%m.%Y %H:%M:%S";
         bool ret = false;
-        auto a_date = a.getMarkedObjects(DATE_PROVIDER);
-        auto b_date = b.getMarkedObjects(DATE_PROVIDER);
-        if (!a_date.empty() && !a_date.empty()) {
-            auto tp1 = sru::util::strptime(a_date.front().get().getContent(), DATE_FORMAT);
-            auto tp2 = sru::util::strptime(b_date.front().get().getContent(), DATE_FORMAT);
+        auto a_found = a.getMarkedObjects(DATE_PROVIDER);
+        auto b_found = b.getMarkedObjects(DATE_PROVIDER);
+
+        if (!a_found.empty() && !b_found.empty()) {
+            const auto& a_date = a.getPage(a_found.front().first).second.db_get(a_found.front().second.front());
+            const auto& b_date = b.getPage(b_found.front().first).second.db_get(b_found.front().second.front());
+            auto tp1 = sru::util::strptime(a_date.getContent(), DATE_FORMAT);
+            auto tp2 = sru::util::strptime(b_date.getContent(), DATE_FORMAT);
             if (tp1 && tp2) {
                 ret = *tp1 < *tp2;
             }
@@ -67,7 +70,7 @@ auto PdfCluster::exportTest() -> void {
                         auto y_base = anchor_pos->second.getY();
                         float offset = object_conf.y_object_spacing;
                         for (auto& obj : new_objs) {
-                            obj.setPosition(obj.getPosition().getX(), y_base + (offset * (&obj - new_objs.data() + 1)));
+                            obj.setPosition(obj.getPosition().getX(), y_base + (offset * ((int)(&obj - new_objs.data()) + 1)));
                         }
                     }
                     for (auto& obj : new_objs) {
@@ -239,20 +242,19 @@ auto PdfCluster::refreshNumbering(PdfFile& file) -> void {
         }
     }
     std::vector<int> count(numbering_confs.size());
-    for (auto& page : file.getPages()) {
+    for (auto& [page_no, page] : file.getPages()) {
         for (int i = 0; i < numbering_confs.size(); ++i) {
-            auto objs = page.second.db_getObjects();
-            auto mrked_objs = page.second.db_getMarkedObjects(numbering_confs[i].id);
+            auto mrked_objs = page.db_getMarkedObjects(numbering_confs[i].id);
             for (auto id : mrked_objs) {
-                auto copy = objs[id];
+                auto copy = page.db_get(id);
                 auto oldstr = copy.getContent();
                 sru::util::multi_re_place(numbering_confs[i].regexs[0], oldstr, {std::to_string(count[i] + 1)});
                 copy.setContent(oldstr);
-                page.second.db_updateObject(id, copy);
+                page.db_updateObject(id, copy);
                 ++count[i];
             }
         }
-        page.second.db_commit();
+        page.db_commit();
     }
 }
 } // namespace sru::pdf
