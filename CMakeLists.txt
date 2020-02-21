@@ -15,6 +15,7 @@ add_compile_options("-flto")
 endif()
 add_compile_options("-fno-rtti")
 add_compile_options("-Wpedantic")
+add_compile_options("-Wshadow")
 
 find_package(Boost 1.66 REQUIRED COMPONENTS program_options regex)
 find_package (Threads)

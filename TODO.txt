@@ -1,14 +1,18 @@
 SRU 2.0: Now with less speculation!
 TODO LIST today:
-manage marked - stickied - anchor objects in with db
-write calculated objects to final
+3. refactor calculate() to accept singular configs and pages (remove PdfFile::getMarkedObjects)
+write calculated objects to final ->
 
 TODO LIST for alpha:
-
+namespace inconsistencies -> split up sru::util to sru::regex and sru::
+when doing .find() assign in the if statement and dereference later
 graph generation
 final pdf building
 userinput in calculations
 quick export
+rename save_anchor to something that actually represent what its doing currently
+ability to construct stickies
+setMarked() or setStickied() or setAnchor()
 
 TODO LIST for beta:
 Coordinate helpers
@@ -22,8 +26,13 @@ global configs to disable stuff
 good logging system
 sru::util::cmd stderr checking
 refactor calculate so that there is an option to only call calculate for one config
+regex match marked objects as well
+use [key, val] where we iterate over maps
+maybe allow objects to pick their anchors instead of anchors picking their objects
+maybe phase out internal sticky and let use handle it
 
 TODO LIST for stable:
+gather more data about page like size
 fix or make limitation clear that capital U and W (only in text type = 1) cant be displayed for some reason
 verify and compare results against v1 to make sure all edge cases are handled properly (also check source code of v1)
 
@@ -33,6 +42,8 @@ libqpdf integration, dctmk integration
 Page overflow
 opensourcing
 CTRE JIT :^)
+sticky linking
+add transform support to objects
 
 
 Ideas:
@@ -52,3 +63,10 @@ create special collumn object with name and vector of values (ints in our case b
 graph generation:
 
 
+
+Sticky stuff:
+create a function to get stickies for a certain object (ugly back search sadly)
+or
+give objects recursive ability to house their own sticky
+
+goal here is to keep integrity between export and import for reasons :)

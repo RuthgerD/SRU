@@ -42,7 +42,10 @@
             "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Numerical overview of the arrhythmia)\\)Tj\\nET",
             "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
             "groups": [
-                5
+                5,
+                6,
+                7,
+                8
             ]
         },
         {
@@ -142,6 +145,47 @@
             "sub_groups": [
                 5
             ]
+        },
+        {
+            "id": 6,
+            "is_virtual": false,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Table - SVPB",
+            "content_id": "SVPB",
+            "content_": "",
+            "content_alt": "",
+            "save_anchor": true,
+            "sub_groups": [
+                6
+            ]
+        },
+        {
+            "id": 7,
+            "is_virtual": false,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Table - End",
+            "content_id": "Total:",
+            "content_": "",
+            "content_alt": "",
+            "save_anchor": false,
+            "sub_groups": [
+            ]
+        },
+        {
+            "id": 8,
+            "is_virtual": false,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Table - Time",
+            "content_id": "Time",
+            "content_": "",
+            "content_alt": "",
+            "save_anchor": true,
+            "sub_groups": [
+                7
+            ]
         }
     ],
     "objects": [
@@ -149,12 +193,12 @@
             "id": 0,
             "object_name": "heart rate",
             "text_justify": 0,
-            "maximum_values": -1,
+            "maximum_values": 1,
             "y_object_spacing": 0,
             "round_cut_off": 0,
             "decimal_points": 0,
             "calc_modes": [
-                "ADD"
+                "SORT"
             ],
             "avrg_self": false,
             "avrg_source_id": -1,
@@ -162,7 +206,7 @@
             "avrg_multiplier": 0,
             "overflow_threshold": 0,
             "sort_settings": [
-                true
+                false
             ],
             "re_extract_order": [
                 1
@@ -172,7 +216,7 @@
             ],
             "margin_x": 150,
             "margin_y": 0,
-            "anchor_margin_x": 3,
+            "anchor_margin_x": -1,
             "anchor_margin_y": -1,
             "object_count": 1,
             "sticky_id": -1
@@ -200,7 +244,7 @@
             ],
             "margin_x": 150,
             "margin_y": 0,
-            "anchor_margin_x": 3,
+            "anchor_margin_x": -1,
             "anchor_margin_y": -1,
             "object_count": 1,
             "sticky_id": 0
@@ -222,7 +266,7 @@
             "avrg_multiplier": 0,
             "overflow_threshold": 0,
             "sort_settings": [
-                false,
+                true,
                 true
             ],
             "re_extract_order": [
@@ -355,6 +399,66 @@
             "anchor_margin_x": -1,
             "anchor_margin_y": -1,
             "object_count": 1,
+            "sticky_id": -1
+        },
+        {
+            "id": 6,
+            "object_name": "SVPB DATA",
+            "text_justify": 0,
+            "maximum_values": -1,
+            "y_object_spacing": 0,
+            "round_cut_off": 0,
+            "decimal_points": 0,
+            "calc_modes": [
+                "TABLE"
+            ],
+            "avrg_self": false,
+            "avrg_source_id": -1,
+            "avrg_base_id": -1,
+            "avrg_multiplier": 0,
+            "overflow_threshold": 0,
+            "sort_settings": [
+            ],
+            "re_extract_order": [
+                1
+            ],
+            "regexs": [
+            ],
+            "margin_x": 15,
+            "margin_y": 0,
+            "anchor_margin_x": -1,
+            "anchor_margin_y": 7,
+            "object_count": 50,
+            "sticky_id": -1
+        },
+        {
+            "id": 7,
+            "object_name": "TIME DATA",
+            "text_justify": 0,
+            "maximum_values": -1,
+            "y_object_spacing": 0,
+            "round_cut_off": 0,
+            "decimal_points": 0,
+            "calc_modes": [
+                "TABLE"
+            ],
+            "avrg_self": false,
+            "avrg_source_id": -1,
+            "avrg_base_id": -1,
+            "avrg_multiplier": 0,
+            "overflow_threshold": 0,
+            "sort_settings": [
+            ],
+            "re_extract_order": [
+                1
+            ],
+            "regexs": [
+            ],
+            "margin_x": -35,
+            "margin_y": 0,
+            "anchor_margin_x": -1,
+            "anchor_margin_y": 7,
+            "object_count": 50,
             "sticky_id": -1
         }
     ]
