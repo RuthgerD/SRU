@@ -12,26 +12,25 @@
 namespace sru::pdf {
 class PdfFile {
     std::string raw_;
-    unsigned int total_pages_;
-    std::vector<std::pair<unsigned int, PdfPage>> pages_;
+    size_t total_pages_;
+    std::vector<std::pair<size_t, PdfPage>> pages_;
 
     std::filesystem::path path_;
-    unsigned int real_pages_;
+    size_t real_pages_;
 
   public:
     explicit PdfFile(const std::string& raw, std::filesystem::path path);
-    [[nodiscard]] auto getPages() const -> const std::vector<std::pair<unsigned int, PdfPage>>&;
-    [[nodiscard]] auto getPage(unsigned int page_no) const -> const std::pair<unsigned int, PdfPage>&;
-    [[nodiscard]] auto getPages() -> std::vector<std::pair<unsigned int, PdfPage>>&;
-    [[nodiscard]] auto getPage(unsigned int page_no) -> std::pair<unsigned int, PdfPage>&;
+    [[nodiscard]] auto getPages() const -> const std::vector<std::pair<size_t, PdfPage>>&;
+    [[nodiscard]] auto getPage(size_t page_no) const -> const PdfPage&;
+    [[nodiscard]] auto getPages() -> std::vector<std::pair<size_t, PdfPage>>&;
+    [[nodiscard]] auto getPage(size_t page_no) -> PdfPage&;
     [[nodiscard]] auto getRaw() -> std::string;
-    [[nodiscard]] auto getMarkedObjects(int id) -> std::vector<std::pair<int, std::vector<int>>>;
+    [[nodiscard]] auto getMarkedObjects(int id) -> std::vector<std::pair<int, std::vector<offset>>>;
     [[nodiscard]] auto getPath() const -> const std::filesystem::path&;
-    [[nodiscard]] auto getPageCount() const -> int;
-    [[nodiscard]] auto getRealPageCount() const -> int;
-    auto deletePage(unsigned int page_no) -> bool;
+    [[nodiscard]] auto getPageCount() const -> size_t;
+    [[nodiscard]] auto getRealPageCount() const -> size_t;
     auto deletePage(const PdfPage& page) -> bool;
-    auto insertPage(PdfPage new_page, unsigned int new_page_no) -> void;
-    auto insertPages(std::vector<PdfPage> new_pages, unsigned int new_page_no) -> void;
+    auto insertPage(PdfPage new_page, size_t new_page_no) -> void;
+    auto insertPages(std::vector<PdfPage> new_pages, size_t new_page_no) -> void;
 };
 } // namespace sru::pdf

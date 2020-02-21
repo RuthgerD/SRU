@@ -8,11 +8,11 @@ namespace sru::pdf {
 extern int DATE_PROVIDER;
 
 struct ObjectConfig {
-    int id;
+    size_t id;
     std::string name;
 
     float text_justify;
-    int maximum_values;
+    size_t maximum_values;
     float y_object_spacing;
     float round_cut_off;
     int decimal_points;
@@ -34,9 +34,9 @@ struct ObjectConfig {
     float margin_y;
     int anchor_margin_x;
     int anchor_margin_y;
-    int object_count;
+    size_t object_count;
     int sticky_id;
 };
 extern std::vector<ObjectConfig> ObjectConfigPool;
-auto getObjectConfig(int id) -> std::optional<ObjectConfig>;
+auto getObjectConfig(size_t id) -> std::optional<ObjectConfig>;
 } // namespace sru::pdf

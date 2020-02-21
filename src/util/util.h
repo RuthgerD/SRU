@@ -45,7 +45,7 @@ auto cmd(const std::string& command) -> int;
 auto re_search(const std::string& re, std::string_view data, int limit = -1) -> std::optional<std::vector<std::vector<std::string_view>>>;
 auto re_match(const std::string& re, std::string_view data) -> bool;
 auto re_replace(const std::string& re, std::string_view repl, std::string& data) -> bool;
-auto re_group_count(const std::string& re) -> int;
+auto re_group_count(const std::string& re) -> size_t;
 auto multi_search(const std::string& re, const std::vector<std::string>& content, std::vector<int> order)
     -> std::pair<std::vector<std::vector<float>>, std::vector<std::vector<float>>>;
 auto multi_add(std::vector<std::vector<float>> values, int overflow = 1) -> std::vector<float>;

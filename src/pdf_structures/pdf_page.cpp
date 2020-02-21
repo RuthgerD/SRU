@@ -15,6 +15,7 @@ void PdfPage::indexObjects() {
     marked_objs_.clear();
     stickied_objs_.clear();
     anchor_objs_.clear();
+    clear_staging();
     if (const auto found = sru::util::re_search(config_.obj_regex, raw_); found) {
         auto color = sru::util::Color{0, 0, 0};
         for (const auto& x : *found) {
@@ -54,42 +55,42 @@ void PdfPage::indexObjects() {
             }
         }
     }
-    for (const auto anchor_pair : anchor_positions_) {
-        if (const auto anchor_conf = getAnchorConfig(anchor_pair.first); anchor_conf) {
-            const auto& anchor_obj = anchor_pair.second;
-            int count_start = 0;
+    for (const auto& [anchor_conf_id, anchor_position] : anchor_positions_) {
+        if (const auto anchor_conf = getAnchorConfig(anchor_conf_id); anchor_conf) {
+            const auto& anchor_obj = anchor_position;
+            auto count_start = 0;
             for (auto object_conf_id : anchor_conf->sub_groups) {
                 if (const auto object_conf_opt = getObjectConfig(object_conf_id); object_conf_opt) {
-                    const auto& object_conf = object_conf_opt.value();
+                    const auto& object_conf = *object_conf_opt;
 
-                    float ref_x = anchor_obj.getX();
-                    float ref_y = anchor_obj.getY();
+                    auto ref_x = anchor_obj.getX();
+                    auto ref_y = anchor_obj.getY();
 
-                    float max_x = ref_x + object_conf.margin_x;
-                    float max_y = ref_y + object_conf.margin_y;
+                    auto max_x = ref_x + object_conf.margin_x;
+                    auto max_y = ref_y + object_conf.margin_y;
 
                     if (auto anchor_margin = anchor_positions_.find(object_conf.anchor_margin_x); anchor_margin != anchor_positions_.end()) {
-                        max_x = anchor_margin->second.getX();
+                        max_x = anchor_position.getX();
                     }
                     if (auto anchor_margin = anchor_positions_.find(object_conf.anchor_margin_y); anchor_margin != anchor_positions_.end()) {
-                        max_y = anchor_margin->second.getY();
+                        max_y = anchor_position.getY();
                     }
 
-                    const float x1 = ref_x < max_x ? ref_x : max_x;
-                    const float y1 = ref_y > max_y ? ref_y : max_y;
+                    const auto x1 = ref_x < max_x ? ref_x : max_x;
+                    const auto y1 = ref_y > max_y ? ref_y : max_y;
 
-                    const float x2 = ref_x > max_x ? ref_x : max_x;
-                    const float y2 = ref_y < max_y ? ref_y : max_y;
+                    const auto x2 = ref_x > max_x ? ref_x : max_x;
+                    const auto y2 = ref_y < max_y ? ref_y : max_y;
 
-                    const int object_count = object_conf.object_count;
-                    int sticky_id = object_conf.sticky_id;
+                    const auto object_count = object_conf.object_count;
+                    auto sticky_id = object_conf.sticky_id;
 
-                    int found_count = 0;
-                    int captured_count = 0;
+                    auto found_count = 0;
+                    auto captured_count = 0;
 
                     for (auto& comp_obj : objs_) {
-                        const float comp_x = std::fabs(comp_obj.getPosition().getX());
-                        const float comp_y = std::fabs(comp_obj.getPosition().getY());
+                        const auto comp_x = std::fabs(comp_obj.getPosition().getX());
+                        const auto comp_y = std::fabs(comp_obj.getPosition().getY());
 
                         // TODO: use sru::util::Coordinate when its implemented
                         if (((y1 >= comp_y && x1 < comp_x && x2 > comp_x && y2 <= comp_y) ||
@@ -102,14 +103,14 @@ void PdfPage::indexObjects() {
                                 if (sticky_id < 0) {
                                     if (marked_objs_.find(object_conf_id) == marked_objs_.end()) {
 
-                                        marked_objs_.emplace(object_conf_id, std::vector<int>{});
+                                        marked_objs_.emplace(object_conf_id, std::vector<offset>{});
                                     }
-                                    marked_objs_.at(object_conf_id).emplace_back(&comp_obj - objs_.data());
+                                    marked_objs_[object_conf_id].emplace_back(&comp_obj - objs_.data());
                                 } else {
-                                    if (stickied_objs_.find(sticky_id) == stickied_objs_.end() && sticky_id >= 0) {
-                                        stickied_objs_.emplace(sticky_id, std::vector<int>{});
+                                    if (stickied_objs_.find(sticky_id) == stickied_objs_.end()) {
+                                        stickied_objs_.emplace(sticky_id, std::vector<offset>{});
                                     }
-                                    stickied_objs_.at(sticky_id).emplace_back(&comp_obj - objs_.data());
+                                    stickied_objs_[sticky_id].emplace_back(&comp_obj - objs_.data());
                                 }
                                 ++captured_count;
                             }
@@ -139,40 +140,29 @@ void PdfPage::printObjects() const {
         }
     }
 }
-auto PdfPage::getObjects() const -> const std::vector<sru::pdf::StringObject>& { return objs_; }
-auto PdfPage::getObjects() -> std::vector<sru::pdf::StringObject>& { return objs_; }
 auto PdfPage::getRaw() const -> const std::string& { return raw_; }
-auto PdfPage::getMarkedObjects(int id) -> std::vector<std::reference_wrapper<StringObject>> {
-    std::vector<std::reference_wrapper<StringObject>> wrapped{};
-    if (marked_objs_.find(id) != marked_objs_.end()) {
-        for (const int& x : marked_objs_.at(id)) {
-            wrapped.emplace_back(objs_[x]);
-        }
-    }
-    return wrapped;
-}
 
-auto PdfPage::db_getObjects() -> const std::vector<StringObject>& { return objs_; }
-auto PdfPage::db_get(unsigned int id) const -> const StringObject& {
+auto PdfPage::getObjects() -> const std::vector<StringObject>& { return objs_; }
+auto PdfPage::getObject(offset id) const -> const StringObject& {
     assert(id < objs_.size());
     return objs_[id];
 }
-auto PdfPage::db_getMarkedObjects(int id) -> std::vector<int> {
+auto PdfPage::getMarkedObjects(size_t id) -> std::vector<offset> {
     if (marked_objs_.find(id) != marked_objs_.end()) {
         return marked_objs_[id];
     }
     return {};
 }
-auto PdfPage::db_updateObject(int id, StringObject obj) -> bool {
-    if (id >= objs_.size()) {
+auto PdfPage::updateObject(offset id, StringObject& obj) -> bool {
+    if (id > objs_.size()) {
         return false;
     }
     update_staging_.erase(id);
     update_staging_.emplace(id, std::move(obj));
     return true;
 }
-auto PdfPage::db_deleteObject(int id) -> bool {
-    if (id >= objs_.size()) {
+auto PdfPage::deleteObject(offset id) -> bool {
+    if (id > objs_.size()) {
         return false;
     }
     delete_staging_.emplace_back(id);
@@ -180,21 +170,21 @@ auto PdfPage::db_deleteObject(int id) -> bool {
     return true;
 }
 // might be bad if dupes get inserted
-auto PdfPage::db_insertObject(const StringObject& obj) -> void { insert_staging_.emplace_back(obj); }
-auto PdfPage::db_clear_staging() -> void {
+auto PdfPage::insertObject(StringObject& obj) -> void { insert_staging_.emplace_back(std::move(obj)); }
+auto PdfPage::clear_staging() -> void {
     update_staging_.clear();
     insert_staging_.clear();
     delete_staging_.clear();
 }
-auto PdfPage::db_commit() -> bool {
-    for (auto& pair : update_staging_) {
-        const auto& orig = objs_[pair.first];
+auto PdfPage::commit() -> bool {
+    for (auto& [id, obj] : update_staging_) {
+        const auto& orig = objs_[id];
         if (auto pos = raw_.find(orig.toString()); pos != std::string::npos) {
             raw_.replace(pos, orig.toString().size(),
-                         "\n" + pair.second.getColor().toString() + "\n" + pair.second.toString() + orig.getColor().toString() + "\n");
-            objs_[pair.first] = std::move(pair.second);
+                         "\n" + obj.getColor().toString() + "\n" + obj.toString() + orig.getColor().toString() + "\n");
+            objs_[id] = std::move(obj);
         } else {
-            db_clear_staging();
+            clear_staging();
             return false;
         }
     }
@@ -248,11 +238,11 @@ auto PdfPage::db_commit() -> bool {
             raw_.replace(pos, objs_[obj_id].toString().size(), "");
             objs_.erase(objs_.begin() + obj_id);
         } else {
-            db_clear_staging();
+            clear_staging();
             return false;
         }
     }
-    db_clear_staging();
+    clear_staging();
     return true;
 }
 } // namespace sru::pdf

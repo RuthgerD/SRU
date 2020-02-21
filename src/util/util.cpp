@@ -113,7 +113,7 @@ auto re_replace(const std::string& regex, const std::string_view repl, std::stri
     }
     return replaced;
 }
-auto re_group_count(const std::string& regex) -> int {
+auto re_group_count(const std::string& regex) -> size_t {
     const re2::RE2 re{regex};
     if (!re.ok()) {
         return -1;
@@ -143,7 +143,7 @@ auto multi_search(const std::string& re, const std::vector<std::string>& content
             const auto& f = result->front();
             std::vector<float> extracted{};
             std::vector<float> count{};
-            for (int i = 1; i < f.size(); ++i) {
+            for (size_t i = 1; i < f.size(); ++i) {
                 extracted.push_back(svto<float>(f[order[i - 1]]));
                 count.push_back(1);
             }
@@ -178,7 +178,7 @@ auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector
 
     std::vector<std::pair<std::vector<float>, sru::pdf::StringObject>> zip;
     zip.reserve(values.size());
-    for (int i = 0; i < values.size(); ++i) {
+    for (size_t i = 0; i < values.size(); ++i) {
         zip.emplace_back(values[i], objects[i]);
     }
     std::sort(zip.begin(), zip.end(), [&settings](const auto& a, const auto& b) {
@@ -186,7 +186,7 @@ auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector
         auto compb = b.first;
 
         int diff = 0;
-        for (int i = 0; i < compa.size(); ++i) {
+        for (size_t i = 0; i < compa.size(); ++i) {
             auto tmp = (compa[i] - compb[i]) * std::pow(10, compa.size() - i);
             if (!settings[i]) {
                 tmp *= -1;
@@ -206,7 +206,7 @@ auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector
 }
 auto multi_avrg(const std::vector<float>& values, const std::vector<float>& compare, float multiplier) -> std::vector<float> {
     std::vector<float> result(values.size());
-    for (int i = 0; i < values.size(); ++i) {
+    for (size_t i = 0; i < values.size(); ++i) {
         result[i] = (values[i] / compare[i]) * multiplier;
     }
     return result;
@@ -216,7 +216,7 @@ auto multi_re_place(const std::string& regex, std::string& base, std::vector<std
         std::cout << "warning: multi_re_place: content doesnt match regex groups" << std::endl;
         return false;
     }
-    int i = 0;
+    size_t i = 0;
     for (; i < content.size(); ++i) {
         if (auto tmp = re_search(regex, base); tmp) {
             const auto& views = tmp->front();

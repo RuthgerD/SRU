@@ -59,9 +59,9 @@ auto main(int argc, char** argv) -> int {
     sru::pdf::DATE_PROVIDER = d["date_provider"].GetInt();
 
     for (auto& obb : d["pages"].GetArray()) {
-        std::vector<int> groups;
+        std::vector<size_t> groups;
         for (auto& val : obb["groups"].GetArray()) {
-            groups.push_back(val.Get<int>());
+            groups.push_back(val.Get<size_t>());
         }
         sru::pdf::PageConfig page{obb["page_name"].GetString(), obb["priority"].GetInt(),     obb["mutate_in_final"].GetString(),
                                   obb["regex_id"].GetString(),  obb["obj_regex"].GetString(), groups};
@@ -72,7 +72,7 @@ auto main(int argc, char** argv) -> int {
         for (auto& val : obb["sub_groups"].GetArray()) {
             sub_groups.push_back(val.Get<int>());
         }
-        sru::pdf::AnchorConfig anchor{obb["id"].GetInt(),
+        sru::pdf::AnchorConfig anchor{obb["id"].Get<size_t>(),
                                       obb["is_virtual"].GetBool(),
                                       sru::util::Coordinate(obb["x"].GetFloat(), obb["y"].GetFloat()),
                                       obb["anchor_name"].GetString(),
@@ -103,10 +103,10 @@ auto main(int argc, char** argv) -> int {
         for (auto& val : obb["re_extract_order"].GetArray()) {
             re_extract_order.push_back(val.Get<int>());
         }
-        sru::pdf::ObjectConfig testing{obb["id"].GetInt(),
+        sru::pdf::ObjectConfig testing{obb["id"].Get<size_t>(),
                                        obb["object_name"].GetString(),
                                        obb["text_justify"].GetFloat(),
-                                       obb["maximum_values"].GetInt(),
+                                       obb["maximum_values"].Get<size_t>(),
                                        obb["y_object_spacing"].GetFloat(),
                                        obb["round_cut_off"].GetFloat(),
                                        obb["decimal_points"].GetInt(),
@@ -123,7 +123,7 @@ auto main(int argc, char** argv) -> int {
                                        obb["margin_y"].GetFloat(),
                                        obb["anchor_margin_x"].GetInt(),
                                        obb["anchor_margin_y"].GetInt(),
-                                       obb["object_count"].GetInt(),
+                                       obb["object_count"].Get<size_t>(),
                                        obb["sticky_id"].GetInt()};
         sru::pdf::ObjectConfigPool.push_back(std::move(testing));
     }

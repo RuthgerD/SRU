@@ -3,7 +3,7 @@
 namespace sru::pdf {
 PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
     std::vector<std::future<std::optional<sru::pdf::PdfFile>>> result;
-    for (int i = 0; i < pdf_file_paths.size() - 1; i++) {
+    for (size_t i = 0; i < pdf_file_paths.size() - 1; i++) {
         const auto path = pdf_file_paths[i];
         result.push_back(std::async(std::launch::async, [path]() {
             if (const auto deflated_path_opt = sru::qpdf::decompress(path); deflated_path_opt) {
@@ -36,8 +36,8 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
         auto b_found = b.getMarkedObjects(DATE_PROVIDER);
 
         if (!a_found.empty() && !b_found.empty()) {
-            const auto& a_date = a.getPage(a_found.front().first).second.db_get(a_found.front().second.front());
-            const auto& b_date = b.getPage(b_found.front().first).second.db_get(b_found.front().second.front());
+            const auto& a_date = a.getPage(a_found.front().first).getObject(a_found.front().second.front());
+            const auto& b_date = b.getPage(b_found.front().first).getObject(b_found.front().second.front());
             auto tp1 = sru::util::strptime(a_date.getContent(), DATE_FORMAT);
             auto tp2 = sru::util::strptime(b_date.getContent(), DATE_FORMAT);
             if (tp1 && tp2) {
@@ -68,21 +68,21 @@ auto PdfCluster::exportTest() -> void {
                     if (auto anchor_pos = anchor_positions.find(anchor_conf_id);
                         anchor_pos != anchor_positions.end()) { // if no anchor found maybe find highest among objects
                         auto y_base = anchor_pos->second.getY();
-                        float offset = object_conf.y_object_spacing;
+                        float spacing = object_conf.y_object_spacing;
                         for (auto& obj : new_objs) {
-                            obj.setPosition(obj.getPosition().getX(), y_base + (offset * ((int)(&obj - new_objs.data()) + 1)));
+                            obj.setPosition(obj.getPosition().getX(), y_base + (spacing * ((int)(&obj - new_objs.data()) + 1.0)));
                         }
                     }
                     for (auto& obj : new_objs) {
-                        page.db_insertObject(obj);
+                        page.insertObject(obj);
                     }
-                    for (auto& obj : page.db_getMarkedObjects(object_conf_id)) {
-                        page.db_deleteObject(obj);
+                    for (auto& obj : page.getMarkedObjects(object_conf_id)) {
+                        page.deleteObject(obj);
                     }
                 }
             }
         }
-        page.db_commit();
+        page.commit();
     }
 
     /*
@@ -119,7 +119,7 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const std::vec
     std::vector<std::string> new_content;
     std::vector<sru::pdf::StringObject> provided_objects;
     auto reference = total_objects.front().getContent();
-    for (int i = 0; i < modes.size(); i++) {
+    for (size_t i = 0; i < modes.size(); i++) {
         auto mode = modes[i];
         auto regex = regexs[i];
 
@@ -130,13 +130,13 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const std::vec
         std::vector<std::string> content;
         std::transform(total_objects.begin(), total_objects.end(), std::back_inserter(content), [](const auto& obj) { return obj.getContent(); });
 
-        auto extracted = sru::util::multi_search(regex, content, object_conf.re_extract_order);
-        if (extracted.first.empty()) {
+        auto [extracted_data, extracted_count] = sru::util::multi_search(regex, content, object_conf.re_extract_order);
+        if (extracted_data.empty()) {
             break;
         }
 
         if (mode == "ADD") {
-            auto result = sru::util::multi_add(extracted.first, overflow_threshold);
+            auto result = sru::util::multi_add(extracted_data, overflow_threshold);
 
             std::vector<std::string> str_result;
             std::transform(result.begin(), result.end(), std::back_inserter(str_result),
@@ -150,9 +150,9 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const std::vec
         if (mode == "SORT") {
             const auto& limit = object_conf.maximum_values;
             const auto& sort_settings = object_conf.sort_settings;
-            auto tmp = sru::util::multi_sort(extracted.first, total_objects, sort_settings).second;
+            auto tmp = sru::util::multi_sort(extracted_data, total_objects, sort_settings).second;
 
-            for (int k = 0; k < tmp.size() && k < limit; ++k) {
+            for (size_t k = 0; k < tmp.size() && k < limit; ++k) {
                 provided_objects.push_back(tmp[k]);
                 new_content.push_back(tmp[k].getContent());
             }
@@ -174,8 +174,8 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const std::vec
                 avrg_base = calculated[avrg_base_id];
                  */
             } else {
-                avrg_source = sru::util::multi_add(extracted.second);
-                avrg_base = sru::util::multi_add(extracted.first);
+                avrg_source = sru::util::multi_add(extracted_count);
+                avrg_base = sru::util::multi_add(extracted_data);
             }
 
             const auto& multiplier = object_conf.avrg_multiplier;
@@ -202,7 +202,7 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const std::vec
         if (modes.size() > 1) {
             new_content = {new_content.back()};
         }
-        for (int j = 0; j < new_content.size(); ++j) {
+        for (size_t j = 0; j < new_content.size(); ++j) {
             const sru::pdf::StringObject* tmp;
             if (provided_objects.empty()) {
                 tmp = &total_objects.front();
@@ -224,8 +224,8 @@ auto PdfCluster::getMarkedObjects(int id, std::vector<PdfFile>& files) -> std::v
     for (auto& file : files) {
         for (auto& pair : file.getPages()) {
             auto& page = pair.second;
-            const auto& objs = page.db_getObjects();
-            for (auto obj_id : page.db_getMarkedObjects(id)) {
+            const auto& objs = page.getObjects();
+            for (auto obj_id : page.getMarkedObjects(id)) {
                 ret.emplace_back(objs[obj_id]);
             }
         }
@@ -243,18 +243,18 @@ auto PdfCluster::refreshNumbering(PdfFile& file) -> void {
     }
     std::vector<int> count(numbering_confs.size());
     for (auto& [page_no, page] : file.getPages()) {
-        for (int i = 0; i < numbering_confs.size(); ++i) {
-            auto mrked_objs = page.db_getMarkedObjects(numbering_confs[i].id);
+        for (size_t i = 0; i < numbering_confs.size(); ++i) {
+            auto mrked_objs = page.getMarkedObjects(numbering_confs[i].id);
             for (auto id : mrked_objs) {
-                auto copy = page.db_get(id);
+                auto copy = page.getObject(id);
                 auto oldstr = copy.getContent();
                 sru::util::multi_re_place(numbering_confs[i].regexs[0], oldstr, {std::to_string(count[i] + 1)});
                 copy.setContent(oldstr);
-                page.db_updateObject(id, copy);
+                page.updateObject(id, copy);
                 ++count[i];
             }
         }
-        page.db_commit();
+        page.commit();
     }
 }
 } // namespace sru::pdf

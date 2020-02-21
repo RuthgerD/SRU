@@ -5,7 +5,7 @@
 namespace sru::pdf {
 std::vector<AnchorConfig> AnchorConfigPool;
 
-auto getAnchorConfig(int id) -> std::optional<AnchorConfig> {
+auto getAnchorConfig(size_t id) -> std::optional<AnchorConfig> {
     for (const auto& conf : sru::pdf::AnchorConfigPool) {
         if (conf.id == id) {
             return conf;

@@ -11,7 +11,7 @@ struct PageConfig {
     std::string mutate_in_final;
     std::string regex_id;
     std::string obj_regex;
-    std::vector<int> groups;
+    std::vector<size_t> groups;
 };
 extern std::vector<PageConfig> PageConfigPool;
 } // namespace sru::pdf

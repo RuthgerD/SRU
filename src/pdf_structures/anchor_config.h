@@ -7,7 +7,7 @@
 
 namespace sru::pdf {
 struct AnchorConfig {
-    int id;
+    size_t id;
     bool is_virtual;
     sru::util::Coordinate position;
     std::string name;
@@ -17,7 +17,7 @@ struct AnchorConfig {
     bool save_anchor;
     std::vector<int> sub_groups;
 };
-auto getAnchorConfig(int id) -> std::optional<AnchorConfig>;
+auto getAnchorConfig(size_t id) -> std::optional<AnchorConfig>;
 extern std::vector<AnchorConfig> AnchorConfigPool;
 
 } // namespace sru::pdf

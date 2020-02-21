@@ -69,7 +69,8 @@ constexpr auto SRU_SCHEMA = R"({
                         "items": {
                             "$id": "#/properties/pages/items/properties/groups/items",
                             "type": "integer",
-                            "title": "The Items Schema"
+                            "title": "The Items Schema",
+                            "minimum" : 0
                         }
                     }
                 }
@@ -99,7 +100,8 @@ constexpr auto SRU_SCHEMA = R"({
                     "id": {
                         "$id": "#/properties/anchors/items/properties/id",
                         "type": "integer",
-                        "title": "The id Schema"
+                        "title": "The id Schema",
+                        "minimum" : 0
                     },
                     "is_virtual": {
                         "$id": "#/properties/anchors/items/properties/is_virtual",
@@ -194,7 +196,8 @@ constexpr auto SRU_SCHEMA = R"({
                     "id": {
                         "$id": "#/properties/objects/properties/items/properties/id",
                         "type": "integer",
-                        "title": "The id Schema"
+                        "title": "The id Schema",
+                        "minimum" : 0
                     },
                     "object_name": {
                         "$id": "#/properties/objects/properties/items/properties/object_name",
@@ -210,7 +213,8 @@ constexpr auto SRU_SCHEMA = R"({
                     "maximum_values": {
                         "$id": "#/properties/objects/properties/items/properties/maximum_values",
                         "type": "integer",
-                        "title": "The maximum_values Schema"
+                        "title": "The maximum_values Schema",
+                        "minimum" : 0
                     },
                     "y_object_spacing": {
                         "$id": "#/properties/objects/properties/items/properties/y_object_spacing",
@@ -315,7 +319,8 @@ constexpr auto SRU_SCHEMA = R"({
                     "object_count": {
                         "$id": "#/properties/objects/properties/items/properties/object_count",
                         "type": "integer",
-                        "title": "The object_count Schema"
+                        "title": "The object_count Schema",
+                        "minimum" : 0
                     },
                     "sticky_id": {
                         "$id": "#/properties/objects/properties/items/properties/sticky_id",
