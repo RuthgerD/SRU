@@ -15,7 +15,8 @@ class StringObject {
 
   public:
     StringObject(sru::util::Color color, int text_type, double font_size, std::string transform, sru::util::Coordinate position, std::string content);
-
+    inline StringObject(const StringObject& other) = default;
+    inline ~StringObject() = default;
     [[nodiscard]] auto getColor() const -> const sru::util::Color&;
     [[nodiscard]] auto getTextType() const -> int;
     [[nodiscard]] auto getFontSize() const -> double;

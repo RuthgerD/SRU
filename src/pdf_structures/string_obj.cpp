@@ -28,7 +28,5 @@ auto StringObject::setColor(float r, float g, float b) -> void {
 }
 auto StringObject::setTextType(int type) -> void { text_type = type; }
 auto StringObject::setFontSize(float size) -> void { font_size = size; }
-auto StringObject::setPosition(float x, float y) -> void {
-    position = sru::util::Coordinate{x,y};
-}
+auto StringObject::setPosition(float x, float y) -> void { position = sru::util::Coordinate{x, y}; }
 } // namespace sru::pdf

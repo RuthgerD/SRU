@@ -172,11 +172,11 @@ auto multi_add(std::vector<std::vector<float>> values, int overflow) -> std::vec
     }
     return total;
 }
-auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector<std::reference_wrapper<sru::pdf::StringObject>>& objects,
+auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector<sru::pdf::StringObject>& objects,
                 const std::vector<bool>& settings)
-    -> std::pair<std::vector<std::vector<float>>, std::vector<std::reference_wrapper<sru::pdf::StringObject>>> {
+    -> std::pair<std::vector<std::vector<float>>, std::vector<sru::pdf::StringObject>> {
 
-    std::vector<std::pair<std::vector<float>, std::reference_wrapper<sru::pdf::StringObject>>> zip;
+    std::vector<std::pair<std::vector<float>, sru::pdf::StringObject>> zip;
     zip.reserve(values.size());
     for (int i = 0; i < values.size(); ++i) {
         zip.emplace_back(values[i], objects[i]);
@@ -196,7 +196,7 @@ auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector
         return diff > 0;
     });
     std::vector<std::vector<float>> unzipped1;
-    std::vector<std::reference_wrapper<sru::pdf::StringObject>> unzipped2;
+    std::vector<sru::pdf::StringObject> unzipped2;
     for (auto& i : zip) {
         unzipped1.push_back(i.first);
         unzipped2.push_back(i.second);

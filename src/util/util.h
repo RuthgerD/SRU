@@ -50,9 +50,9 @@ auto multi_search(const std::string& re, const std::vector<std::string>& content
     -> std::pair<std::vector<std::vector<float>>, std::vector<std::vector<float>>>;
 auto multi_add(std::vector<std::vector<float>> values, int overflow = 1) -> std::vector<float>;
 // TODO: make into a template
-auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector<std::reference_wrapper<sru::pdf::StringObject>>& objects,
+auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector<sru::pdf::StringObject>& objects,
                 const std::vector<bool>& settings)
-    -> std::pair<std::vector<std::vector<float>>, std::vector<std::reference_wrapper<sru::pdf::StringObject>>>;
+    -> std::pair<std::vector<std::vector<float>>, std::vector<sru::pdf::StringObject>>;
 auto multi_avrg(const std::vector<float>& values, const std::vector<float>& compare, float multiplier) -> std::vector<float>;
 auto multi_re_place(const std::string& regex, std::string& base, std::vector<std::string> content) -> bool;
 template <typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
