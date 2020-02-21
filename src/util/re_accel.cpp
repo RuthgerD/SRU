@@ -1,7 +1,7 @@
 #include "re_accel.h"
 #include <ctre.hpp>
 
-namespace sru::util {
+namespace sru::re {
 
 static constexpr std::tuple ctre_regexs = {
     std::pair{default_obj_match_key, [](std::string_view sv) { return ctre::range<default_obj_match>(sv); }},
@@ -33,4 +33,4 @@ auto ReAccel::getAllMatches(std::string_view key, std::string_view sv, int limit
     });
     return ret;
 }
-} // namespace sru::util
+} // namespace sru::re

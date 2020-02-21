@@ -1,5 +1,5 @@
 #pragma once
-
+#include "regex.h"
 #include <boost/convert.hpp>
 #include <boost/convert/strtol.hpp>
 #include <boost/range/combine.hpp>
@@ -14,6 +14,11 @@
 #include <cmath>
 #include <iostream>
 #include <fmt/format.h>
+#include <algorithm>
+#include <array>
+#include <cmath>
+#include <cstdlib>
+#include <filesystem>
 
 namespace sru::pdf {
 class StringObject;
@@ -42,10 +47,7 @@ struct Color {
 auto QFileRead(const std::filesystem::path& path) -> std::optional<std::string>;
 auto QFileWrite(const std::string& content, const std::filesystem::path& path) -> bool;
 auto cmd(const std::string& command) -> int;
-auto re_search(const std::string& re, std::string_view data, int limit = -1) -> std::optional<std::vector<std::vector<std::string_view>>>;
-auto re_match(const std::string& re, std::string_view data) -> bool;
-auto re_replace(const std::string& re, std::string_view repl, std::string& data) -> bool;
-auto re_group_count(const std::string& re) -> size_t;
+
 auto multi_search(const std::string& re, const std::vector<std::string>& content, std::vector<int> order)
     -> std::pair<std::vector<std::vector<float>>, std::vector<std::vector<float>>>;
 auto multi_add(std::vector<std::vector<float>> values, int overflow = 1) -> std::vector<float>;

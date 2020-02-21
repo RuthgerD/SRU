@@ -10,11 +10,11 @@
 namespace sru::pdf {
 PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw_{""}, path_{path} {
     total_pages_ = 0;
-    if (auto page_matches = sru::util::re_search(sru::util::page_match_key, raw); page_matches) {
+    if (auto page_matches = sru::re::re_search(sru::re::page_match_key, raw); page_matches) {
         for (auto page_match : *page_matches) {
             const PageConfig* best_config = nullptr;
             for (const auto& pconf : sru::pdf::PageConfigPool) {
-                if (sru::util::re_match(pconf.regex_id, page_match[2])) {
+                if (sru::re::re_match(pconf.regex_id, page_match[2])) {
                     if (!best_config || best_config->priority > pconf.priority) {
                         best_config = &pconf;
                     }
@@ -104,7 +104,7 @@ auto PdfFile::getRaw() -> std::string {
     auto real_raw = *sru::util::QFileRead(path_);
     for (size_t j = 0; j < total_pages_; ++j) {
         auto sv = std::string_view{real_raw};
-        if (auto page_matches_opt = sru::util::re_search(sru::util::page_match_key, sv); page_matches_opt) {
+        if (auto page_matches_opt = sru::re::re_search(sru::re::page_match_key, sv); page_matches_opt) {
             auto& matches = *page_matches_opt;
             auto& match = matches[j];
             if (auto page = std::find_if(pages_.begin(), pages_.end(), [&](const auto& x) { return x.first == j; }); page != pages_.end()) {

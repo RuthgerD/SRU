@@ -12,7 +12,7 @@
 #include <variant>
 #include <vector>
 
-namespace sru::util {
+namespace sru::re {
 // CREDITS TO:
 // https://github.com/heavyeyelid/virthttp/blob/2877d4867f18f3bc17f5c1c84e37003cb4afbe56/include/virt_wrap/utility.hpp#L41
 //
@@ -69,4 +69,4 @@ class ReAccel {
     };
 
 } constexpr regex_accel{};
-} // namespace sru::util
+} // namespace sru::re

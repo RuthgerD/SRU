@@ -16,7 +16,7 @@ void PdfPage::indexObjects() {
     stickied_objs_.clear();
     anchor_objs_.clear();
     clear_staging();
-    if (const auto found = sru::util::re_search(config_.obj_regex, raw_); found) {
+    if (const auto found = sru::re::re_search(config_.obj_regex, raw_); found) {
         auto color = sru::util::Color{0, 0, 0};
         for (const auto& x : *found) {
 
@@ -38,7 +38,7 @@ void PdfPage::indexObjects() {
                 auto conf_y = anchor_conf.position.getY();
                 if (anchor_conf.is_virtual || (std::fabs(conf_y) / conf_y) * obj.getPosition().getY() >= conf_y ||
                     (std::fabs(conf_x) / conf_x) * obj.getPosition().getX() <= conf_x ||
-                    !sru::util::re_match(anchor_conf.content_id, obj.getContent())) {
+                    !sru::re::re_match(anchor_conf.content_id, obj.getContent())) {
                     continue;
                 }
                 if (anchor_conf.save_anchor) {
