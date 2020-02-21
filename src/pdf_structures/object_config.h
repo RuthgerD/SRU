@@ -38,5 +38,5 @@ struct ObjectConfig {
     int sticky_id;
 };
 extern std::vector<ObjectConfig> ObjectConfigPool;
-std::optional<ObjectConfig> getObjectConfig(int id);
+auto getObjectConfig(int id) -> std::optional<ObjectConfig>;
 } // namespace sru::pdf

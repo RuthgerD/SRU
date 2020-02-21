@@ -6,7 +6,7 @@
 namespace sru::pdf {
 int DATE_PROVIDER = -1;
 std::vector<ObjectConfig> ObjectConfigPool;
-std::optional<ObjectConfig> getObjectConfig(int id) {
+auto getObjectConfig(int id) -> std::optional<ObjectConfig> {
     for (const auto& conf : ObjectConfigPool) {
         if (conf.id == id) {
             return conf;
