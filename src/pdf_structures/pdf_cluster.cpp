@@ -29,23 +29,16 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
         }
     }
     std::sort(pdf_files_.begin(), pdf_files_.end(), [](PdfFile& a, PdfFile& b) {
+        // TODO: dont hardcode
+        auto DATE_FORMAT = "%d.%m.%Y %H:%M:%S";
         bool ret = false;
         auto a_date = a.getMarkedObjects(DATE_PROVIDER);
         auto b_date = b.getMarkedObjects(DATE_PROVIDER);
         if (!a_date.empty() && !a_date.empty()) {
-            // TODO: dont hardcode format and move to own function strptime()
-            std::tm tm1 = {};
-            std::stringstream ss1(a_date.front().get().getContent());
-
-            std::tm tm2 = {};
-            std::stringstream ss2(b_date.front().get().getContent());
-            ss1 >> std::get_time(&tm1, "%d.%m.%Y %H:%M:%S");
-
-            ss2 >> std::get_time(&tm2, "%d.%m.%Y %H:%M:%S");
-            if (!ss2.fail() && !ss1.fail()) {
-                auto tp1 = std::chrono::system_clock::from_time_t(std::mktime(&tm1));
-                auto tp2 = std::chrono::system_clock::from_time_t(std::mktime(&tm2));
-                ret = tp1 < tp2;
+            auto tp1 = sru::util::strptime(a_date.front().get().getContent(), DATE_FORMAT);
+            auto tp2 = sru::util::strptime(b_date.front().get().getContent(), DATE_FORMAT);
+            if (tp1 && tp2) {
+                ret = *tp1 < *tp2;
             }
         }
         return ret;

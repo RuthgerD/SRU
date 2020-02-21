@@ -244,4 +244,12 @@ auto to_string(const float& value, float cut_off, int decimal_point) -> std::str
     }
     return to_string(value, decimal_point);
 }
+auto strptime(const std::string& value, const std::string& pattern) -> std::optional<std::chrono::system_clock::time_point> {
+    std::tm tm = {};
+    std::stringstream ss(value);
+    ss >> std::get_time(&tm, pattern.data());
+    if (ss.fail())
+        return {};
+    return std::chrono::system_clock::from_time_t(std::mktime(&tm));
+}
 } // namespace sru::util

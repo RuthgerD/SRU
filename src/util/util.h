@@ -73,4 +73,5 @@ auto erase_if(std::unordered_map<Key,T,Hash,KeyEqual,Alloc>& c, Pred pred) -> vo
 }
 auto to_string(const float& value, int decimal_point) -> std::string;
 auto to_string(const float& value, float cut_off, int decimal_point) -> std::string;
+auto strptime(const std::string& value, const std::string& pattern) -> std::optional<std::chrono::system_clock::time_point>;
 } // namespace sru::util
