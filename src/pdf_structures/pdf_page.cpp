@@ -201,25 +201,29 @@ auto PdfPage::db_commit() -> bool {
 
     for (auto id : delete_staging) {
         sru::util::erase_if(stickied_objs, [&](auto& key, auto& val) {
-            for (auto& [key, val] : marked_objs) {
-                for (auto& x : val) {
+            for (auto& [mkey, mval] : marked_objs) {
+                for (auto& x : mval) {
                     if (x == id) {
-                        val.erase(val.begin() + (&x - val.data()));
-                        const auto& sticky = stickied_objs[key];
                         const auto start = delete_staging.size();
-                        delete_staging.resize(start + sticky.size());
-                        std::copy(sticky.begin(), sticky.end(), delete_staging.begin() + start);
+                        delete_staging.resize(start + val.size());
+                        std::copy(val.begin(), val.end(), delete_staging.begin() + start);
                         return true;
                     }
                 }
             }
             return false;
         });
-        for (auto& [key, val] : anchor_objs) {
-            if (val == id) {
-                marked_objs.erase(key);
+        sru::util::erase_if(marked_objs, [&](auto& key, auto& val) {
+            for (auto& x : val) {
+                if (x == id) {
+                    val.erase(val.begin() + (&x - val.data()));
+                }
             }
-        }
+            return val.empty();
+        });
+        sru::util::erase_if(anchor_objs, [&](auto& key, auto& val) {
+          return val == id;
+        });
     }
     //
     std::sort(delete_staging.begin(), delete_staging.end(), std::greater<>());
