@@ -9,7 +9,6 @@
 #include <chrono>
 #include <filesystem>
 #include <iostream>
-#include <iterator>
 #include <rapidjson/schema.h>
 #include <string_view>
 #include <utility>
@@ -72,60 +71,63 @@ auto main(int argc, char** argv) -> int {
         for (auto& val : obb["sub_groups"].GetArray()) {
             sub_groups.push_back(val.Get<int>());
         }
-        sru::pdf::AnchorConfig anchor{obb["id"].Get<size_t>(),
-                                      obb["is_virtual"].GetBool(),
-                                      sru::util::Coordinate(obb["x"].GetFloat(), obb["y"].GetFloat()),
-                                      obb["anchor_name"].GetString(),
-                                      obb["content_id"].GetString(),
-                                      obb["content_"].GetString(),
-                                      obb["content_alt"].GetString(),
-                                      obb["save_anchor"].GetBool(),
-                                      sub_groups};
+        sru::pdf::AnchorConfig anchor{
+            obb["id"].Get<size_t>(),        obb["is_virtual"].GetBool(),   sru::util::Coordinate(obb["x"].GetFloat(), obb["y"].GetFloat()),
+            obb["anchor_name"].GetString(), obb["content_id"].GetString(), obb["content_"].GetString(),
+            obb["content_alt"].GetString(), obb["save_anchor"].GetBool(),  sub_groups};
         sru::pdf::AnchorConfigPool.push_back(std::move(anchor)); // REMINDER TO DO THIS FOR EVERYTHING
     }
     for (auto& obb : d["objects"].GetArray()) {
         std::vector<std::string> calc_modes;
+
         for (auto& val : obb["calc_modes"].GetArray()) {
             calc_modes.push_back(val.Get<std::string>());
         }
 
         std::vector<bool> sort_settings;
-        for (auto& val : obb["sort_settings"].GetArray()) {
-            sort_settings.push_back(val.Get<bool>());
+        if (obb.HasMember("sort_settings")) {
+            for (auto& val : obb["sort_settings"].GetArray()) {
+                sort_settings.push_back(val.Get<bool>());
+            }
         }
 
         std::vector<std::string> regexs;
-        for (auto& val : obb["regexs"].GetArray()) {
-            regexs.push_back(val.Get<std::string>());
+        if (obb.HasMember("regexs")) {
+            for (auto& val : obb["regexs"].GetArray()) {
+                regexs.push_back(val.Get<std::string>());
+            }
         }
 
         std::vector<int> re_extract_order;
-        for (auto& val : obb["re_extract_order"].GetArray()) {
-            re_extract_order.push_back(val.Get<int>());
+        if (obb.HasMember("re_extract_order")) {
+            for (auto& val : obb["re_extract_order"].GetArray()) {
+                re_extract_order.push_back(val.Get<int>());
+            }
         }
-        sru::pdf::ObjectConfig testing{obb["id"].Get<size_t>(),
-                                       obb["object_name"].GetString(),
-                                       obb["text_justify"].GetFloat(),
-                                       obb["maximum_values"].Get<size_t>(),
-                                       obb["y_object_spacing"].GetFloat(),
-                                       obb["round_cut_off"].GetFloat(),
-                                       obb["decimal_points"].GetInt(),
-                                       calc_modes,
-                                       obb["avrg_self"].GetBool(),
-                                       obb["avrg_source_id"].GetInt(),
-                                       obb["avrg_base_id"].GetInt(),
-                                       obb["avrg_multiplier"].GetInt(),
-                                       obb["overflow_threshold"].GetFloat(),
-                                       sort_settings,
-                                       re_extract_order,
-                                       regexs,
-                                       obb["margin_x"].GetFloat(),
-                                       obb["margin_y"].GetFloat(),
-                                       obb["anchor_margin_x"].GetInt(),
-                                       obb["anchor_margin_y"].GetInt(),
-                                       obb["object_count"].Get<size_t>(),
-                                       obb["sticky_id"].GetInt()};
-        sru::pdf::ObjectConfigPool.push_back(std::move(testing));
+
+        sru::pdf::ObjectConfig config{obb["id"].Get<size_t>(),
+                                      obb["object_name"].GetString(),
+                                      obb.HasMember("text_justify") ? obb["text_justify"].GetFloat() : 0,
+                                      obb.HasMember("maximum_values") ? obb["maximum_values"].Get<size_t>() : 0,
+                                      obb.HasMember("y_object_spacing") ? obb["y_object_spacing"].GetFloat() : 0,
+                                      obb.HasMember("round_cut_off") ? obb["round_cut_off"].GetFloat() : 0,
+                                      obb.HasMember("decimal_points") ? obb["decimal_points"].GetInt() : 0,
+                                      calc_modes,
+                                      obb.HasMember("avrg_self") ? obb["avrg_source_id"].GetBool() : false,
+                                      obb.HasMember("avrg_source_id") ? obb["avrg_source_id"].GetInt() : -1,
+                                      obb.HasMember("avrg_base_id") ? obb["avrg_base_id"].GetInt() : -1,
+                                      obb.HasMember("avrg_multiplier") ? obb["avrg_multiplier"].GetInt() : -1,
+                                      obb.HasMember("overflow_threshold") ? obb["overflow_threshold"].GetFloat() : -1,
+                                      sort_settings,
+                                      re_extract_order,
+                                      regexs,
+                                      obb.HasMember("margin_x") ? obb["margin_x"].GetFloat() : 0,
+                                      obb.HasMember("margin_y") ? obb["margin_y"].GetFloat() : 0,
+                                      obb.HasMember("anchor_margin_x") ? obb["anchor_margin_x"].GetInt() : -1,
+                                      obb.HasMember("anchor_margin_y") ? obb["anchor_margin_y"].GetInt() : -1,
+                                      obb.HasMember("object_count") ? obb["object_count"].Get<size_t>() : 1,
+                                      obb.HasMember("sticky_id") ? obb["sticky_id"].GetInt() : -1};
+        sru::pdf::ObjectConfigPool.push_back(std::move(config));
     }
     std::vector<std::filesystem::path> pdf_file_paths{};
     // On unix based systems the binary isnt stored in a place where the user

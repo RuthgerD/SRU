@@ -20,7 +20,6 @@
             "groups": [
                 0,
                 1,
-                2,
                 3,
                 5
             ]
@@ -88,20 +87,6 @@
             "sub_groups": [
                 0,
                 99
-            ]
-        },
-        {
-            "id": 2,
-            "is_virtual": true,
-            "x": 340.85,
-            "y": 698.45,
-            "anchor_name": "First name",
-            "content_id": "",
-            "content_": "",
-            "content_alt": "",
-            "save_anchor": true,
-            "sub_groups": [
-                2
             ]
         },
         {
@@ -195,16 +180,9 @@
             "text_justify": 0,
             "maximum_values": 1,
             "y_object_spacing": 0,
-            "round_cut_off": 0,
-            "decimal_points": 0,
             "calc_modes": [
                 "SORT"
             ],
-            "avrg_self": false,
-            "avrg_source_id": -1,
-            "avrg_base_id": -1,
-            "avrg_multiplier": 0,
-            "overflow_threshold": 0,
             "sort_settings": [
                 false
             ],
@@ -214,39 +192,14 @@
             "regexs": [
                 "([0-9]+?)/min"
             ],
-            "margin_x": 150,
-            "margin_y": 0,
-            "anchor_margin_x": -1,
-            "anchor_margin_y": -1,
-            "object_count": 1,
-            "sticky_id": -1
+            "margin_x": 150
         },
         {
             "id": 99,
+            "calc_modes": [],
             "object_name": "min heart rate date",
             "text_justify": 0,
-            "maximum_values": 1,
-            "y_object_spacing": 0,
-            "round_cut_off": 0,
-            "decimal_points": 0,
-            "calc_modes": [
-            ],
-            "avrg_self": false,
-            "avrg_source_id": -1,
-            "avrg_base_id": -1,
-            "avrg_multiplier": 0,
-            "overflow_threshold": 0,
-            "sort_settings": [
-            ],
-            "re_extract_order": [
-            ],
-            "regexs": [
-            ],
             "margin_x": 150,
-            "margin_y": 0,
-            "anchor_margin_x": -1,
-            "anchor_margin_y": -1,
-            "object_count": 1,
             "sticky_id": 0
         },
         {
@@ -255,16 +208,9 @@
             "text_justify": 0,
             "maximum_values": 3,
             "y_object_spacing": -11.33,
-            "round_cut_off": 0,
-            "decimal_points": 0,
             "calc_modes": [
                 "SORT"
             ],
-            "avrg_self": false,
-            "avrg_source_id": -1,
-            "avrg_base_id": -1,
-            "avrg_multiplier": 0,
-            "overflow_threshold": 0,
             "sort_settings": [
                 true,
                 true
@@ -278,188 +224,58 @@
             ],
             "margin_x": 20,
             "margin_y": -40,
-            "anchor_margin_x": -1,
-            "anchor_margin_y": -1,
-            "object_count": 3,
-            "sticky_id": -1
-        },
-        {
-            "id": 2,
-            "object_name": "first name",
-            "text_justify": 0,
-            "maximum_values": 1,
-            "y_object_spacing": 0,
-            "round_cut_off": 0,
-            "decimal_points": 0,
-            "calc_modes": [
-            ],
-            "avrg_self": false,
-            "avrg_source_id": -1,
-            "avrg_base_id": -1,
-            "avrg_multiplier": 0,
-            "overflow_threshold": 0,
-            "sort_settings": [
-            ],
-            "re_extract_order": [
-            ],
-            "regexs": [
-            ],
-            "margin_x": 150,
-            "margin_y": 0,
-            "anchor_margin_x": -1,
-            "anchor_margin_y": -1,
-            "object_count": 1,
-            "sticky_id": -1
+            "object_count": 3
         },
         {
             "id": 3,
             "object_name": "begin date",
-            "text_justify": 0,
-            "maximum_values": 1,
-            "y_object_spacing": 0,
-            "round_cut_off": 0,
-            "decimal_points": 0,
             "calc_modes": [
             ],
-            "avrg_self": false,
-            "avrg_source_id": -1,
-            "avrg_base_id": -1,
-            "avrg_multiplier": 0,
-            "overflow_threshold": 0,
-            "sort_settings": [
-            ],
-            "re_extract_order": [
-            ],
-            "regexs": [
-            ],
-            "margin_x": 150,
-            "margin_y": 0,
-            "anchor_margin_x": -1,
-            "anchor_margin_y": -1,
-            "object_count": 1,
-            "sticky_id": -1
+            "margin_x": 150
         },
         {
             "id": 4,
             "object_name": "example numbering",
             "text_justify": 0,
-            "maximum_values": 1,
-            "y_object_spacing": 0,
-            "round_cut_off": 0,
-            "decimal_points": 0,
             "calc_modes": [
                 "NUMBERING"
-            ],
-            "avrg_self": false,
-            "avrg_source_id": -1,
-            "avrg_base_id": -1,
-            "avrg_multiplier": 0,
-            "overflow_threshold": 0,
-            "sort_settings": [
-            ],
-            "re_extract_order": [
-                1
             ],
             "regexs": [
                 "Example No.: ([0-9]*)"
             ],
-            "margin_x": 150,
-            "margin_y": 0,
-            "anchor_margin_x": -1,
-            "anchor_margin_y": -1,
-            "object_count": 1,
-            "sticky_id": -1
+            "margin_x": 150
         },
         {
             "id": 5,
             "object_name": "page numbering",
             "text_justify": 0,
-            "maximum_values": 1,
-            "y_object_spacing": 0,
-            "round_cut_off": 0,
-            "decimal_points": 0,
             "calc_modes": [
                 "NUMBERING"
-            ],
-            "avrg_self": false,
-            "avrg_source_id": -1,
-            "avrg_base_id": -1,
-            "avrg_multiplier": 0,
-            "overflow_threshold": 0,
-            "sort_settings": [
-            ],
-            "re_extract_order": [
-                1
             ],
             "regexs": [
                 "Page ([0-9]*)"
             ],
-            "margin_x": 150,
-            "margin_y": 0,
-            "anchor_margin_x": -1,
-            "anchor_margin_y": -1,
-            "object_count": 1,
-            "sticky_id": -1
+            "margin_x": 150
         },
         {
             "id": 6,
             "object_name": "SVPB DATA",
-            "text_justify": 0,
-            "maximum_values": 1,
-            "y_object_spacing": 0,
-            "round_cut_off": 0,
-            "decimal_points": 0,
             "calc_modes": [
                 "TABLE"
             ],
-            "avrg_self": false,
-            "avrg_source_id": -1,
-            "avrg_base_id": -1,
-            "avrg_multiplier": 0,
-            "overflow_threshold": 0,
-            "sort_settings": [
-            ],
-            "re_extract_order": [
-                1
-            ],
-            "regexs": [
-            ],
             "margin_x": 15,
-            "margin_y": 0,
-            "anchor_margin_x": -1,
             "anchor_margin_y": 7,
-            "object_count": 50,
-            "sticky_id": -1
+            "object_count": 50
         },
         {
             "id": 7,
             "object_name": "TIME DATA",
-            "text_justify": 0,
-            "maximum_values": 1,
-            "y_object_spacing": 0,
-            "round_cut_off": 0,
-            "decimal_points": 0,
             "calc_modes": [
                 "TABLE"
             ],
-            "avrg_self": false,
-            "avrg_source_id": -1,
-            "avrg_base_id": -1,
-            "avrg_multiplier": 0,
-            "overflow_threshold": 0,
-            "sort_settings": [
-            ],
-            "re_extract_order": [
-                1
-            ],
-            "regexs": [
-            ],
             "margin_x": -35,
-            "margin_y": 0,
-            "anchor_margin_x": -1,
             "anchor_margin_y": 7,
-            "object_count": 50,
-            "sticky_id": -1
+            "object_count": 50
         }
     ]
 }
