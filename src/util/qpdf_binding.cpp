@@ -109,16 +109,13 @@ auto insert_page(const sru::pdf::PdfFile& pdf_file_out, size_t page_no, const sr
         return false;
     }
 }
-auto change_size(const sru::pdf::PdfFile& pdf_file, size_t size) -> bool {
+auto increase_size(const sru::pdf::PdfFile& pdf_file, size_t size) -> bool {
     auto page_count = pdf_file.getRealPageCount();
     if (size > page_count) {
-        change_size(pdf_file, page_count);
+        increase_size(pdf_file, page_count);
         size -= page_count;
     }
-    if (size < -page_count) {
-        change_size(pdf_file, -page_count);
-        size += page_count;
-    }
+
     const auto abs_pdf_file = std::filesystem::absolute(pdf_file.getPath().lexically_normal());
     std::string command{};
     if (size > 0) {

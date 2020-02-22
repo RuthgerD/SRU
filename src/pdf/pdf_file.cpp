@@ -97,7 +97,7 @@ auto PdfFile::insertPages(std::vector<PdfPage> new_pages, size_t new_page_no) ->
 auto PdfFile::getRaw() -> std::string {
     // TODO: * Dont scan every loop and keep an offset instead
     if (total_pages_ != real_pages_) {
-        sru::qpdf::change_size(*this, (int)total_pages_ - (int)real_pages_);
+        sru::qpdf::increase_size(*this, (int)total_pages_ - (int)real_pages_);
         real_pages_ = total_pages_;
     }
 

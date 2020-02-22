@@ -58,38 +58,42 @@ auto PdfCluster::exportTest() -> void {
         for (auto& [anchor_conf_id, val] : page.getAnchorPositions()) {
             auto anchor_conf = *getAnchorConfig(anchor_conf_id); // if the page got it then we dont need to check :)
             for (auto& object_conf_id : anchor_conf.sub_groups) {
-                auto object_conf = *getObjectConfig(object_conf_id);
+                auto object_conf_opt = getObjectConfig(object_conf_id);
+                if (!object_conf_opt) {
+                    continue;
+                }
+                auto& object_conf = *object_conf_opt;
                 auto total_objs = getMarkedObjects(object_conf_id, pdf_files_); // get ALL objects from all the files that follow the same config
 
                 auto new_objs = calculateObject(object_conf, total_objs);
 
-                if (!new_objs.empty()) {
-                    const auto& anchor_positions = page.getAnchorPositions();
-                    if (auto anchor_pos = anchor_positions.find(anchor_conf_id);
-                        anchor_pos != anchor_positions.end()) { // if no anchor found maybe find highest among objects
-                        auto y_base = anchor_pos->second.getY();
-                        float spacing = object_conf.y_object_spacing;
-                        for (auto& obj : new_objs) {
-                            obj.setPosition(obj.getPosition().getX(), y_base + (spacing * ((int)(&obj - new_objs.data()) + 1.0)));
-                        }
-                    }
+                if (new_objs.empty()) {
+                    continue;
+                }
+                const auto& anchor_positions = page.getAnchorPositions();
+                if (auto anchor_pos = anchor_positions.find(anchor_conf_id);
+                    anchor_pos != anchor_positions.end()) { // if no anchor found maybe find highest among objects
+                    auto y_base = anchor_pos->second.getY();
+                    float spacing = object_conf.y_object_spacing;
                     for (auto& obj : new_objs) {
-                        page.insertObject(obj);
+                        obj.setPosition(obj.getPosition().getX(), y_base + (spacing * ((int)(&obj - new_objs.data()) + 1.0)));
                     }
-                    for (auto& obj : page.getMarkedObjects(object_conf_id)) {
-                        page.deleteObject(obj);
-                    }
+                }
+                for (auto& obj : new_objs) {
+                    page.insertObject(obj);
+                }
+                for (auto& obj : page.getMarkedObjects(object_conf_id)) {
+                    page.deleteObject(obj);
                 }
             }
         }
         page.commit();
     }
 
-    /*
     std::vector<PdfPage> to_be;
     // NOT SORTED
-    for (int i = 1; i < pdf_files.size(); ++i) {
-        for (const auto& x : pdf_files[i].getPages()) {
+    for (int i = 1; i < pdf_files_.size(); ++i) {
+        for (const auto& x : pdf_files_[i].getPages()) {
             if (x.second.getConfig().mutate_in_final == "append") {
                 to_be.push_back(x.second);
             }
@@ -97,7 +101,6 @@ auto PdfCluster::exportTest() -> void {
     }
 
     final_pdf.insertPages(std::move(to_be), 999);
-    */
     refreshNumbering(final_pdf);
 
     const auto raw = final_pdf.getRaw();
@@ -105,23 +108,22 @@ auto PdfCluster::exportTest() -> void {
 }
 
 auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const std::vector<StringObject>& total_objects) -> std::vector<StringObject> {
-    if (total_objects.empty()) {
-        std::cout << "No objects found for " << object_conf.name << std::endl;
+    const auto& modes = object_conf.calc_modes;
+    const auto& regexs = object_conf.regexs;
+    if (object_conf.calc_modes.empty() || modes.size() != regexs.size() || total_objects.empty()) {
         return {};
     }
-    auto modes = object_conf.calc_modes;
-    auto regexs = object_conf.regexs;
-    if (modes.size() != regexs.size()) {
-        std::cout << "Not enough regexs supplied for " << object_conf.name << std::endl;
-        return {};
+    for (auto& x : object_conf.calc_modes) {
+        if (!(x == "SUM" || x == "SORT" || x == "AVRG" || x == "USER_INPUT"))
+            return {};
     }
 
     std::vector<std::string> new_content;
     std::vector<sru::pdf::StringObject> provided_objects;
     auto reference = total_objects.front().getContent();
     for (size_t i = 0; i < modes.size(); i++) {
-        auto mode = modes[i];
-        auto regex = regexs[i];
+        const auto& mode = modes[i];
+        const auto& regex = regexs[i];
 
         const auto& cut_off = object_conf.round_cut_off;
         const auto& decimal_points = object_conf.decimal_points;
@@ -135,7 +137,7 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const std::vec
             break;
         }
 
-        if (mode == "ADD") {
+        if (mode == "SUM") {
             auto result = sru::util::multi_add(extracted_data, overflow_threshold);
 
             std::vector<std::string> str_result;
