@@ -58,10 +58,13 @@ auto multi_search(const std::string& re, const std::vector<std::string>& content
 
     for (const auto& data : content) {
         if (auto result = sru::re::re_search(re, data); result) {
-            const auto& f = result->front();
+            auto& f = result->front();
             std::vector<float> extracted{};
             std::vector<float> count{};
             for (size_t i = 1; i < f.size(); ++i) {
+                //std::string contn{f[order[i - 1]]};
+                if (auto pos = f[order[i - 1]].find('<'); pos != std::string::npos)
+                    f[order[i - 1]].remove_prefix(1);
                 extracted.push_back(svto<float>(f[order[i - 1]]));
                 count.push_back(1);
             }
@@ -90,14 +93,14 @@ auto multi_add(std::vector<std::vector<float>> values, int overflow) -> std::vec
     }
     return total;
 }
-auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector<sru::pdf::StringObject>& objects,
+auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector<std::string>& elements,
                 const std::vector<bool>& settings)
-    -> std::pair<std::vector<std::vector<float>>, std::vector<sru::pdf::StringObject>> {
+    -> std::pair<std::vector<std::vector<float>>, std::vector<std::string>> {
 
-    std::vector<std::pair<std::vector<float>, sru::pdf::StringObject>> zip;
+    std::vector<std::pair<std::vector<float>, std::string>> zip;
     zip.reserve(values.size());
     for (size_t i = 0; i < values.size(); ++i) {
-        zip.emplace_back(values[i], objects[i]);
+        zip.emplace_back(values[i], elements[i]);
     }
     std::sort(zip.begin(), zip.end(), [&settings](const auto& a, const auto& b) {
         auto compa = a.first;
@@ -114,7 +117,7 @@ auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector
         return diff > 0;
     });
     std::vector<std::vector<float>> unzipped1;
-    std::vector<sru::pdf::StringObject> unzipped2;
+    std::vector<std::string> unzipped2;
     for (auto& i : zip) {
         unzipped1.push_back(i.first);
         unzipped2.push_back(i.second);

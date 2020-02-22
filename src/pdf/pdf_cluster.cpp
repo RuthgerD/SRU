@@ -118,7 +118,7 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const std::vec
             return {};
     }
 
-    std::vector<std::string> new_content;
+    std::vector<std::string> new_content{};
     auto reference = total_objects.front().getContent();
     for (size_t i = 0; i < modes.size(); i++) {
         const auto& mode = modes[i];
@@ -151,11 +151,8 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const std::vec
         if (mode == "SORT") {
             const auto& limit = object_conf.maximum_values;
             const auto& sort_settings = object_conf.sort_settings;
-            auto tmp = sru::util::multi_sort(extracted_data, total_objects, sort_settings).second;
-
-            for (size_t k = 0; k < tmp.size() && k < limit; ++k) {
-                new_content.push_back(tmp[k].getContent());
-            }
+            auto tmp = sru::util::multi_sort(extracted_data, content, sort_settings).second;
+            std::copy(tmp.begin(), tmp.begin() + limit, std::back_inserter(new_content));
         }
         if (mode == "AVRG") {
             const auto avrg_source_id = object_conf.avrg_source_id;
