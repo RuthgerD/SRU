@@ -1,37 +1,32 @@
 SRU 2.0: Now with less speculation!
 TODO LIST today:
-3. refactor calculate() to accept singular configs and pages (remove PdfFile::getMarkedObjects)
-write calculated objects to final ->
+re-add new stickies when writing to final pdf
+implement AVRG with recursive call
+add some more test configs
 
 TODO LIST for alpha:
-namespace inconsistencies -> split up sru::util to sru::regex and sru::
-when doing .find() assign in the if statement and dereference later
 graph generation
 final pdf building
 userinput in calculations
 quick export
-rename save_anchor to something that actually represent what its doing currently
 ability to construct stickies
 setMarked() or setStickied() or setAnchor()
+reminder: end: has to be sorted based on all time values
 
 TODO LIST for beta:
 Coordinate helpers
-add patterns in the schema to restrict modes and others
 pdf file to doc convertion
-config defaulting to reduce config size
 dctmk integration
 better error checking and handling with asserts
 Ryan magic
 global configs to disable stuff
-good logging system
 sru::util::cmd stderr checking
-refactor calculate so that there is an option to only call calculate for one config
 regex match marked objects as well
-use [key, val] where we iterate over maps
-maybe allow objects to pick their anchors instead of anchors picking their objects
-maybe phase out internal sticky and let use handle it
+maybe phase out internal sticky and let the user handle it
+append instead of insert 999
 
 TODO LIST for stable:
+good logging system
 gather more data about page like size
 fix or make limitation clear that capital U and W (only in text type = 1) cant be displayed for some reason
 verify and compare results against v1 to make sure all edge cases are handled properly (also check source code of v1)
@@ -70,3 +65,9 @@ or
 give objects recursive ability to house their own sticky
 
 goal here is to keep integrity between export and import for reasons :)
+
+
+JSON REDO:
+disallow mixing certain modes e.g. sort
+
+in software check for array lengths
