@@ -119,7 +119,6 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const std::vec
     }
 
     std::vector<std::string> new_content;
-    std::vector<sru::pdf::StringObject> provided_objects;
     auto reference = total_objects.front().getContent();
     for (size_t i = 0; i < modes.size(); i++) {
         const auto& mode = modes[i];
@@ -155,7 +154,6 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const std::vec
             auto tmp = sru::util::multi_sort(extracted_data, total_objects, sort_settings).second;
 
             for (size_t k = 0; k < tmp.size() && k < limit; ++k) {
-                provided_objects.push_back(tmp[k]);
                 new_content.push_back(tmp[k].getContent());
             }
         }
@@ -204,17 +202,10 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const std::vec
         if (modes.size() > 1) {
             new_content = {new_content.back()};
         }
-        for (size_t j = 0; j < new_content.size(); ++j) {
-            const sru::pdf::StringObject* tmp;
-            if (provided_objects.empty()) {
-                tmp = &total_objects.front();
-            } else {
-                tmp = &provided_objects[j];
-            }
+        for (const auto& j : new_content) {
+            auto new_obj = total_objects.front();
 
-            sru::pdf::StringObject new_obj = *tmp;
-
-            new_obj.setContent(new_content[j], object_conf.text_justify);
+            new_obj.setContent(j, object_conf.text_justify);
             new_objects.push_back(std::move(new_obj));
         }
         return new_objects;
