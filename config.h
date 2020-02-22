@@ -358,7 +358,7 @@ constexpr auto SRU_SCHEMA = R"({
                             },
                             "required": [
                                 "avrg_multiplier",
-                                "round_cutoff",
+                                "round_cut_off",
                                 "decimal_points",
                                 "re_extract_order",
                                 "regexs"
@@ -397,7 +397,7 @@ constexpr auto SRU_SCHEMA = R"({
                         },
                         "then": {
                             "required": [
-                                "round_cutoff",
+                                "round_cut_off",
                                 "decimal_points",
                                 "overflow_threshold",
                                 "re_extract_order",

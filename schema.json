@@ -358,7 +358,7 @@
                             },
                             "required": [
                                 "avrg_multiplier",
-                                "round_cutoff",
+                                "round_cut_off",
                                 "decimal_points",
                                 "re_extract_order",
                                 "regexs"
@@ -397,7 +397,7 @@
                         },
                         "then": {
                             "required": [
-                                "round_cutoff",
+                                "round_cut_off",
                                 "decimal_points",
                                 "overflow_threshold",
                                 "re_extract_order",
