@@ -124,9 +124,6 @@ void PdfPage::indexObjects() {
     }
 }
 void PdfPage::printObjects() const {
-    if (anchor_positions_.empty()) {
-        std::cout << "page: no objects to display" << std::endl;
-    }
     for (auto anchor_pair : anchor_positions_) {
         if (auto conf = getAnchorConfig(anchor_pair.first)) {
             std::cout << conf.value().name << ":\n";

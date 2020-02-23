@@ -1,4 +1,5 @@
 #include "pdf_cluster.h"
+#include "calc_config.h"
 
 namespace sru::pdf {
 PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
@@ -48,7 +49,7 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
     });
 }
 auto PdfCluster::exportTest() -> void {
-    for (auto& x : pdf_files_.at(2).getPages()) {
+    for (auto& x : pdf_files_.at(0).getPages()) {
         x.second.printObjects();
     }
 
@@ -63,9 +64,8 @@ auto PdfCluster::exportTest() -> void {
                     continue;
                 }
                 auto& object_conf = *object_conf_opt;
-                auto total_objs = getMarkedObjects(object_conf_id, pdf_files_); // get ALL objects from all the files that follow the same config
 
-                auto new_objs = calculateObject(object_conf, total_objs);
+                auto new_objs = calculateObject(object_conf);
 
                 if (new_objs.empty()) {
                     continue;
@@ -74,7 +74,8 @@ auto PdfCluster::exportTest() -> void {
                 if (auto anchor_pos = anchor_positions.find(anchor_conf_id);
                     anchor_pos != anchor_positions.end()) { // if no anchor found maybe find highest among objects
                     auto y_base = anchor_pos->second.getY();
-                    float spacing = object_conf.y_object_spacing;
+                    // float spacing = object_conf.y_object_spacing;
+                    float spacing = 0;
                     for (auto& obj : new_objs) {
                         obj.setPosition(obj.getPosition().getX(), y_base + (spacing * ((int)(&obj - new_objs.data()) + 1.0)));
                     }
@@ -107,105 +108,97 @@ auto PdfCluster::exportTest() -> void {
     sru::util::QFileWrite(raw, std::filesystem::current_path().append("testing_export.pdf"));
 }
 
-auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const std::vector<StringObject>& total_objects) -> std::vector<StringObject> {
-    const auto& modes = object_conf.calc_modes;
-    const auto& regexs = object_conf.regexs;
-    if (object_conf.calc_modes.empty() || modes.size() != regexs.size() || total_objects.empty()) {
+auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& contents, std::string reference) -> std::vector<std::string> {
+
+    if (!(cc.calc_mode == "SUM" || cc.calc_mode == "SORT" || cc.calc_mode == "AVRG" || cc.calc_mode == "USER_INPUT")){
         return {};
     }
-    for (auto& x : object_conf.calc_modes) {
-        if (!(x == "SUM" || x == "SORT" || x == "AVRG" || x == "USER_INPUT"))
+
+    auto [extracted_data, extracted_count] = sru::util::multi_search(cc.regex, contents, cc.re_extract_order);
+    std::vector<std::string> new_content{};
+    if (cc.calc_mode == "SUM") {
+        const auto tmp = sru::util::multi_add(extracted_data, cc.overflow_threshold);
+
+        std::vector<std::string> str_result;
+        std::transform(tmp.begin(), tmp.end(), std::back_inserter(str_result),
+                       [&](const auto& x) { return sru::util::to_string(x, cc.round_cut_off, cc.decimal_points); });
+
+        if (!sru::util::multi_re_place(cc.regex, reference, str_result)) {
             return {};
+        }
+        new_content.push_back(std::move(reference));
+    } else if (cc.calc_mode == "SORT") {
+        const auto tmp = sru::util::multi_sort(extracted_data, contents, cc.sort_settings).second;
+        std::move(tmp.begin(), tmp.begin() + cc.maximum_values, std::back_inserter(new_content));
+    } else if (cc.calc_mode == "AVRG") {
+        std::vector<float> avrg_source;
+        std::vector<float> avrg_base;
+        if (cc.avrg_self) {
+            avrg_source = sru::util::multi_add(extracted_count);
+            avrg_base = sru::util::multi_add(extracted_data);
+        } else {
+            auto base_c = *getObjectConfig(cc.avrg_base_id.front());
+            auto base_cc = *getCalcConfig(cc.avrg_base_id.back());
+            auto source_c = *getObjectConfig(cc.avrg_source_id.front());
+            auto source_cc = *getCalcConfig(cc.avrg_source_id.back());
+            auto testing = calculateObject(base_c, base_cc);
+            auto testing2 = calculateObject(source_c, source_cc);
+            avrg_base = sru::util::multi_search(base_cc.regex, testing, base_cc.re_extract_order).first.front();
+            avrg_source = sru::util::multi_search(source_cc.regex, testing2, source_cc.re_extract_order).first.front();
+        }
+        auto tmp = sru::util::multi_avrg(avrg_base, avrg_source, cc.avrg_multiplier);
+
+        std::vector<std::string> tmp_s;
+        std::transform(tmp.begin(), tmp.end(), std::back_inserter(tmp_s),
+                       [&](const auto& x) { return sru::util::to_string(x, cc.round_cut_off, cc.decimal_points); });
+        if (!sru::util::multi_re_place(cc.regex, reference, tmp_s)) {
+            return {};
+        }
+        new_content.push_back(std::move(reference));
     }
+    return new_content;
+}
+
+auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const CalcConfig& calc_config) -> std::vector<std::string> {
+    const auto total_objects = getMarkedObjects(object_conf.id, pdf_files_);
+    auto reference = total_objects.front().getContent();
+
+    std::vector<std::string> content;
+    std::transform(total_objects.begin(), total_objects.end(), std::back_inserter(content), [](const auto& obj) { return obj.getContent(); });
+
+    auto ret = calccalc(calc_config, content, reference);
+    return ret;
+}
+
+auto PdfCluster::calculateObject(const ObjectConfig& object_conf) -> std::vector<StringObject> {
+    auto total_objects = getMarkedObjects(object_conf.id, pdf_files_);
+    auto reference = total_objects.front().getContent();
 
     std::vector<std::string> new_content{};
-    auto reference = total_objects.front().getContent();
-    for (size_t i = 0; i < modes.size(); i++) {
-        const auto& mode = modes[i];
-        const auto& regex = regexs[i];
+    for (const auto& calc_id : object_conf.calcs) {
+        if (const auto calc_config_opt = getCalcConfig(calc_id); calc_config_opt) {
+            const auto& calc_config = *calc_config_opt;
+            std::cout << "Calculating: " << object_conf.name << " -> " << calc_config.name << std::endl;
 
-        const auto& cut_off = object_conf.round_cut_off;
-        const auto& decimal_points = object_conf.decimal_points;
-        const auto& overflow_threshold = object_conf.overflow_threshold;
+            std::vector<std::string> content;
+            std::transform(total_objects.begin(), total_objects.end(), std::back_inserter(content), [](const auto& obj) { return obj.getContent(); });
 
-        std::vector<std::string> content;
-        std::transform(total_objects.begin(), total_objects.end(), std::back_inserter(content), [](const auto& obj) { return obj.getContent(); });
-
-        auto [extracted_data, extracted_count] = sru::util::multi_search(regex, content, object_conf.re_extract_order);
-        if (extracted_data.empty()) {
-            break;
-        }
-
-        if (mode == "SUM") {
-            auto result = sru::util::multi_add(extracted_data, overflow_threshold);
-
-            std::vector<std::string> str_result;
-            std::transform(result.begin(), result.end(), std::back_inserter(str_result),
-                           [cut_off, decimal_points](const auto& x) { return sru::util::to_string(x, cut_off, decimal_points); });
-
-            if (!sru::util::multi_re_place(regex, reference, str_result)) {
-                break;
+            new_content = calccalc(calc_config, content, reference);
+            if (!new_content.empty()){
+                std::cout << "Result: " << new_content.front() << std::endl;
+                reference = new_content.front();
             }
-            new_content.push_back(reference);
-        }
-        if (mode == "SORT") {
-            const auto& limit = object_conf.maximum_values;
-            const auto& sort_settings = object_conf.sort_settings;
-            auto tmp = sru::util::multi_sort(extracted_data, content, sort_settings).second;
-            std::copy(tmp.begin(), tmp.begin() + limit, std::back_inserter(new_content));
-        }
-        if (mode == "AVRG") {
-            const auto avrg_source_id = object_conf.avrg_source_id;
-            const auto avrg_base_id = object_conf.avrg_base_id;
-            const auto& avrg_self = object_conf.avrg_self;
-
-            std::vector<float> avrg_source;
-            std::vector<float> avrg_base;
-            if (!avrg_self) {
-                // TODO: recurse call to calculate dependents
-                /*
-                if (calculated.find(avrg_source_id) == calculated.end() || calculated.find(avrg_base_id) == calculated.end()) {
-                    break;
-                }
-                avrg_source = calculated[avrg_source_id];
-                avrg_base = calculated[avrg_base_id];
-                 */
-            } else {
-                avrg_source = sru::util::multi_add(extracted_count);
-                avrg_base = sru::util::multi_add(extracted_data);
-            }
-
-            const auto& multiplier = object_conf.avrg_multiplier;
-            auto result = sru::util::multi_avrg(avrg_source, avrg_base, multiplier);
-
-            std::vector<std::string> str_result;
-            std::transform(result.begin(), result.end(), std::back_inserter(str_result),
-                           [cut_off, decimal_points](const auto& x) { return sru::util::to_string(x, cut_off, decimal_points); });
-            if (!sru::util::multi_re_place(regex, reference, str_result)) {
-                break;
-            }
-            new_content.push_back(reference);
-        }
-        if (mode == "USER_INPUT") {
-            // TODO: implement
-        }
-        if (!new_content.empty()) {
-            reference = new_content.front();
         }
     }
-
     std::vector<sru::pdf::StringObject> new_objects;
     if (!new_content.empty()) {
-        if (modes.size() > 1) {
-            new_content = {new_content.back()};
-        }
         for (const auto& j : new_content) {
             auto new_obj = total_objects.front();
 
-            new_obj.setContent(j, object_conf.text_justify);
+            new_obj.setContent(j, 0);
             new_objects.push_back(std::move(new_obj));
         }
-        return new_objects;
+        return std::move(new_objects);
     }
     return {};
 }
@@ -223,22 +216,27 @@ auto PdfCluster::getMarkedObjects(int id, std::vector<PdfFile>& files) -> std::v
     return ret;
 }
 auto PdfCluster::refreshNumbering(PdfFile& file) -> void {
-    std::vector<ObjectConfig> numbering_confs{};
+
+    std::vector<std::pair<ObjectConfig, CalcConfig>> numbering_confs{};
+
     for (const auto& conf : ObjectConfigPool) {
-        if (conf.calc_modes.size() == 1 && conf.regexs.size() == 1) {
-            if (conf.calc_modes.front() == "NUMBERING") {
-                numbering_confs.push_back(conf);
+        if (conf.calcs.empty()) {
+            continue;
+        }
+        if (const auto calc = getCalcConfig(conf.calcs.front()); calc) {
+            if (calc->calc_mode == "NUMBERING") {
+                numbering_confs.emplace_back(conf, *calc);
             }
         }
     }
     std::vector<int> count(numbering_confs.size());
     for (auto& [page_no, page] : file.getPages()) {
         for (size_t i = 0; i < numbering_confs.size(); ++i) {
-            auto mrked_objs = page.getMarkedObjects(numbering_confs[i].id);
+            auto mrked_objs = page.getMarkedObjects(numbering_confs[i].first.id);
             for (auto id : mrked_objs) {
                 auto copy = page.getObject(id);
                 auto oldstr = copy.getContent();
-                sru::util::multi_re_place(numbering_confs[i].regexs[0], oldstr, {std::to_string(count[i] + 1)});
+                sru::util::multi_re_place(numbering_confs[i].second.regex, oldstr, {std::to_string(count[i]+1)});
                 copy.setContent(oldstr);
                 page.updateObject(id, copy);
                 ++count[i];

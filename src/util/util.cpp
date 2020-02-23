@@ -62,8 +62,10 @@ auto multi_search(const std::string& re, const std::vector<std::string>& content
             std::vector<float> extracted{};
             std::vector<float> count{};
             for (size_t i = 1; i < f.size(); ++i) {
-                //std::string contn{f[order[i - 1]]};
+                // TODO: do a better job of cleaning shit
                 if (auto pos = f[order[i - 1]].find('<'); pos != std::string::npos)
+                    f[order[i - 1]].remove_prefix(1);
+                if (auto pos = f[order[i - 1]].find(' '); pos != std::string::npos)
                     f[order[i - 1]].remove_prefix(1);
                 extracted.push_back(svto<float>(f[order[i - 1]]));
                 count.push_back(1);

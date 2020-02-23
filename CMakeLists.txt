@@ -27,7 +27,7 @@ include_directories(${Boost_INCLUDE_DIRS} ${RE2_INCLUDE_DIR} thirdparty/ctre/inc
 
 add_compile_definitions(RAPIDJSON_HAS_STDSTRING)
 add_library(re_accel src/util/re_accel.h src/util/re_accel.cpp)
-add_executable(cppthings main.cpp src/pdf/string_obj.cpp src/pdf/pdf_cluster.cpp src/pdf/pdf_file.cpp src/pdf/pdf_page.cpp src/pdf/object_config.cpp src/pdf/anchor_config.cpp src/pdf/page_config.cpp src/util/util.cpp src/util/qpdf_binding.cpp src/util/regex.cpp)
+add_executable(cppthings main.cpp src/pdf/string_obj.cpp src/pdf/pdf_cluster.cpp src/pdf/pdf_file.cpp src/pdf/pdf_page.cpp src/pdf/object_config.cpp src/pdf/anchor_config.cpp src/pdf/page_config.cpp src/util/util.cpp src/util/qpdf_binding.cpp src/util/regex.cpp src/pdf/calc_config.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

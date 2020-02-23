@@ -9,7 +9,8 @@ constexpr auto SRU_SCHEMA = R"({
         "date_provider",
         "pages",
         "anchors",
-        "objects"
+        "objects",
+        "calcs"
     ],
     "properties": {
         "date_provider": {
@@ -24,7 +25,7 @@ constexpr auto SRU_SCHEMA = R"({
             "items": {
                 "$id": "#/properties/pages/items",
                 "type": "object",
-                "title": "The Anchor Objects Schema",
+                "title": "The Anchor calcs Schema",
                 "additionalProperties": false,
                 "required": [
                     "page_name",
@@ -89,14 +90,10 @@ constexpr auto SRU_SCHEMA = R"({
                 "additionalProperties": false,
                 "required": [
                     "id",
-                    "is_virtual",
                     "x",
                     "y",
                     "anchor_name",
                     "content_id",
-                    "content_",
-                    "content_alt",
-                    "save_anchor",
                     "sub_groups"
                 ],
                 "properties": {
@@ -166,7 +163,7 @@ constexpr auto SRU_SCHEMA = R"({
         "objects": {
             "$id": "#/properties/objects",
             "type": "array",
-            "title": "The Objects Schema",
+            "title": "The objects Schema",
             "items": {
                 "$id": "#/properties/objects/properties/items",
                 "type": "object",
@@ -175,7 +172,7 @@ constexpr auto SRU_SCHEMA = R"({
                 "required": [
                     "id",
                     "object_name",
-                    "calc_modes"
+                    "calcs"
                 ],
                 "properties": {
                     "id": {
@@ -188,108 +185,6 @@ constexpr auto SRU_SCHEMA = R"({
                         "$id": "#/properties/objects/properties/items/properties/object_name",
                         "type": "string",
                         "title": "The object_name Schema"
-                    },
-                    "text_justify": {
-                        "$id": "#/properties/objects/properties/items/properties/text_justify",
-                        "type": "number",
-                        "title": "The text_justify Schema"
-                    },
-                    "maximum_values": {
-                        "$id": "#/properties/objects/properties/items/properties/maximum_values",
-                        "type": "integer",
-                        "title": "The maximum_values Schema",
-                        "minimum": 0
-                    },
-                    "y_object_spacing": {
-                        "$id": "#/properties/objects/properties/items/properties/y_object_spacing",
-                        "type": "number",
-                        "title": "The y_object_spacing Schema"
-                    },
-                    "round_cut_off": {
-                        "$id": "#/properties/objects/properties/items/properties/round_cut_off",
-                        "type": "number",
-                        "title": "The round_cut_off Schema"
-                    },
-                    "decimal_points": {
-                        "$id": "#/properties/objects/properties/items/properties/decimal_points",
-                        "type": "integer",
-                        "title": "The decimal_points Schema"
-                    },
-                    "calc_modes": {
-                        "$id": "#/properties/objects/properties/items/properties/calc_modes",
-                        "type": "array",
-                        "title": "The calc_modes Schema",
-                        "items": {
-                            "$id": "#/properties/objects/properties/items/properties/calc_modes/items",
-                            "type": "string",
-                            "title": "The Items Schema",
-                            "enum": [
-                                "SORT",
-                                "AVRG",
-                                "SUM",
-                                "USER_INPUT",
-                                "TABLE",
-                                "NUMBERING"
-                            ]
-                        }
-                    },
-                    "avrg_self": {
-                        "$id": "#/properties/objects/properties/items/properties/avrg_self",
-                        "type": "boolean",
-                        "title": "The avrg_self Schema"
-                    },
-                    "avrg_source_id": {
-                        "$id": "#/properties/objects/properties/items/properties/avrg_source_id",
-                        "type": "integer",
-                        "title": "The avrg_source_id Schema",
-                        "minimum": 0
-                    },
-                    "avrg_base_id": {
-                        "$id": "#/properties/objects/properties/items/properties/avrg_base_id",
-                        "type": "integer",
-                        "title": "The avrg_base_id Schema",
-                        "minimum": 0
-                    },
-                    "avrg_multiplier": {
-                        "$id": "#/properties/objects/properties/items/properties/avrg_multiplier",
-                        "type": "integer",
-                        "title": "The avrg_multiplier Schema"
-                    },
-                    "overflow_threshold": {
-                        "$id": "#/properties/objects/properties/items/properties/overflow_threshold",
-                        "type": "number",
-                        "title": "The overflow_threshold Schema"
-                    },
-                    "sort_settings": {
-                        "$id": "#/properties/objects/properties/items/properties/sort_settings",
-                        "type": "array",
-                        "title": "The sort_settings Schema",
-                        "items": {
-                            "$id": "#/properties/objects/properties/items/properties/sort_settings/items",
-                            "type": "boolean",
-                            "title": "The Items Schema"
-                        }
-                    },
-                    "re_extract_order": {
-                        "$id": "#/properties/objects/properties/items/properties/re_extract_order",
-                        "type": "array",
-                        "title": "The re_extract_order Schema",
-                        "items": {
-                            "$id": "#/properties/objects/properties/items/properties/re_extract_order/items",
-                            "type": "integer",
-                            "title": "The Items Schema",
-                            "minimum": 0
-                        }
-                    },
-                    "regexs": {
-                        "$id": "#/properties/objects/properties/items/properties/regexs",
-                        "type": "array",
-                        "title": "The regexs Schema",
-                        "items": {
-                            "$id": "#/properties/objects/properties/items/properties/regexs/items",
-                            "type": "string",
-                            "title": "The Items Schema"
-                        }
                     },
                     "margin_x": {
                         "$id": "#/properties/objects/properties/items/properties/margin_x",
@@ -324,16 +219,195 @@ constexpr auto SRU_SCHEMA = R"({
                         "type": "integer",
                         "title": "The sticky_id Schema",
                         "minimum": 0
+                    },
+                    "calcs": {
+                        "$id": "#/properties/objects/properties/items/properties/calcs",
+                        "type": "array",
+                        "title": "The calcs Schema",
+                        "items": {
+                            "$id": "#/properties/objects/properties/items/properties/calcs/items",
+                            "type": "integer",
+                            "title": "The Items Schema",
+                            "minimum": 0
+                        }
+                    }
+                }
+            }
+        },
+        "calcs": {
+            "$id": "#/properties/calcs",
+            "type": "array",
+            "title": "The calcs Schema",
+            "items": {
+                "$id": "#/properties/calcs/properties/items",
+                "type": "object",
+                "title": "The Items Schema",
+                "additionalProperties": false,
+                "required": [
+                    "id",
+                    "calc_name",
+                    "calc_mode"
+                ],
+                "properties": {
+                    "id": {
+                        "$id": "#/properties/calcs/properties/items/properties/id",
+                        "type": "integer",
+                        "title": "The id Schema",
+                        "minimum": 0
+                    },
+                    "calc_name": {
+                        "$id": "#/properties/calcs/properties/items/properties/calc_name",
+                        "type": "string",
+                        "title": "The calc_name Schema"
+                    },
+                    "text_justify": {
+                        "$id": "#/properties/calcs/properties/items/properties/text_justify",
+                        "type": "number",
+                        "title": "The text_justify Schema"
+                    },
+                    "maximum_values": {
+                        "$id": "#/properties/calcs/properties/items/properties/maximum_values",
+                        "type": "integer",
+                        "title": "The maximum_values Schema",
+                        "minimum": 0
+                    },
+                    "y_object_spacing": {
+                        "$id": "#/properties/calcs/properties/items/properties/y_object_spacing",
+                        "type": "number",
+                        "title": "The y_object_spacing Schema"
+                    },
+                    "round_cut_off": {
+                        "$id": "#/properties/calcs/properties/items/properties/round_cut_off",
+                        "type": "number",
+                        "title": "The round_cut_off Schema"
+                    },
+                    "decimal_points": {
+                        "$id": "#/properties/calcs/properties/items/properties/decimal_points",
+                        "type": "integer",
+                        "title": "The decimal_points Schema"
+                    },
+                    "calc_mode": {
+                        "$id": "#/properties/calcs/properties/items/properties/calc_mode",
+                        "type": "string",
+                        "title": "The calc_mode Schema",
+                        "enum": [
+                            "SORT",
+                            "AVRG",
+                            "SUM",
+                            "USER_INPUT",
+                            "TABLE",
+                            "NUMBERING",
+                            ""
+                        ]
+                    },
+                    "avrg_self": {
+                        "$id": "#/properties/calcs/properties/items/properties/avrg_self",
+                        "type": "boolean",
+                        "title": "The avrg_self Schema"
+                    },
+                    "avrg_source_id": {
+                        "$id": "#/properties/calcs/properties/items/properties/avrg_source_id",
+                        "type": "array",
+                        "title": "The avrg_source_id Schema",
+                        "items": {
+                            "$id": "#/properties/calcs/properties/items/properties/avrg_source_id/items",
+                            "type": "integer",
+                            "title": "The Items Schema",
+                            "minimum": 0
+                        },
+                        "minItems": 2,
+                        "maxItems": 2
+                    },
+                    "avrg_base_id": {
+                        "$id": "#/properties/calcs/properties/items/properties/avrg_base_id",
+                        "type": "array",
+                        "title": "The avrg_base_id Schema",
+                        "items": {
+                            "$id": "#/properties/calcs/properties/items/properties/avrg_base_id/items",
+                            "type": "integer",
+                            "title": "The Items Schema",
+                            "minimum": 0
+                        },
+                        "minItems": 2,
+                        "maxItems": 2
+                    },
+                    "avrg_multiplier": {
+                        "$id": "#/properties/calcs/properties/items/properties/avrg_multiplier",
+                        "type": "integer",
+                        "title": "The avrg_multiplier Schema"
+                    },
+                    "overflow_threshold": {
+                        "$id": "#/properties/calcs/properties/items/properties/overflow_threshold",
+                        "type": "number",
+                        "title": "The overflow_threshold Schema"
+                    },
+                    "sort_settings": {
+                        "$id": "#/properties/calcs/properties/items/properties/sort_settings",
+                        "type": "array",
+                        "title": "The sort_settings Schema",
+                        "items": {
+                            "$id": "#/properties/calcs/properties/items/properties/sort_settings/items",
+                            "type": "boolean",
+                            "title": "The Items Schema"
+                        }
+                    },
+                    "re_extract_order": {
+                        "$id": "#/properties/calcs/properties/items/properties/re_extract_order",
+                        "type": "array",
+                        "title": "The re_extract_order Schema",
+                        "items": {
+                            "$id": "#/properties/calcs/properties/items/properties/re_extract_order/items",
+                            "type": "integer",
+                            "title": "The Items Schema",
+                            "minimum": 0
+                        }
+                    },
+                    "regex": {
+                        "$id": "#/properties/calcs/properties/items/properties/regex",
+                        "type": "string",
+                        "title": "The regex Schema"
+                    },
+                    "margin_x": {
+                        "$id": "#/properties/calcs/properties/items/properties/margin_x",
+                        "type": "number",
+                        "title": "The margin_x Schema"
+                    },
+                    "margin_y": {
+                        "$id": "#/properties/calcs/properties/items/properties/margin_y",
+                        "type": "number",
+                        "title": "The margin_y Schema"
+                    },
+                    "anchor_margin_x": {
+                        "$id": "#/properties/calcs/properties/items/properties/anchor_margin_x",
+                        "type": "integer",
+                        "title": "The anchor_margin_x Schema",
+                        "minimum": 0
+                    },
+                    "anchor_margin_y": {
+                        "$id": "#/properties/calcs/properties/items/properties/anchor_margin_y",
+                        "type": "integer",
+                        "title": "The anchor_margin_y Schema",
+                        "minimum": 0
+                    },
+                    "object_count": {
+                        "$id": "#/properties/calcs/properties/items/properties/object_count",
+                        "type": "integer",
+                        "title": "The object_count Schema",
+                        "minimum": 0
+                    },
+                    "sticky_id": {
+                        "$id": "#/properties/calcs/properties/items/properties/sticky_id",
+                        "type": "integer",
+                        "title": "The sticky_id Schema",
+                        "minimum": 0
                     }
                 },
                 "allOf": [
                     {
                         "if": {
                             "properties": {
-                                "calc_modes": {
-                                    "contains": {
-                                        "const": "AVRG"
-                                    }
+                                "calc_mode": {
+                                    "const": "AVRG"
                                 }
                             }
                         },
@@ -361,17 +435,15 @@ constexpr auto SRU_SCHEMA = R"({
                                 "round_cut_off",
                                 "decimal_points",
                                 "re_extract_order",
-                                "regexs"
+                                "regex"
                             ]
                         }
                     },
                     {
                         "if": {
                             "properties": {
-                                "calc_modes": {
-                                    "contains": {
-                                        "const": "SORT"
-                                    }
+                                "calc_mode": {
+                                    "const": "SORT"
                                 }
                             }
                         },
@@ -380,7 +452,7 @@ constexpr auto SRU_SCHEMA = R"({
                                 "maximum_values",
                                 "sort_settings",
                                 "re_extract_order",
-                                "regexs",
+                                "regex",
                                 "y_object_spacing"
                             ]
                         }
@@ -388,10 +460,8 @@ constexpr auto SRU_SCHEMA = R"({
                     {
                         "if": {
                             "properties": {
-                                "calc_modes": {
-                                    "contains": {
-                                        "const": "SUM"
-                                    }
+                                "calc_mode": {
+                                    "const": "SUM"
                                 }
                             }
                         },
@@ -401,7 +471,7 @@ constexpr auto SRU_SCHEMA = R"({
                                 "decimal_points",
                                 "overflow_threshold",
                                 "re_extract_order",
-                                "regexs"
+                                "regex"
                             ]
                         }
                     }
