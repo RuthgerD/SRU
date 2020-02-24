@@ -10,6 +10,7 @@ namespace sru::pdf {
 PdfPage::PdfPage(std::string raw, const PageConfig& config) : raw_{std::move(raw)}, config_{config} {}
 auto PdfPage::getConfig() const -> PageConfig { return config_; }
 auto PdfPage::getAnchorPositions() const -> const std::unordered_map<int, sru::util::Coordinate>& { return anchor_positions_; }
+auto PdfPage::getAnchorObjects() const -> const std::unordered_map<int, offset>& { return anchor_objs_; }
 void PdfPage::indexObjects() {
     objs_.clear();
     marked_objs_.clear();

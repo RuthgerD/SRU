@@ -96,6 +96,8 @@
             "y": 842,
             "anchor_name": "Bradycardias",
             "content_id": "(Bradycardias:)|(No bradycardia found)",
+            "content_": "Bradycardias:",
+            "content_alt": "No bradycardia found",
             "save_anchor": true,
             "sub_groups": [
                 2,
@@ -109,6 +111,8 @@
             "y": 842,
             "anchor_name": "Tachycardias:",
             "content_id": "(Tachycardias:)|(No tachycardia found)",
+            "content_": "Tachycardias:",
+            "content_alt": "No tachycardia found",
             "save_anchor": true,
             "sub_groups": [
                 5,
@@ -122,6 +126,8 @@
             "y": 842,
             "anchor_name": "Pauses:",
             "content_id": "(Pauses:)|(No pauses found)",
+            "content_": "Pauses:",
+            "content_alt": "No pauses found",
             "save_anchor": true,
             "sub_groups": [
                 40,

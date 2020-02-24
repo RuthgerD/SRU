@@ -71,6 +71,14 @@ auto PdfCluster::exportTest() -> void {
                     continue;
                 }
                 const auto& anchor_positions = page.getAnchorPositions();
+                const auto& anchor_objs = page.getAnchorObjects();
+                if (auto anchor_obj = anchor_objs.find(anchor_conf_id); anchor_obj != anchor_objs.end()) {
+                    if(anchor_conf.content_ != anchor_conf.content_alt) {
+                        auto new_anchor = page.getObject(anchor_obj->second);
+                        new_anchor.setContent(anchor_conf.content_);
+                        page.updateObject(anchor_obj->second, new_anchor);
+                    }
+                }
                 if (auto anchor_pos = anchor_positions.find(anchor_conf_id);
                     anchor_pos != anchor_positions.end()) { // TODO: if no anchor found maybe find highest among objects
                     auto y_base = anchor_pos->second.getY();

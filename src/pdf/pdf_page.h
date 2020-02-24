@@ -43,6 +43,7 @@ class PdfPage {
     auto getObject(offset id) const -> const StringObject&;
     auto getConfig() const -> PageConfig;
     auto getAnchorPositions() const -> const std::unordered_map<int, sru::util::Coordinate>&;
+    auto getAnchorObjects() const -> const std::unordered_map<int, offset>&;
     auto getRaw() const -> const std::string&;
     void indexObjects();
     void printObjects() const;
