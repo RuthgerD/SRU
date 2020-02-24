@@ -111,7 +111,7 @@ auto insert_page(const sru::pdf::PdfFile& pdf_file_out, size_t page_no, const sr
 }
 auto increase_size(const sru::pdf::PdfFile& pdf_file, size_t size) -> bool {
     auto page_count = pdf_file.getRealPageCount();
-    if (size > page_count) {
+    while (size > page_count) {
         increase_size(pdf_file, page_count);
         size -= page_count;
     }
@@ -128,5 +128,16 @@ auto increase_size(const sru::pdf::PdfFile& pdf_file, size_t size) -> bool {
     sru::util::cmd(command);
     return std::filesystem::exists(abs_pdf_file);
 }
+
+auto decrease_size(const sru::pdf::PdfFile& pdf_file, size_t size) -> bool {
+    const auto abs_pdf_file = std::filesystem::absolute(pdf_file.getPath().lexically_normal());
+    std::string command{};
+    size = pdf_file.getRealPageCount() - size;
+    command = qpdf_settings.get_bin() + " " + abs_pdf_file.generic_string() + " --replace-input --stream-data=preserve --pages . 1-" + std::to_string(size) + " -- ";
+
+    sru::util::cmd(command);
+    return std::filesystem::exists(abs_pdf_file);
+}
+
 
 } // namespace sru::qpdf

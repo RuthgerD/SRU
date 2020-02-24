@@ -1,6 +1,6 @@
 #include "pdf_file.h"
-#include "../util/re_accel.h"
 #include "../util/qpdf_binding.h"
+#include "../util/re_accel.h"
 #include "object_config.h"
 #include "pdf_page.h"
 #include <future>
@@ -54,7 +54,7 @@ auto PdfFile::getMarkedObjects(int id) -> std::vector<std::pair<int, std::vector
     std::vector<std::pair<int, std::vector<offset>>> ret;
     for (auto& [page_no, page] : pages_) {
         auto mkrd = page.getMarkedObjects(id);
-        if (!mkrd.empty()){
+        if (!mkrd.empty()) {
             ret.emplace_back(page_no, std::move(mkrd));
         }
     }
@@ -63,22 +63,35 @@ auto PdfFile::getMarkedObjects(int id) -> std::vector<std::pair<int, std::vector
 auto PdfFile::getPath() const -> const std::filesystem::path& { return path_; }
 auto PdfFile::getPageCount() const -> size_t { return total_pages_; }
 auto PdfFile::getRealPageCount() const -> size_t { return real_pages_; }
-auto PdfFile::deletePage(const sru::pdf::PdfPage& page) -> bool {
-    if (auto it = std::find_if(pages_.begin(), pages_.end(), [&](const auto& x) { return x.second == page; }); it != pages_.end()) {
-        const auto& comp_no = it->first;
-        for (auto& [page_no, page_] : pages_) {
-            if (page_no > comp_no) {
-                page_no -= 1;
-            }
-        }
-        pages_.erase(it);
-        --total_pages_;
-        return true;
-    }
-    return false;
+auto PdfFile::deletePage(size_t page_no) -> void {
+    std::vector<size_t> tmp{page_no};
+    deletePages(tmp);
 }
-auto PdfFile::insertPage(PdfPage new_page, size_t new_page_no) -> void { insertPages({std::move(new_page)}, new_page_no); }
-auto PdfFile::insertPages(std::vector<PdfPage> new_pages, size_t new_page_no) -> void {
+auto PdfFile::deletePages(std::vector<size_t>& page_nos) -> void {
+    std::sort(page_nos.begin(), page_nos.end());
+    page_nos.erase(std::unique(page_nos.begin(), page_nos.end()), page_nos.end());
+    // TODO: std::erase_if for c++20
+    pages_.erase(std::remove_if(pages_.begin(), pages_.end(),
+                                [&](const auto& page) {
+                                    for (auto& page_no : page_nos) {
+                                        if (page_no == page.first) {
+                                            --total_pages_;
+                                            return true;
+                                        }
+                                    }
+                                    return false;
+                                }),
+                 pages_.end());
+
+    for (auto& [key, val] : pages_) {
+        key -= std::distance(page_nos.begin(), std::upper_bound(page_nos.begin(), page_nos.end(), key));
+    }
+}
+auto PdfFile::insertPage(PdfPage& new_page, size_t new_page_no) -> void {
+    std::vector<PdfPage> tmp{std::move(new_page)};
+    insertPages(tmp, new_page_no);
+}
+auto PdfFile::insertPages(std::vector<PdfPage>& new_pages, size_t new_page_no) -> void {
     // maybe assert?
     if (new_page_no > pages_.size()) {
         new_page_no = pages_.size();
@@ -96,8 +109,11 @@ auto PdfFile::insertPages(std::vector<PdfPage> new_pages, size_t new_page_no) ->
 }
 auto PdfFile::getRaw() -> std::string {
     // TODO: * Dont scan every loop and keep an offset instead
-    if (total_pages_ != real_pages_) {
-        sru::qpdf::increase_size(*this, (int)total_pages_ - (int)real_pages_);
+    if (total_pages_ > real_pages_) {
+        sru::qpdf::increase_size(*this, total_pages_ - real_pages_);
+        real_pages_ = total_pages_;
+    } else if (total_pages_ < real_pages_) {
+        sru::qpdf::decrease_size(*this, real_pages_ - total_pages_);
         real_pages_ = total_pages_;
     }
 

@@ -13,5 +13,7 @@ auto delete_page(const sru::pdf::PdfFile& pdf_file, size_t page_no) -> bool;
 auto insert_page(const sru::pdf::PdfFile& pdf_file_out, size_t page_no, const sru::pdf::PdfFile& pdf_file_in, size_t new_page_no) -> bool;
 auto append_page(const sru::pdf::PdfFile& pdf_file_out, size_t page_no, const sru::pdf::PdfFile& pdf_file_in, size_t new_page_no) -> bool;
 auto increase_size(const sru::pdf::PdfFile& pdf_file, size_t size) -> bool;
+auto decrease_size(const sru::pdf::PdfFile& pdf_file, size_t size) -> bool;
+
 } // namespace sru::qpdf
 

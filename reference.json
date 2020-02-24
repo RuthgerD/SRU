@@ -47,7 +47,7 @@
         {
             "page_name": "page 1+",
             "priority": 1,
-            "mutate_in_final": "none",
+            "mutate_in_final": "delete",
             "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page 2)\\)Tj\\nET",
             "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
             "groups": [

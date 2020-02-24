@@ -29,8 +29,9 @@ class PdfFile {
     [[nodiscard]] auto getPath() const -> const std::filesystem::path&;
     [[nodiscard]] auto getPageCount() const -> size_t;
     [[nodiscard]] auto getRealPageCount() const -> size_t;
-    auto deletePage(const PdfPage& page) -> bool;
-    auto insertPage(PdfPage new_page, size_t new_page_no) -> void;
-    auto insertPages(std::vector<PdfPage> new_pages, size_t new_page_no) -> void;
+    auto deletePage(size_t page_no) -> void;
+    auto deletePages(std::vector<size_t>& page_nos) -> void;
+    auto insertPage(PdfPage& new_page, size_t new_page_no) -> void;
+    auto insertPages(std::vector<PdfPage>& new_pages, size_t new_page_no) -> void;
 };
 } // namespace sru::pdf

@@ -51,7 +51,7 @@
                         "$id": "#/properties/pages/items/properties/mutate_in_final",
                         "type": "string",
                         "title": "The mutate_in_final Schema",
-                        "pattern": "^(append|delete|none)$"
+                        "enum": ["append", "delete", "none"]
                     },
                     "regex_id": {
                         "$id": "#/properties/pages/items/properties/regex_id",

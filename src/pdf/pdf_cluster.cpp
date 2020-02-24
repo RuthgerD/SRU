@@ -97,9 +97,9 @@ auto PdfCluster::exportTest() -> void {
         }
         page.commit();
     }
-    /*
+
     std::vector<PdfPage> to_be;
-    // NOT SORTED
+
     for (int i = 1; i < pdf_files_.size(); ++i) {
         for (const auto& x : pdf_files_[i].getPages()) {
             if (x.second.getConfig().mutate_in_final == "append") {
@@ -107,8 +107,19 @@ auto PdfCluster::exportTest() -> void {
             }
         }
     }
-    final_pdf.insertPages(std::move(to_be), 999);
-     */
+    final_pdf.insertPages(to_be, 999);
+
+    std::vector<size_t> to_die;
+
+    for (const auto& x : final_pdf.getPages()) {
+        if (x.second.getConfig().mutate_in_final == "delete") {
+            to_die.push_back(x.first);
+        }
+    }
+
+    final_pdf.deletePages(to_die);
+
+
 
     refreshNumbering(final_pdf);
 
