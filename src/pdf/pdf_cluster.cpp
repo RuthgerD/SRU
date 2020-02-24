@@ -110,8 +110,12 @@ auto PdfCluster::exportTest() -> void {
 
 auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& contents, std::string reference) -> std::vector<std::string> {
 
-    if (!(cc.calc_mode == "SUM" || cc.calc_mode == "SORT" || cc.calc_mode == "AVRG" || cc.calc_mode == "USER_INPUT")){
+    if (!(cc.calc_mode == "SUM" || cc.calc_mode == "SORT" || cc.calc_mode == "AVRG" || cc.calc_mode == "USER_INPUT" || cc.calc_mode == "FORWARD")) {
         return {};
+    }
+
+    if (cc.calc_mode == "FORWARD") {
+        return {contents.front()};
     }
 
     auto [extracted_data, extracted_count] = sru::util::multi_search(cc.regex, contents, cc.re_extract_order);
@@ -186,9 +190,8 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf) -> std::vector
 
             std::vector<std::string> content;
             std::transform(total_objects.begin(), total_objects.end(), std::back_inserter(content), [](const auto& obj) { return obj.getContent(); });
-
             new_content = calccalc(calc_config, content, reference);
-            if (!new_content.empty()){
+            if (!new_content.empty()) {
                 std::cout << "Calculating: " << object_conf.name << " -> " << calc_config.name << std::endl;
                 std::cout << "Result: " << new_content.front() << std::endl;
                 reference = new_content.front();
@@ -241,7 +244,7 @@ auto PdfCluster::refreshNumbering(PdfFile& file) -> void {
             for (auto id : mrked_objs) {
                 auto copy = page.getObject(id);
                 auto oldstr = copy.getContent();
-                sru::util::multi_re_place(numbering_confs[i].second.regex, oldstr, {std::to_string(count[i]+1)});
+                sru::util::multi_re_place(numbering_confs[i].second.regex, oldstr, {std::to_string(count[i] + 1)});
                 copy.setContent(oldstr);
                 page.updateObject(id, copy);
                 ++count[i];

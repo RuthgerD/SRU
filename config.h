@@ -297,6 +297,7 @@ constexpr auto SRU_SCHEMA = R"({
                             "USER_INPUT",
                             "TABLE",
                             "NUMBERING",
+                            "FORWARD",
                             ""
                         ]
                     },
