@@ -50,7 +50,7 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
 }
 auto PdfCluster::exportTest() -> void {
     for (auto& x : pdf_files_.at(0).getPages()) {
-        x.second.printObjects();
+        //x.second.printObjects();
     }
 
     auto final_pdf = pdf_files_.front();
@@ -72,10 +72,9 @@ auto PdfCluster::exportTest() -> void {
                 }
                 const auto& anchor_positions = page.getAnchorPositions();
                 if (auto anchor_pos = anchor_positions.find(anchor_conf_id);
-                    anchor_pos != anchor_positions.end()) { // if no anchor found maybe find highest among objects
+                    anchor_pos != anchor_positions.end()) { // TODO: if no anchor found maybe find highest among objects
                     auto y_base = anchor_pos->second.getY();
-                    // float spacing = object_conf.y_object_spacing;
-                    float spacing = 0;
+                    float spacing = getCalcConfig(object_conf.calcs.front())->y_object_spacing; // TODO: maybe put this just on the object conf
                     for (auto& obj : new_objs) {
                         obj.setPosition(obj.getPosition().getX(), y_base + (spacing * ((int)(&obj - new_objs.data()) + 1.0)));
                     }
@@ -90,7 +89,7 @@ auto PdfCluster::exportTest() -> void {
         }
         page.commit();
     }
-
+    /*
     std::vector<PdfPage> to_be;
     // NOT SORTED
     for (int i = 1; i < pdf_files_.size(); ++i) {
@@ -100,8 +99,9 @@ auto PdfCluster::exportTest() -> void {
             }
         }
     }
-
     final_pdf.insertPages(std::move(to_be), 999);
+     */
+
     refreshNumbering(final_pdf);
 
     const auto raw = final_pdf.getRaw();
@@ -129,7 +129,8 @@ auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& 
         new_content.push_back(std::move(reference));
     } else if (cc.calc_mode == "SORT") {
         const auto tmp = sru::util::multi_sort(extracted_data, contents, cc.sort_settings).second;
-        std::move(tmp.begin(), tmp.begin() + cc.maximum_values, std::back_inserter(new_content));
+
+        std::move(tmp.begin(), (cc.maximum_values > tmp.size() ? tmp.end() : tmp.begin() + cc.maximum_values), std::back_inserter(new_content));
     } else if (cc.calc_mode == "AVRG") {
         std::vector<float> avrg_source;
         std::vector<float> avrg_base;
@@ -141,6 +142,7 @@ auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& 
             auto base_cc = *getCalcConfig(cc.avrg_base_id.back());
             auto source_c = *getObjectConfig(cc.avrg_source_id.front());
             auto source_cc = *getCalcConfig(cc.avrg_source_id.back());
+
             auto testing = calculateObject(base_c, base_cc);
             auto testing2 = calculateObject(source_c, source_cc);
             avrg_base = sru::util::multi_search(base_cc.regex, testing, base_cc.re_extract_order).first.front();
@@ -172,19 +174,22 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf, const CalcConf
 
 auto PdfCluster::calculateObject(const ObjectConfig& object_conf) -> std::vector<StringObject> {
     auto total_objects = getMarkedObjects(object_conf.id, pdf_files_);
+    if (total_objects.empty()) {
+        return {};
+    }
     auto reference = total_objects.front().getContent();
 
     std::vector<std::string> new_content{};
     for (const auto& calc_id : object_conf.calcs) {
         if (const auto calc_config_opt = getCalcConfig(calc_id); calc_config_opt) {
             const auto& calc_config = *calc_config_opt;
-            std::cout << "Calculating: " << object_conf.name << " -> " << calc_config.name << std::endl;
 
             std::vector<std::string> content;
             std::transform(total_objects.begin(), total_objects.end(), std::back_inserter(content), [](const auto& obj) { return obj.getContent(); });
 
             new_content = calccalc(calc_config, content, reference);
             if (!new_content.empty()){
+                std::cout << "Calculating: " << object_conf.name << " -> " << calc_config.name << std::endl;
                 std::cout << "Result: " << new_content.front() << std::endl;
                 reference = new_content.front();
             }

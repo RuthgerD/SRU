@@ -135,7 +135,7 @@ auto main(int argc, char** argv) -> int {
                                     obb.HasMember("round_cut_off") ? obb["round_cut_off"].GetFloat() : 0,
                                     obb.HasMember("decimal_points") ? obb["decimal_points"].GetInt() : 0,
                                     obb.HasMember("calc_mode") ? obb["calc_mode"].GetString() : "",
-                                    obb.HasMember("avrg_self") ? obb["avrg_source_id"].GetBool() : false,
+                                    obb.HasMember("avrg_self") ? obb["avrg_self"].GetBool() : false,
                                     avrg_source_id,
                                     avrg_base_id,
                                     obb.HasMember("avrg_multiplier") ? obb["avrg_multiplier"].GetFloat() : -1,

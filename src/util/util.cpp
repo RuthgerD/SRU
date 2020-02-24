@@ -57,17 +57,21 @@ auto multi_search(const std::string& re, const std::vector<std::string>& content
     }
 
     for (const auto& data : content) {
-        if (auto result = sru::re::re_search(re, data); result) {
+        if (auto result = sru::re::re_search(re, data, 1); result) {
             auto& f = result->front();
             std::vector<float> extracted{};
             std::vector<float> count{};
             for (size_t i = 1; i < f.size(); ++i) {
                 // TODO: do a better job of cleaning shit
-                if (auto pos = f[order[i - 1]].find('<'); pos != std::string::npos)
-                    f[order[i - 1]].remove_prefix(1);
-                if (auto pos = f[order[i - 1]].find(' '); pos != std::string::npos)
-                    f[order[i - 1]].remove_prefix(1);
-                extracted.push_back(svto<float>(f[order[i - 1]]));
+                std::string repl{f[order[i - 1]]};
+                std::replace(repl.begin(), repl.end(), ',', '.');
+                std::string cleaned{};
+                std::string cleaned2{};
+                std::remove_copy(repl.begin(), repl.end(),std::back_inserter(cleaned), ' ');
+                std::remove_copy(cleaned.begin(), cleaned.end(),std::back_inserter(cleaned2), '<');
+
+
+                extracted.push_back(svto<float>(cleaned2));
                 count.push_back(1);
             }
             total_extracted.push_back(std::move(extracted));
@@ -141,7 +145,7 @@ auto multi_re_place(const std::string& regex, std::string& base, std::vector<std
     }
     size_t i = 0;
     for (; i < content.size(); ++i) {
-        if (auto tmp = sru::re::re_search(regex, base); tmp) {
+        if (auto tmp = sru::re::re_search(regex, base ,1); tmp) {
             const auto& views = tmp->front();
             base.replace(views[i + 1].data() - base.data(), views[i + 1].size(), content[i]);
         }

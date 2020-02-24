@@ -59,6 +59,9 @@ void PdfPage::indexObjects() {
         if (const auto anchor_conf = getAnchorConfig(anchor_conf_id); anchor_conf) {
             const auto& anchor_obj = anchor_position;
             auto count_start = 0;
+            auto prev_margin_x = 0;
+            auto prev_margin_y = 0;
+
             for (auto object_conf_id : anchor_conf->sub_groups) {
                 if (const auto object_conf_opt = getObjectConfig(object_conf_id); object_conf_opt) {
                     const auto& object_conf = *object_conf_opt;
@@ -99,6 +102,10 @@ void PdfPage::indexObjects() {
                             if (captured_count == object_count) {
                                 break;
                             }
+                            // small hack where we reset count_start if it searches in a different direction, TODO: find something better
+                            if (prev_margin_x != object_conf.margin_x && prev_margin_y != object_conf.margin_y) {
+                                count_start = 0;
+                            }
                             if (found_count >= count_start) {
                                 if (sticky_id < 0) {
                                     if (marked_objs_.find(object_conf_id) == marked_objs_.end()) {
@@ -115,6 +122,8 @@ void PdfPage::indexObjects() {
                                 ++captured_count;
                             }
                             ++found_count;
+                            prev_margin_x = object_conf.margin_x;
+                            prev_margin_y = object_conf.margin_x;
                         }
                     }
                     count_start += object_count;
