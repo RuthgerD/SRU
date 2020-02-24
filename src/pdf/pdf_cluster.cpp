@@ -50,7 +50,7 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
 }
 auto PdfCluster::exportTest() -> void {
     for (auto& x : pdf_files_.at(0).getPages()) {
-        //x.second.printObjects();
+        // x.second.printObjects();
     }
 
     auto final_pdf = pdf_files_.front();
@@ -98,6 +98,7 @@ auto PdfCluster::exportTest() -> void {
         page.commit();
     }
 
+    /*
     std::vector<PdfPage> to_be;
 
     for (int i = 1; i < pdf_files_.size(); ++i) {
@@ -125,6 +126,7 @@ auto PdfCluster::exportTest() -> void {
 
     const auto raw = final_pdf.getRaw();
     sru::util::QFileWrite(raw, std::filesystem::current_path().append("testing_export.pdf"));
+     */
 }
 
 auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& contents, std::string reference) -> std::vector<std::string> {
@@ -211,8 +213,8 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf) -> std::vector
             std::transform(total_objects.begin(), total_objects.end(), std::back_inserter(content), [](const auto& obj) { return obj.getContent(); });
             new_content = calccalc(calc_config, content, reference);
             if (!new_content.empty()) {
-                std::cout << "Calculating: " << object_conf.name << " -> " << calc_config.name << std::endl;
-                std::cout << "Result: " << new_content.front() << std::endl;
+                std::cout << "Calculating: " << object_conf.name << " -> " << calc_config.name << "\n";
+                std::cout << "Result: " << new_content.front() << "\n";
                 reference = new_content.front();
             }
         }

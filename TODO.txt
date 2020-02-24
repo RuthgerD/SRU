@@ -1,29 +1,29 @@
 SRU 2.0: Now with less speculation!
 TODO LIST today:
-re-add new stickies when writing to final pdf
-implement AVRG with recursive call
-add some more test configs
+hacky stickies with backwards search
+text_justify
+zfill
+plural forms
+fix fmt crap
 
 TODO LIST for alpha:
 graph generation
-final pdf building
 userinput in calculations
-quick export
-ability to construct stickies
-setMarked() or setStickied() or setAnchor()
-reminder: end: has to be sorted based on all time values
+export speed enhancements
+page delete support (with the already implemented append)
 
 TODO LIST for beta:
 Coordinate helpers
-pdf file to doc convertion
+pdf file to doc conversion
 dctmk integration
 better error checking and handling with asserts
 Ryan magic
 global configs to disable stuff
 sru::util::cmd stderr checking
-regex match marked objects as well
 maybe phase out internal sticky and let the user handle it
 append instead of insert 999
+optional json?
+active resting average got weird sticky sometimes
 
 TODO LIST for stable:
 good logging system
@@ -71,3 +71,10 @@ JSON REDO:
 disallow mixing certain modes e.g. sort
 
 in software check for array lengths
+
+Sticky removal:
+remove sticky saving and switch who points to who when calculating / exporting we gather all the original objects and stickies and match them against the calculated object,
+since we only use sticky for when sorting this is good i think :))
+for referencing others for AVRG mostly we set avrg_source/base_id to be an json array of 2 values [obj_config, calc config]
+
+move some object specific configs back to object like y_object_spacing

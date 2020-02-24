@@ -187,8 +187,7 @@ auto PdfPage::commit() -> bool {
     for (auto& [id, obj] : update_staging_) {
         const auto& orig = objs_[id];
         if (auto pos = raw_.find(orig.toString()); pos != std::string::npos) {
-            raw_.replace(pos, orig.toString().size(),
-                         "\n" + obj.getColor().toString() + "\n" + obj.toString() + orig.getColor().toString() + "\n");
+            raw_.replace(pos, orig.toString().size(), "\n" + obj.getColor().toString() + "\n" + obj.toString() + orig.getColor().toString() + "\n");
             objs_[id] = std::move(obj);
         } else {
             clear_staging();
