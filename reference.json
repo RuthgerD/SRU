@@ -1,5 +1,5 @@
 {
-    "date_provider": 3,
+    "date_provider": 31,
     "pages": [
         {
             "page_name": "page any",
@@ -20,10 +20,26 @@
             "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
             "groups": [
                 0,
+                1,
+                2,
+                3,
                 4,
                 5,
+                6,
+                7,
+                8,
+                9,
+                10,
                 11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
                 19,
+                20,
                 21,
                 22
             ]
@@ -79,9 +95,12 @@
             "x": 0,
             "y": 842,
             "anchor_name": "Bradycardias",
-            "content_id": "Bradycardias:",
+            "content_id": "(Bradycardias:)|(No bradycardia found)",
             "save_anchor": true,
             "sub_groups": [
+                2,
+                3,
+                4
             ]
         },
         {
@@ -89,9 +108,10 @@
             "x": 0,
             "y": 842,
             "anchor_name": "Tachycardias:",
-            "content_id": "Tachycardias:",
+            "content_id": "(Tachycardias:)|(No tachycardia found)",
             "save_anchor": true,
             "sub_groups": [
+                5,6,7
             ]
         },
         {
@@ -99,9 +119,10 @@
             "x": 0,
             "y": 842,
             "anchor_name": "Pauses:",
-            "content_id": "Pauses:",
+            "content_id": "(Pauses:)|(No pauses found)",
             "save_anchor": true,
             "sub_groups": [
+                40, 8
             ]
         },
         {
@@ -134,6 +155,7 @@
             "content_id": "VPB per hour:",
             "save_anchor": true,
             "sub_groups": [
+                12
             ]
         },
         {
@@ -144,6 +166,7 @@
             "content_id": "VPB per 1000 events:",
             "save_anchor": true,
             "sub_groups": [
+                13
             ]
         },
         {
@@ -156,6 +179,7 @@
             "content_alt": "No couplets found",
             "save_anchor": true,
             "sub_groups": [
+                14,15,16
             ]
         },
         {
@@ -168,6 +192,7 @@
             "content_alt": "No triplets found",
             "save_anchor": true,
             "sub_groups": [
+                17,18,19
             ]
         },
         {
@@ -175,11 +200,12 @@
             "x": 0,
             "y": 842,
             "anchor_name": "Salvos / VTA:",
-            "content_id": "(Salvos / VTA:)|(No triplets found)",
+            "content_id": "(Salvos \/ VTA:)|(No salvos \/ VTA found)",
             "content_": "Salvos / VTA:",
             "content_alt": "No salvos / VTA found",
             "save_anchor": true,
             "sub_groups": [
+                20,21,22,23
             ]
         },
         {
@@ -201,6 +227,7 @@
             "content_id": "Max:",
             "save_anchor": true,
             "sub_groups": [
+                26
             ]
         },
         {
@@ -211,6 +238,7 @@
             "content_id": "Average:",
             "save_anchor": true,
             "sub_groups": [
+                28
             ]
         },
         {
@@ -221,6 +249,7 @@
             "content_id": "Middle active:",
             "save_anchor": true,
             "sub_groups": [
+                29
             ]
         },
         {
@@ -231,6 +260,7 @@
             "content_id": "Middle resting:",
             "save_anchor": true,
             "sub_groups": [
+                30
             ]
         },
         {
@@ -241,6 +271,7 @@
             "content_id": "Start:",
             "save_anchor": true,
             "sub_groups": [
+                31
             ]
         },
         {
@@ -251,6 +282,7 @@
             "content_id": "End:",
             "save_anchor": true,
             "sub_groups": [
+                32
             ]
         },
         {
@@ -261,6 +293,7 @@
             "content_id": "Duration:",
             "save_anchor": true,
             "sub_groups": [
+                33
             ]
         },
         {
@@ -282,6 +315,7 @@
             "content_id": "Signal quality:",
             "save_anchor": true,
             "sub_groups": [
+                35
             ]
         },
         {
@@ -352,8 +386,8 @@
             "object_name": "SVPB total/avrg",
             "margin_x": 150,
             "calcs": [
-                4,
-                5
+                10,
+                11
             ]
         },
         {
@@ -361,6 +395,7 @@
             "object_name": "Bradycardias amount",
             "margin_x": 150,
             "calcs": [
+                20
             ]
         },
         {
@@ -368,6 +403,7 @@
             "object_name": "Bradycardias avrg",
             "margin_x": 150,
             "calcs": [
+                21
             ]
         },
         {
@@ -377,6 +413,7 @@
             "margin_y": -40,
             "object_count": 3,
             "calcs": [
+                23
             ]
         },
         {
@@ -384,6 +421,7 @@
             "object_name": "Tachycardias amount",
             "margin_x": 150,
             "calcs": [
+                20
             ]
         },
         {
@@ -391,6 +429,7 @@
             "object_name": "Tachycardias avrg",
             "margin_x": 150,
             "calcs": [
+                21
             ]
         },
         {
@@ -400,6 +439,15 @@
             "margin_y": -40,
             "object_count": 3,
             "calcs": [
+                30
+            ]
+        },
+        {
+            "id": 40,
+            "object_name": "Pauses total",
+            "margin_x": 150,
+            "calcs": [
+                20
             ]
         },
         {
@@ -409,6 +457,7 @@
             "margin_y": -40,
             "object_count": 3,
             "calcs": [
+                40
             ]
         },
         {
@@ -424,7 +473,7 @@
             "object_name": "VPB in % of events",
             "margin_x": 150,
             "calcs": [
-                1
+                50
             ]
         },
         {
@@ -439,6 +488,7 @@
             "object_name": "VPB per 1000 events",
             "margin_x": 150,
             "calcs": [
+                52
             ]
         },
         {
@@ -446,6 +496,7 @@
             "object_name": "Couplets amount",
             "margin_x": 150,
             "calcs": [
+                0
             ]
         },
         {
@@ -461,6 +512,7 @@
             "object_name": "Couplets qrs amount",
             "margin_x": 150,
             "calcs": [
+                60
             ]
         },
         {
@@ -468,6 +520,7 @@
             "object_name": "Triplets amount",
             "margin_x": 150,
             "calcs": [
+                0
             ]
         },
         {
@@ -483,6 +536,7 @@
             "object_name": "Triplets qrs amount",
             "margin_x": 150,
             "calcs": [
+                60
             ]
         },
         {
@@ -490,6 +544,7 @@
             "object_name": "Salvos amount",
             "margin_x": 150,
             "calcs": [
+                0
             ]
         },
         {
@@ -505,14 +560,17 @@
             "object_name": "Salvos qrs amount",
             "margin_x": 150,
             "calcs": [
+                60
             ]
         },
         {
             "id": 23,
             "object_name": "Salvos list",
+            "margin_x": 20,
             "margin_y": -50,
             "object_count": 3,
             "calcs": [
+                30
             ]
         },
         {
@@ -520,7 +578,7 @@
             "object_name": "Min heart rate",
             "margin_x": 150,
             "calcs": [
-                2
+                70
             ]
         },
         {
@@ -536,6 +594,7 @@
             "object_name": "Max heart rate",
             "margin_x": 150,
             "calcs": [
+                80
             ]
         },
         {
@@ -551,6 +610,7 @@
             "object_name": "Average heart rate",
             "margin_x": 150,
             "calcs": [
+                90
             ]
         },
         {
@@ -558,6 +618,7 @@
             "object_name": "Middle active heart rate",
             "margin_x": 150,
             "calcs": [
+                90
             ]
         },
         {
@@ -565,6 +626,7 @@
             "object_name": "Middle rest heart rate",
             "margin_x": 150,
             "calcs": [
+                90
             ]
         },
         {
@@ -579,6 +641,7 @@
             "object_name": "End date",
             "margin_x": 150,
             "calcs": [
+                100
             ]
         },
         {
@@ -586,6 +649,7 @@
             "object_name": "Duration",
             "margin_x": 150,
             "calcs": [
+                110
             ]
         },
         {
@@ -601,6 +665,7 @@
             "object_name": "Signal Quality",
             "margin_x": 150,
             "calcs": [
+                120
             ]
         },
         {
@@ -608,7 +673,7 @@
             "object_name": "example numbering",
             "margin_x": 150,
             "calcs": [
-                20
+                130
             ]
         },
         {
@@ -616,7 +681,7 @@
             "object_name": "page numbering",
             "margin_x": 150,
             "calcs": [
-                21
+                140
             ]
         },
         {
@@ -626,6 +691,7 @@
             "anchor_margin_y": 7,
             "object_count": 50,
             "calcs": [
+                151
             ]
         },
         {
@@ -635,6 +701,7 @@
             "anchor_margin_y": 7,
             "object_count": 50,
             "calcs": [
+                150
             ]
         }
     ],
@@ -652,59 +719,7 @@
             "overflow_threshold": -1
         },
         {
-            "id": 1,
-            "calc_name": "VPB average",
-            "calc_mode": "AVRG",
-            "avrg_base_id": [
-                9,
-                0
-            ],
-            "avrg_source_id": [
-                34,
-                0
-            ],
-            "avrg_multiplier": 100,
-            "round_cut_off": 1,
-            "decimal_points": 2,
-            "re_extract_order": [
-                1
-            ],
-            "regex": "(.*)%"
-        },
-        {
-            "id": 2,
-            "calc_name": "heart rate",
-            "text_justify": 0,
-            "maximum_values": 1,
-            "y_object_spacing": 0,
-            "calc_mode": "SORT",
-            "sort_settings": [
-                false
-            ],
-            "re_extract_order": [
-                1
-            ],
-            "regex": "([0-9]+?)/min"
-        },
-        {
-            "id": 3,
-            "calc_name": "list",
-            "text_justify": 0,
-            "maximum_values": 3,
-            "y_object_spacing": -11.33,
-            "calc_mode": "SORT",
-            "sort_settings": [
-                true,
-                true
-            ],
-            "re_extract_order": [
-                2,
-                1
-            ],
-            "regex": "(.*?)s, .*\\. (.*?)/min"
-        },
-        {
-            "id": 4,
+            "id": 10,
             "calc_name": "SVPB total",
             "calc_mode": "SUM",
             "regex": "([0-9]*).*?\\((?:.*)%",
@@ -717,7 +732,7 @@
             "overflow_threshold": 0
         },
         {
-            "id": 5,
+            "id": 11,
             "calc_name": "SVPB avrg",
             "calc_mode": "AVRG",
             "regex": "(?:[0-9]*).*?\\((.*)%",
@@ -738,25 +753,234 @@
         },
         {
             "id": 20,
+            "calc_name": "General Sum + episode",
+            "calc_mode": "SUM",
+            "regex": "([0-9]+) episode.?",
+            "re_extract_order": [
+                1
+            ],
+            "round_cut_off": 0,
+            "decimal_points": 1,
+            "overflow_threshold": -1
+        },
+        {
+            "id": 21,
+            "calc_name": "AVRG avrg :)",
+            "calc_mode": "AVRG",
+            "regex": ".*\\((.*)%.*",
+            "avrg_self": true,
+            "avrg_multiplier": 1,
+            "round_cut_off": 0,
+            "decimal_points": 2,
+            "re_extract_order": [
+                1
+            ]
+        },
+        {
+            "id": 23,
+            "calc_name": "Bradycardia list",
+            "text_justify": 0,
+            "maximum_values": 3,
+            "y_object_spacing": -11.33,
+            "calc_mode": "SORT",
+            "sort_settings": [
+                false,
+                false
+            ],
+            "re_extract_order": [
+                2,
+                1
+            ],
+            "regex": "(.*?)s, .*\\. (.*?)/min"
+        },
+        {
+            "id": 30,
+            "calc_name": "Tachycardia list",
+            "text_justify": 0,
+            "maximum_values": 3,
+            "y_object_spacing": -11.33,
+            "calc_mode": "SORT",
+            "sort_settings": [
+                true,
+                true
+            ],
+            "re_extract_order": [
+                2,
+                1
+            ],
+            "regex": "(.*?)s, .*\\. (.*?)/min"
+        },
+        {
+            "id": 40,
+            "calc_name": "Pauses list",
+            "text_justify": 0,
+            "maximum_values": 3,
+            "y_object_spacing": -11.33,
+            "calc_mode": "SORT",
+            "sort_settings": [
+                true
+            ],
+            "re_extract_order": [
+                1
+            ],
+            "regex": "(.*?)s.*"
+        },
+
+        {
+            "id": 50,
+            "calc_name": "VPB average",
+            "calc_mode": "AVRG",
+            "avrg_base_id": [
+                9,
+                0
+            ],
+            "avrg_source_id": [
+                34,
+                0
+            ],
+            "avrg_multiplier": 100,
+            "round_cut_off": 1,
+            "decimal_points": 2,
+            "re_extract_order": [
+                1
+            ],
+            "regex": "(.*)%"
+        },
+        {
+            "id": 52,
+            "calc_name": "VPB per 1000",
+            "calc_mode": "AVRG",
+            "avrg_base_id": [
+                9,
+                0
+            ],
+            "avrg_source_id": [
+                34,
+                0
+            ],
+            "avrg_multiplier": 1000,
+            "round_cut_off": 0,
+            "decimal_points": 0,
+            "re_extract_order": [
+                1
+            ],
+            "regex": "(.*)"
+        },
+        {
+            "id": 60,
+            "calc_name": "General Sum + QRS",
+            "calc_mode": "SUM",
+            "regex": "([0-9]+) QRS",
+            "re_extract_order": [
+                1
+            ],
+            "round_cut_off": 0,
+            "decimal_points": 1,
+            "overflow_threshold": -1
+        },
+        {
+            "id": 70,
+            "calc_name": "min heart rate",
+            "text_justify": 0,
+            "maximum_values": 1,
+            "y_object_spacing": 0,
+            "calc_mode": "SORT",
+            "sort_settings": [
+                false
+            ],
+            "re_extract_order": [
+                1
+            ],
+            "regex": "([0-9]+?)/min"
+        },
+        {
+            "id": 80,
+            "calc_name": "max heart rate",
+            "text_justify": 0,
+            "maximum_values": 1,
+            "y_object_spacing": 0,
+            "calc_mode": "SORT",
+            "sort_settings": [
+                true
+            ],
+            "re_extract_order": [
+                1
+            ],
+            "regex": "([0-9]+?)/min"
+        },
+        {
+            "id": 90,
+            "calc_name": "AVRG heart",
+            "calc_mode": "AVRG",
+            "regex": "([0-9]+?)/min",
+            "avrg_self": true,
+            "avrg_multiplier": 1,
+            "round_cut_off": 0,
+            "decimal_points": 1,
+            "re_extract_order": [
+                1
+            ]
+        },
+        {
+            "id": 100,
+            "calc_name": "date sort",
+            "calc_mode": "SORT",
+            "regex": "([0-9]{2}).([0-9]{2}).([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})",
+            "maximum_values": 1,
+            "re_extract_order": [1,2,3,4,5,6],
+            "sort_settings": [true,true,true,true,true,true],
+            "y_object_spacing": 0
+        },
+        {
+            "id": 110,
+            "calc_name": "General Sum for time",
+            "calc_mode": "SUM",
+            "regex": "([0-9]+):([0-9]+):([0-9]+)",
+            "re_extract_order": [
+                1,2,3
+            ],
+            "round_cut_off": 0,
+            "decimal_points": 0,
+            "overflow_threshold": -1
+        },
+        {
+            "id": 120,
+            "calc_name": "lowest signal",
+            "text_justify": 0,
+            "maximum_values": 1,
+            "y_object_spacing": 0,
+            "calc_mode": "SORT",
+            "sort_settings": [
+                false
+            ],
+            "re_extract_order": [
+                1
+            ],
+            "regex": "(.*)% disturbed"
+        },
+
+
+        {
+            "id": 130,
             "calc_name": "example numbering",
             "text_justify": 0,
             "calc_mode": "NUMBERING",
             "regex": "Example No.: ([0-9]*)"
         },
         {
-            "id": 21,
+            "id": 140,
             "calc_name": "page numbering",
             "text_justify": 0,
             "calc_mode": "NUMBERING",
             "regex": "Page ([0-9]*)"
         },
         {
-            "id": 22,
+            "id": 151,
             "calc_name": "SVPB DATA",
             "calc_mode": "TABLE"
         },
         {
-            "id": 23,
+            "id": 150,
             "calc_name": "TIME DATA",
             "calc_mode": "TABLE"
         }
