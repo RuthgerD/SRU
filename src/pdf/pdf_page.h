@@ -18,7 +18,6 @@ class PdfPage {
     std::string raw_;
     std::vector<sru::pdf::StringObject> objs_;
     std::unordered_map<int, std::vector<offset>> marked_objs_;
-    std::unordered_map<int, std::vector<offset>> stickied_objs_;
     std::unordered_map<int, offset> anchor_objs_;
     std::unordered_map<int, sru::util::Coordinate> anchor_positions_;
 

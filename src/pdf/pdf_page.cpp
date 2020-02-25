@@ -14,7 +14,6 @@ auto PdfPage::getAnchorObjects() const -> const std::unordered_map<int, offset>&
 void PdfPage::indexObjects() {
     objs_.clear();
     marked_objs_.clear();
-    stickied_objs_.clear();
     anchor_objs_.clear();
     clear_staging();
     if (const auto found = sru::re::re_search(config_.obj_regex, raw_); found) {
@@ -87,7 +86,6 @@ void PdfPage::indexObjects() {
                     const auto y2 = ref_y < max_y ? ref_y : max_y;
 
                     const auto object_count = object_conf.object_count;
-                    auto sticky_id = object_conf.sticky_id;
 
                     auto found_count = 0;
                     auto captured_count = 0;
@@ -108,18 +106,10 @@ void PdfPage::indexObjects() {
                                 count_start = 0;
                             }
                             if (found_count >= count_start) {
-                                if (sticky_id < 0) {
-                                    if (marked_objs_.find(object_conf_id) == marked_objs_.end()) {
-
-                                        marked_objs_.emplace(object_conf_id, std::vector<offset>{});
-                                    }
-                                    marked_objs_[object_conf_id].emplace_back(&comp_obj - objs_.data());
-                                } else {
-                                    if (stickied_objs_.find(sticky_id) == stickied_objs_.end()) {
-                                        stickied_objs_.emplace(sticky_id, std::vector<offset>{});
-                                    }
-                                    stickied_objs_[sticky_id].emplace_back(&comp_obj - objs_.data());
+                                if (marked_objs_.find(object_conf_id) == marked_objs_.end()) {
+                                    marked_objs_.emplace(object_conf_id, std::vector<offset>{});
                                 }
+                                marked_objs_[object_conf_id].emplace_back(&comp_obj - objs_.data());
                                 ++captured_count;
                             }
                             ++found_count;
@@ -200,19 +190,6 @@ auto PdfPage::commit() -> bool {
     }
 
     for (auto id : delete_staging_) {
-        sru::util::erase_if(stickied_objs_, [&](auto& key, auto& val) {
-            for (auto& [mkey, mval] : marked_objs_) {
-                for (auto& x : mval) {
-                    if (x == id) {
-                        const auto start = delete_staging_.size();
-                        delete_staging_.resize(start + val.size());
-                        std::copy(val.begin(), val.end(), delete_staging_.begin() + start);
-                        return true;
-                    }
-                }
-            }
-            return false;
-        });
         sru::util::erase_if(marked_objs_, [&](auto& key, auto& val) {
             for (auto& x : val) {
                 if (x == id) {
@@ -234,7 +211,6 @@ auto PdfPage::commit() -> bool {
         }
     };
     delta_adj(marked_objs_);
-    delta_adj(stickied_objs_);
     for (auto& [key, val] : anchor_objs_) {
         val -= std::distance(delete_staging_.begin(), std::upper_bound(delete_staging_.begin(), delete_staging_.end(), val));
     }
