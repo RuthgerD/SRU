@@ -70,6 +70,22 @@ auto PdfCluster::exportTest() -> void {
                 if (new_objs.empty()) {
                     continue;
                 }
+
+                // TODO: this is horrible, think of a better way of doing stickies.
+                if (object_conf.sticky_id != -1) {
+                    for (auto& file : pdf_files_) {
+                        auto stickied_obj = file.getMarkedObjects(object_conf.id);
+                        auto sticky_obj = file.getMarkedObjects(object_conf.sticky_id);
+                        if (stickied_obj.empty() || sticky_obj.empty()) {
+                            continue;
+                        }
+                        if (new_objs.front().getContent() == file.getPage(stickied_obj.front().first).getObjects()[stickied_obj.front().second.front()].getContent()) {
+                            page.deleteObject(page.getMarkedObjects(object_conf.sticky_id).front());
+                            auto stick_content = file.getPage(sticky_obj.front().first).getObjects()[sticky_obj.front().second.front()];
+                            page.insertObject(stick_content);
+                        }
+                    }
+                }
                 const auto& anchor_positions = page.getAnchorPositions();
                 const auto& anchor_objs = page.getAnchorObjects();
                 if (auto anchor_obj = anchor_objs.find(anchor_conf_id); anchor_obj != anchor_objs.end()) {

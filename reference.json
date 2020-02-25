@@ -235,7 +235,7 @@
             "content_id": "Min:",
             "save_anchor": true,
             "sub_groups": [
-                24
+                24,25
             ]
         },
         {
@@ -246,7 +246,7 @@
             "content_id": "Max:",
             "save_anchor": true,
             "sub_groups": [
-                26
+                26,27
             ]
         },
         {
@@ -630,6 +630,7 @@
             "id": 24,
             "object_name": "Min heart rate",
             "margin_x": 150,
+            "sticky_id": 25,
             "calcs": [
                 70
             ]
@@ -638,7 +639,6 @@
             "id": 25,
             "object_name": "min heart rate date",
             "margin_x": 150,
-            "sticky_id": 0,
             "calcs": [
             ]
         },
@@ -646,6 +646,7 @@
             "id": 26,
             "object_name": "Max heart rate",
             "margin_x": 150,
+            "sticky_id": 27,
             "calcs": [
                 80
             ]
@@ -654,7 +655,6 @@
             "id": 27,
             "object_name": "max heart rate date",
             "margin_x": 150,
-            "sticky_id": 0,
             "calcs": [
             ]
         },
