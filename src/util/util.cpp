@@ -88,7 +88,7 @@ auto multi_add(std::vector<std::vector<float>> values, int overflow) -> std::vec
         auto count = value.size() - 1;
         std::for_each(value.rbegin(), value.rend(), [&](const auto& x) {
             auto& tc = total[count];
-            if (tc + x >= overflow && overflow == -1 && count != 0) {
+            if (tc + x >= overflow && overflow != -1 && count != 0) {
                 tc += x - overflow;
                 ++total[count - 1];
             } else {

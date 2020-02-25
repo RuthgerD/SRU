@@ -1008,7 +1008,7 @@
             ],
             "round_cut_off": 0,
             "decimal_points": 0,
-            "overflow_threshold": -1
+            "overflow_threshold": 60
         },
         {
             "id": 120,
