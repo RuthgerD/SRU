@@ -236,7 +236,7 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf) -> std::vector
         for (const auto& j : new_content) {
             auto new_obj = total_objects.front();
 
-            new_obj.setContent(j, 0);
+            new_obj.setContent(j, object_conf.text_justify);
             new_objects.push_back(std::move(new_obj));
         }
         return std::move(new_objects);

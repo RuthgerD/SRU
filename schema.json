@@ -219,6 +219,11 @@
                         "type": "number",
                         "title": "The y_object_spacing Schema"
                     },
+                    "text_justify": {
+                        "$id": "#/properties/calcs/properties/items/properties/text_justify",
+                        "type": "number",
+                        "title": "The text_justify Schema"
+                    },
                     "sticky_id": {
                         "$id": "#/properties/objects/properties/items/properties/sticky_id",
                         "type": "integer",
@@ -264,11 +269,6 @@
                         "$id": "#/properties/calcs/properties/items/properties/calc_name",
                         "type": "string",
                         "title": "The calc_name Schema"
-                    },
-                    "text_justify": {
-                        "$id": "#/properties/calcs/properties/items/properties/text_justify",
-                        "type": "number",
-                        "title": "The text_justify Schema"
                     },
                     "maximum_values": {
                         "$id": "#/properties/calcs/properties/items/properties/maximum_values",

@@ -12,7 +12,6 @@ struct CalcConfig {
     size_t id;
     std::string name;
 
-    float text_justify;
     size_t maximum_values;
     float round_cut_off;
     int decimal_points;

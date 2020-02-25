@@ -404,6 +404,7 @@
             "id": 1,
             "object_name": "SVPB total/avrg",
             "margin_x": 150,
+            "text_justify": -2.3,
             "calcs": [
                 10,
                 11
@@ -413,6 +414,7 @@
             "id": 2,
             "object_name": "Bradycardias amount",
             "margin_x": 150,
+            "text_justify": -4.3,
             "calcs": [
                 20
             ]
@@ -421,6 +423,7 @@
             "id": 3,
             "object_name": "Bradycardias avrg",
             "margin_x": 150,
+            "text_justify": 0,
             "calcs": [
                 21
             ]
@@ -440,6 +443,7 @@
             "id": 5,
             "object_name": "Tachycardias amount",
             "margin_x": 150,
+            "text_justify": -4.3,
             "calcs": [
                 20
             ]
@@ -467,6 +471,7 @@
             "id": 40,
             "object_name": "Pauses total",
             "margin_x": 150,
+            "text_justify": -4.3,
             "calcs": [
                 20
             ]
@@ -837,7 +842,6 @@
         {
             "id": 23,
             "calc_name": "Bradycardia list",
-            "text_justify": 0,
             "maximum_values": 3,
             "calc_mode": "SORT",
             "sort_settings": [
@@ -853,7 +857,6 @@
         {
             "id": 30,
             "calc_name": "Tachycardia list",
-            "text_justify": 0,
             "maximum_values": 3,
             "calc_mode": "SORT",
             "sort_settings": [
@@ -869,7 +872,6 @@
         {
             "id": 40,
             "calc_name": "Pauses list",
-            "text_justify": 0,
             "maximum_values": 3,
             "calc_mode": "SORT",
             "sort_settings": [
@@ -935,7 +937,6 @@
         {
             "id": 70,
             "calc_name": "min heart rate",
-            "text_justify": 0,
             "maximum_values": 1,
             "calc_mode": "SORT",
             "sort_settings": [
@@ -949,7 +950,6 @@
         {
             "id": 80,
             "calc_name": "max heart rate",
-            "text_justify": 0,
             "maximum_values": 1,
             "calc_mode": "SORT",
             "sort_settings": [
@@ -1013,7 +1013,6 @@
         {
             "id": 120,
             "calc_name": "lowest signal",
-            "text_justify": 0,
             "maximum_values": 1,
             "calc_mode": "SORT",
             "sort_settings": [
@@ -1027,14 +1026,12 @@
         {
             "id": 130,
             "calc_name": "example numbering",
-            "text_justify": 0,
             "calc_mode": "NUMBERING",
             "regex": "Example No.: ([0-9]*)"
         },
         {
             "id": 140,
             "calc_name": "page numbering",
-            "text_justify": 0,
             "calc_mode": "NUMBERING",
             "regex": "Page ([0-9]*)"
         },

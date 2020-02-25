@@ -17,6 +17,7 @@ struct ObjectConfig {
     int anchor_margin_y;
     size_t object_count;
     float y_object_spacing;
+    float text_justify;
     int sticky_id;
     std::vector<size_t> calcs;
 };
