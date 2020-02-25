@@ -82,7 +82,7 @@ auto PdfCluster::exportTest() -> void {
                 if (auto anchor_pos = anchor_positions.find(anchor_conf_id);
                     anchor_pos != anchor_positions.end()) { // TODO: if no anchor found maybe find highest among objects
                     auto y_base = anchor_pos->second.getY();
-                    float spacing = getCalcConfig(object_conf.calcs.front())->y_object_spacing; // TODO: maybe put this just on the object conf
+                    float spacing = object_conf.y_object_spacing;
                     for (auto& obj : new_objs) {
                         obj.setPosition(obj.getPosition().getX(), y_base + (spacing * ((int)(&obj - new_objs.data()) + 1.0)));
                     }

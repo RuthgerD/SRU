@@ -99,6 +99,7 @@ auto main(int argc, char** argv) -> int {
                                       obb.HasMember("anchor_margin_x") ? obb["anchor_margin_x"].GetInt() : -1,
                                       obb.HasMember("anchor_margin_y") ? obb["anchor_margin_y"].GetInt() : -1,
                                       obb.HasMember("object_count") ? obb["object_count"].Get<size_t>() : 1,
+                                      obb.HasMember("y_object_spacing") ? obb["y_object_spacing"].GetFloat() : 0,
                                       obb.HasMember("sticky_id") ? obb["sticky_id"].GetInt() : -1,
                                       calcs};
         sru::pdf::ObjectConfigPool.push_back(std::move(config));
@@ -131,7 +132,6 @@ auto main(int argc, char** argv) -> int {
                                     obb["calc_name"].GetString(),
                                     obb.HasMember("text_justify") ? obb["text_justify"].GetFloat() : 0,
                                     obb.HasMember("maximum_values") ? obb["maximum_values"].Get<size_t>() : 0,
-                                    obb.HasMember("y_object_spacing") ? obb["y_object_spacing"].GetFloat() : 0,
                                     obb.HasMember("round_cut_off") ? obb["round_cut_off"].GetFloat() : 0,
                                     obb.HasMember("decimal_points") ? obb["decimal_points"].GetInt() : 0,
                                     obb.HasMember("calc_mode") ? obb["calc_mode"].GetString() : "",

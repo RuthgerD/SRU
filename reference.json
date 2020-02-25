@@ -431,6 +431,7 @@
             "margin_x": 20,
             "margin_y": -40,
             "object_count": 3,
+            "y_object_spacing": -11.33,
             "calcs": [
                 23
             ]
@@ -457,6 +458,7 @@
             "margin_x": 20,
             "margin_y": -40,
             "object_count": 3,
+            "y_object_spacing": -11.33,
             "calcs": [
                 30
             ]
@@ -475,6 +477,7 @@
             "margin_x": 20,
             "margin_y": -40,
             "object_count": 3,
+            "y_object_spacing": -11.33,
             "calcs": [
                 40
             ]
@@ -618,6 +621,7 @@
             "margin_x": 20,
             "margin_y": -50,
             "object_count": 3,
+            "y_object_spacing": -11.33,
             "calcs": [
                 30
             ]
@@ -835,7 +839,6 @@
             "calc_name": "Bradycardia list",
             "text_justify": 0,
             "maximum_values": 3,
-            "y_object_spacing": -11.33,
             "calc_mode": "SORT",
             "sort_settings": [
                 false,
@@ -852,7 +855,6 @@
             "calc_name": "Tachycardia list",
             "text_justify": 0,
             "maximum_values": 3,
-            "y_object_spacing": -11.33,
             "calc_mode": "SORT",
             "sort_settings": [
                 true,
@@ -869,7 +871,6 @@
             "calc_name": "Pauses list",
             "text_justify": 0,
             "maximum_values": 3,
-            "y_object_spacing": -11.33,
             "calc_mode": "SORT",
             "sort_settings": [
                 true
@@ -936,7 +937,6 @@
             "calc_name": "min heart rate",
             "text_justify": 0,
             "maximum_values": 1,
-            "y_object_spacing": 0,
             "calc_mode": "SORT",
             "sort_settings": [
                 false
@@ -951,7 +951,6 @@
             "calc_name": "max heart rate",
             "text_justify": 0,
             "maximum_values": 1,
-            "y_object_spacing": 0,
             "calc_mode": "SORT",
             "sort_settings": [
                 true
@@ -995,8 +994,7 @@
                 true,
                 true,
                 true
-            ],
-            "y_object_spacing": 0
+            ]
         },
         {
             "id": 110,
@@ -1017,7 +1015,6 @@
             "calc_name": "lowest signal",
             "text_justify": 0,
             "maximum_values": 1,
-            "y_object_spacing": 0,
             "calc_mode": "SORT",
             "sort_settings": [
                 false

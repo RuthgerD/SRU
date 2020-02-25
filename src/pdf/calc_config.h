@@ -14,7 +14,6 @@ struct CalcConfig {
 
     float text_justify;
     size_t maximum_values;
-    float y_object_spacing;
     float round_cut_off;
     int decimal_points;
 

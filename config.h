@@ -51,7 +51,7 @@ constexpr auto SRU_SCHEMA = R"({
                         "$id": "#/properties/pages/items/properties/mutate_in_final",
                         "type": "string",
                         "title": "The mutate_in_final Schema",
-                        "pattern": "^(append|delete|none)$"
+                        "enum": ["append", "delete", "none"]
                     },
                     "regex_id": {
                         "$id": "#/properties/pages/items/properties/regex_id",
@@ -214,6 +214,11 @@ constexpr auto SRU_SCHEMA = R"({
                         "title": "The object_count Schema",
                         "minimum": 0
                     },
+                    "y_object_spacing": {
+                        "$id": "#/properties/objects/properties/items/properties/y_object_spacing",
+                        "type": "number",
+                        "title": "The y_object_spacing Schema"
+                    },
                     "sticky_id": {
                         "$id": "#/properties/objects/properties/items/properties/sticky_id",
                         "type": "integer",
@@ -270,11 +275,6 @@ constexpr auto SRU_SCHEMA = R"({
                         "type": "integer",
                         "title": "The maximum_values Schema",
                         "minimum": 0
-                    },
-                    "y_object_spacing": {
-                        "$id": "#/properties/calcs/properties/items/properties/y_object_spacing",
-                        "type": "number",
-                        "title": "The y_object_spacing Schema"
                     },
                     "round_cut_off": {
                         "$id": "#/properties/calcs/properties/items/properties/round_cut_off",
@@ -453,8 +453,7 @@ constexpr auto SRU_SCHEMA = R"({
                                 "maximum_values",
                                 "sort_settings",
                                 "re_extract_order",
-                                "regex",
-                                "y_object_spacing"
+                                "regex"
                             ]
                         }
                     },
