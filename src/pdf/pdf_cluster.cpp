@@ -49,10 +49,6 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
     });
 }
 auto PdfCluster::exportTest() -> void {
-    for (auto& x : pdf_files_.at(0).getPages()) {
-        // x.second.printObjects();
-    }
-
     auto final_pdf = pdf_files_.front();
 
     for (auto& [page_no, page] : final_pdf.getPages()) {
@@ -139,10 +135,10 @@ auto PdfCluster::exportTest() -> void {
 
 
     refreshNumbering(final_pdf);
+     */
 
     const auto raw = final_pdf.getRaw();
     sru::util::QFileWrite(raw, std::filesystem::current_path().append("testing_export.pdf"));
-     */
 }
 
 auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& contents, std::string reference) -> std::vector<std::string> {

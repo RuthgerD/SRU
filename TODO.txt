@@ -1,29 +1,28 @@
 SRU 2.0: Now with less speculation!
 TODO LIST today:
-hacky stickies with backwards search
 text_justify
 zfill
-plural forms
 fix fmt crap
 
 TODO LIST for alpha:
 graph generation
 userinput in calculations
-export speed enhancements
-page delete support (with the already implemented append)
+export speed enhancements + Ryan magic
+implement vpb per hour, maybe have a custom calc to add up the hours properly (30 overflow)
 
 TODO LIST for beta:
 Coordinate helpers
 pdf file to doc conversion
 dctmk integration
 better error checking and handling with asserts
-Ryan magic
 global configs to disable stuff
 sru::util::cmd stderr checking
 maybe phase out internal sticky and let the user handle it
 append instead of insert 999
 optional json?
 active resting average got weird sticky sometimes
+plural forms
+
 
 TODO LIST for stable:
 good logging system
@@ -41,40 +40,15 @@ sticky linking
 add transform support to objects
 
 
-Ideas:
-Page range configs + virtual anchors = profit!
-
-
-
-Graph stuff:
-Create option for margin_x/y to be based on an anchor (for our case its Total: and Result:)
-Add option to have virtual x/y assist in searching (in case of dupes) since order cant be trusted OR or use id as order
-
 table creation:
 configurable x axis and y axis (Time in our case) where the x axis defines the amount of values used (in our case should always match or be larger then the gather values)
 create special collumn object with name and vector of values (ints in our case but store in float), for dates we have to calculate the delta,
  to generate the graph we need to get the starting data from somewhere (perhaps save the first time entry).
 
 graph generation:
-
-
-
-Sticky stuff:
-create a function to get stickies for a certain object (ugly back search sadly)
-or
-give objects recursive ability to house their own sticky
-
-goal here is to keep integrity between export and import for reasons :)
-
-
-JSON REDO:
-disallow mixing certain modes e.g. sort
-
-in software check for array lengths
+for now just inject the graph and hard code most values and follow original design except data gathering.
 
 Sticky removal:
 remove sticky saving and switch who points to who when calculating / exporting we gather all the original objects and stickies and match them against the calculated object,
 since we only use sticky for when sorting this is good i think :))
 for referencing others for AVRG mostly we set avrg_source/base_id to be an json array of 2 values [obj_config, calc config]
-
-move some object specific configs back to object like y_object_spacing
