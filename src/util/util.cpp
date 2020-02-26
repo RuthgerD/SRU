@@ -64,13 +64,18 @@ auto multi_search(const std::string& re, const std::vector<std::string>& content
             for (size_t i = 1; i < f.size(); ++i) {
                 // TODO: do a better job of cleaning shit
                 std::string repl{f[order[i - 1]]};
-                std::replace(repl.begin(), repl.end(), ',', '.');
-                std::string cleaned{};
-                std::string cleaned2{};
-                std::remove_copy(repl.begin(), repl.end(), std::back_inserter(cleaned), ' ');
-                std::remove_copy(cleaned.begin(), cleaned.end(), std::back_inserter(cleaned2), '<');
+                for (auto it = repl.begin(); it != repl.end(); ) {
+                    if (*it == ' ' || *it == '<') {
+                        it = repl.erase(it);
+                    } else {
+                        if (*it == ',') {
+                            *it = '.';
+                        }
+                        ++it;
+                    }
+                }
 
-                extracted.push_back(svto<float>(cleaned2));
+                extracted.push_back(svto<float>(repl));
                 count.push_back(1);
             }
             total_extracted.push_back(std::move(extracted));
