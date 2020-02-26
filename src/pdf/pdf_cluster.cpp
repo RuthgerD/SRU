@@ -79,6 +79,7 @@ auto PdfCluster::exportTest() -> void {
                             page.deleteObject(page.getMarkedObjects(object_conf.sticky_id).front());
                             auto stick_content = file.getPage(sticky_obj.front().first).getObjects()[sticky_obj.front().second.front()];
                             page.insertObject(stick_content);
+                            break;
                         }
                     }
                 }
