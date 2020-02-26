@@ -77,4 +77,5 @@ auto zfill(std::string& string, int amount) -> void;
 auto to_string(const float& value, int decimal_point, int zfill_amount = 0) -> std::string;
 auto to_string(const float& value, float cut_off, int decimal_point, int zfill_amount = 0) -> std::string;
 auto strptime(const std::string& value, const std::string& pattern) -> std::optional<std::chrono::system_clock::time_point>;
+auto escape(std::string& in, const char escape, std::string_view needs_escape) -> void;
 } // namespace sru::util

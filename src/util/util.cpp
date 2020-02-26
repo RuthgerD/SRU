@@ -183,4 +183,18 @@ auto strptime(const std::string& value, const std::string& pattern) -> std::opti
         return {};
     return std::chrono::system_clock::from_time_t(std::mktime(&tm));
 }
+
+auto escape(std::string& in, const char escape, std::string_view needs_escape) -> void {
+    auto find_any_from = [&](std::size_t pos) {
+      const auto in_length = in.size();
+      while(pos < in_length && std::find(needs_escape.begin(), needs_escape.end(), in[pos]) == needs_escape.end())
+          ++pos;
+      return pos != in_length ? pos : std::string::npos;
+    };
+    std::size_t pos{};
+    while((pos = find_any_from(pos)) != std::string::npos){
+        in.insert(in.begin() + pos, escape);
+        pos += 2;
+    }
+}
 } // namespace sru::util
