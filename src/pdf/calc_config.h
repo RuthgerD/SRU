@@ -24,6 +24,7 @@ struct CalcConfig {
     float avrg_multiplier;
 
     float overflow_threshold;
+    int zfill;
 
     std::vector<bool> sort_settings;
     std::vector<int> re_extract_order;

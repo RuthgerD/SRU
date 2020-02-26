@@ -342,6 +342,11 @@
                         "type": "number",
                         "title": "The overflow_threshold Schema"
                     },
+                    "zfill": {
+                        "$id": "#/properties/calcs/properties/items/properties/zfill",
+                        "type": "integer",
+                        "title": "The zfill Schema"
+                    },
                     "sort_settings": {
                         "$id": "#/properties/calcs/properties/items/properties/sort_settings",
                         "type": "array",

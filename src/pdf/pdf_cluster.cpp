@@ -158,7 +158,7 @@ auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& 
 
         std::vector<std::string> str_result;
         std::transform(tmp.begin(), tmp.end(), std::back_inserter(str_result),
-                       [&](const auto& x) { return sru::util::to_string(x, cc.round_cut_off, cc.decimal_points); });
+                       [&](const auto& x) { return sru::util::to_string(x, cc.round_cut_off, cc.decimal_points, cc.zfill); });
 
         if (!sru::util::multi_re_place(cc.regex, reference, str_result)) {
             return {};

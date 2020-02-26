@@ -140,6 +140,7 @@ auto main(int argc, char** argv) -> int {
                                     avrg_base_id,
                                     obb.HasMember("avrg_multiplier") ? obb["avrg_multiplier"].GetFloat() : -1,
                                     obb.HasMember("overflow_threshold") ? obb["overflow_threshold"].GetFloat() : -1,
+                                    obb.HasMember("zfill") ? obb["zfill"].GetInt() : 0,
                                     sort_settings,
                                     re_extract_order,
                                     obb.HasMember("regex") ? obb["regex"].GetString() : ""};

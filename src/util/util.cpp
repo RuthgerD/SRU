@@ -67,9 +67,8 @@ auto multi_search(const std::string& re, const std::vector<std::string>& content
                 std::replace(repl.begin(), repl.end(), ',', '.');
                 std::string cleaned{};
                 std::string cleaned2{};
-                std::remove_copy(repl.begin(), repl.end(),std::back_inserter(cleaned), ' ');
-                std::remove_copy(cleaned.begin(), cleaned.end(),std::back_inserter(cleaned2), '<');
-
+                std::remove_copy(repl.begin(), repl.end(), std::back_inserter(cleaned), ' ');
+                std::remove_copy(cleaned.begin(), cleaned.end(), std::back_inserter(cleaned2), '<');
 
                 extracted.push_back(svto<float>(cleaned2));
                 count.push_back(1);
@@ -99,8 +98,7 @@ auto multi_add(std::vector<std::vector<float>> values, int overflow) -> std::vec
     }
     return total;
 }
-auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector<std::string>& elements,
-                const std::vector<bool>& settings)
+auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector<std::string>& elements, const std::vector<bool>& settings)
     -> std::pair<std::vector<std::vector<float>>, std::vector<std::string>> {
 
     std::vector<std::pair<std::vector<float>, std::string>> zip;
@@ -145,31 +143,37 @@ auto multi_re_place(const std::string& regex, std::string& base, std::vector<std
     }
     size_t i = 0;
     for (; i < content.size(); ++i) {
-        if (auto tmp = sru::re::re_search(regex, base ,1); tmp) {
+        if (auto tmp = sru::re::re_search(regex, base, 1); tmp) {
             const auto& views = tmp->front();
             base.replace(views[i + 1].data() - base.data(), views[i + 1].size(), content[i]);
         }
     }
     return (i == content.size());
 }
-// TODO: ABSOLUTELY GARBAGE PLEASE LEARN TO USE FMT PROPERLY
-auto to_string(const float& value, int decimal_point) -> std::string {
+auto zfill(std::string& string, int amount) -> void {
+    for (int i = string.size(); i < amount; ++i) {
+        string.insert(0, "0");
+    }
+}
+auto to_string(const float& value, int decimal_point, int zfill_amount) -> std::string {
     int accuracy = std::pow(10, decimal_point + 1);
     float rounded = value + ((5.0 / 9.0) / accuracy);
     auto str = fmt::format("{:." + std::to_string(decimal_point) + "f}", rounded);
+
     while (str.back() == '0') {
         str.pop_back();
     }
     if (str.back() == '.') {
         str.append("0");
     }
+    zfill(str, zfill_amount);
     return str;
 }
-auto to_string(const float& value, float cut_off, int decimal_point) -> std::string {
+auto to_string(const float& value, float cut_off, int decimal_point, int zfill_amount) -> std::string {
     if (value < cut_off) {
-        return ("<" + to_string(cut_off, decimal_point));
+        return ("<" + to_string(cut_off, decimal_point, zfill_amount));
     }
-    return to_string(value, decimal_point);
+    return to_string(value, decimal_point, zfill_amount);
 }
 auto strptime(const std::string& value, const std::string& pattern) -> std::optional<std::chrono::system_clock::time_point> {
     std::tm tm = {};
