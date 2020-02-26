@@ -41,7 +41,8 @@
                 19,
                 20,
                 21,
-                22
+                22,
+                26
             ]
         },
         {
@@ -396,6 +397,18 @@
             "content_id": "Time",
             "save_anchor": true,
             "sub_groups": [
+            ]
+        },
+        {
+            "id": 26,
+            "is_virtual": false,
+            "x": 0,
+            "y": 300,
+            "anchor_name": "Report",
+            "content_id": "Report",
+            "save_anchor": true,
+            "sub_groups": [
+                41
             ]
         }
     ],
@@ -767,6 +780,16 @@
             "calcs": [
                 150
             ]
+        },
+        {
+            "id": 41,
+            "object_name": "Report text",
+            "margin_y": -130,
+            "object_count": 10,
+            "y_object_spacing": -11.33,
+            "calcs": [
+                160
+            ]
         }
     ],
     "calcs": [
@@ -1071,6 +1094,12 @@
             "id": 150,
             "calc_name": "TIME DATA",
             "calc_mode": "TABLE"
+        },
+        {
+            "id": 160,
+            "calc_name": "Report text",
+            "calc_mode": "USER_INPUT",
+            "maximum_values": 10
         }
     ]
 }
