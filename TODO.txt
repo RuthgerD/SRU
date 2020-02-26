@@ -17,7 +17,6 @@ append instead of insert 999
 optional json?
 active resting average got weird sticky sometimes
 plural forms
-dont die when heart rate is --/min
 
 
 TODO LIST for stable:

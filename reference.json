@@ -4,7 +4,7 @@
         {
             "page_name": "page any",
             "priority": 3,
-            "mutate_in_final": "none",
+            "mutate_in_final": "delete",
             "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET",
             "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET)",
             "groups": [
@@ -59,7 +59,7 @@
         {
             "page_name": "Numerical overview of the arrhythmia",
             "priority": 0,
-            "mutate_in_final": "none",
+            "mutate_in_final": "delete",
             "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Numerical overview of the arrhythmia)\\)Tj\\nET",
             "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
             "groups": [
@@ -994,7 +994,7 @@
             "re_extract_order": [
                 1
             ],
-            "regex": "([0-9]+?)/min"
+            "regex": "(.*)/min.*"
         },
         {
             "id": 80,
@@ -1007,13 +1007,13 @@
             "re_extract_order": [
                 1
             ],
-            "regex": "([0-9]+?)/min"
+            "regex": "(.*)/min.*"
         },
         {
             "id": 90,
             "calc_name": "AVRG heart",
             "calc_mode": "AVRG",
-            "regex": "([0-9]+?)/min",
+            "regex": "(.*)/min.*",
             "avrg_self": true,
             "avrg_multiplier": 1,
             "round_cut_off": 0,
