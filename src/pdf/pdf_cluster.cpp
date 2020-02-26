@@ -151,6 +151,23 @@ auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& 
         return {contents.front()};
     }
 
+    if (cc.calc_mode == "USER_INPUT") {
+        std::vector<std::string> input{"\\\\"};
+        std::cout << cc.name << " Requires input:" << std::endl;
+
+        while (!input.back().empty()) {
+            std::string tmp;
+            std::cout << "> "<< std::flush;
+            std::getline(std::cin, tmp);
+            std::cout << std::flush;
+            sru::util::escape(tmp, '\\', "():\\P/>|*!&}^%");
+            input.push_back(tmp);
+        }
+
+
+        return input;
+    }
+
     auto [extracted_data, extracted_count] = sru::util::multi_search(cc.regex, contents, cc.re_extract_order);
     std::vector<std::string> new_content{};
     if (cc.calc_mode == "SUM") {
