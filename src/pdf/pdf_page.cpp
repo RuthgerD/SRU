@@ -21,12 +21,12 @@ void PdfPage::indexObjects() {
         for (const auto& x : *found) {
 
             if (x[1] == "") {
-                objs_.emplace_back(color, sru::util::svto<int>(x[4]), sru::util::svto<float>(x[5]), std::string{x[6]},
-                                   sru::util::Coordinate{sru::util::svto<float>(x[7]), sru::util::svto<float>(x[8])}, std::string{x[9]});
+                objs_.emplace_back(color, *sru::util::svto<int>(x[4]), *sru::util::svto<float>(x[5]), std::string{x[6]},
+                                   sru::util::Coordinate{*sru::util::svto<float>(x[7]), *sru::util::svto<float>(x[8])}, std::string{x[9]});
             } else {
-                color.r_ = sru::util::svto<float>(x[1]);
-                color.g_ = sru::util::svto<float>(x[2]);
-                color.b_ = sru::util::svto<float>(x[3]);
+                color.r_ = *sru::util::svto<float>(x[1]);
+                color.g_ = *sru::util::svto<float>(x[2]);
+                color.b_ = *sru::util::svto<float>(x[3]);
             }
         }
     }

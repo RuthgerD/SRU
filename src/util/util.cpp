@@ -46,13 +46,11 @@ auto multi_search(const std::string& re, const std::vector<std::string>& content
     // checks if we can use it
     order.erase(std::unique(order.begin(), order.end()), order.end());
     if (sru::re::re_group_count(re) != order.size()) {
-        std::cout << "1. Invalid order for multi_search";
         return {total_extracted, total_count};
     }
-    auto max = *std::max_element(order.begin(), order.end());
-    auto min = *std::min_element(order.begin(), order.end());
+    const auto& max = *std::max_element(order.begin(), order.end());
+    const auto& min = *std::min_element(order.begin(), order.end());
     if (max > order.size() || min < 0) {
-        std::cout << "2. Invalid order for multi_search";
         return {total_extracted, total_count};
     }
 
@@ -75,11 +73,15 @@ auto multi_search(const std::string& re, const std::vector<std::string>& content
                     }
                 }
 
-                extracted.push_back(svto<float>(repl));
-                count.push_back(1);
+                if (auto conv = svto<float>(repl); conv) {
+                    extracted.push_back(*conv);
+                    count.push_back(1);
+                }
             }
-            total_extracted.push_back(std::move(extracted));
-            total_count.push_back(std::move(count));
+            if (!extracted.empty()){
+                total_extracted.push_back(std::move(extracted));
+                total_count.push_back(std::move(count));
+            }
         }
     }
     return {total_extracted, total_count};

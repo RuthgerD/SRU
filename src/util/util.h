@@ -58,10 +58,12 @@ auto multi_sort(const std::vector<std::vector<float>>& values, const std::vector
 auto multi_avrg(const std::vector<float>& values, const std::vector<float>& compare, float multiplier) -> std::vector<float>;
 auto multi_re_place(const std::string& regex, std::string& base, std::vector<std::string> content) -> bool;
 template <typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
-// TODO: unsafe :P
-auto svto(const std::string_view& sv) -> T {
+auto svto(const std::string_view& sv) -> std::optional<T> {
     auto value = boost::convert<T>(sv, boost::cnv::strtol());
-    return value.get();
+    if (value) {
+        return *value;
+    }
+    return {};
 }
 template< class Key, class T, class Hash, class KeyEqual, class Alloc, class Pred >
 auto erase_if(std::unordered_map<Key,T,Hash,KeyEqual,Alloc>& c, Pred pred) -> void {
