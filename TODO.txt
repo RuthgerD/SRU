@@ -1,14 +1,10 @@
 SRU 2.0: Now with less speculation!
 TODO LIST today:
-text_justify
-zfill
-fix fmt crap
+
 
 TODO LIST for alpha:
 graph generation
-userinput in calculations
 export speed enhancements + Ryan magic
-implement vpb per hour, maybe have a custom calc to add up the hours properly (30 overflow)
 
 TODO LIST for beta:
 Coordinate helpers
@@ -17,11 +13,11 @@ dctmk integration
 better error checking and handling with asserts
 global configs to disable stuff
 sru::util::cmd stderr checking
-maybe phase out internal sticky and let the user handle it
 append instead of insert 999
 optional json?
 active resting average got weird sticky sometimes
 plural forms
+dont die when heart rate is --/min
 
 
 TODO LIST for stable:
@@ -47,8 +43,3 @@ create special collumn object with name and vector of values (ints in our case b
 
 graph generation:
 for now just inject the graph and hard code most values and follow original design except data gathering.
-
-Sticky removal:
-remove sticky saving and switch who points to who when calculating / exporting we gather all the original objects and stickies and match them against the calculated object,
-since we only use sticky for when sorting this is good i think :))
-for referencing others for AVRG mostly we set avrg_source/base_id to be an json array of 2 values [obj_config, calc config]
