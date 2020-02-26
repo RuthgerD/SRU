@@ -121,8 +121,8 @@ auto PdfCluster::exportTest() -> void {
             }
         }
     }
-    final_pdf.insertPages(to_be, 999);
 
+    final_pdf.appendPages(to_be);
     std::vector<size_t> to_die;
 
     for (const auto& x : final_pdf.getPages()) {
