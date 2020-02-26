@@ -33,5 +33,8 @@ class PdfFile {
     auto deletePages(std::vector<size_t>& page_nos) -> void;
     auto insertPage(PdfPage& new_page, size_t new_page_no) -> void;
     auto insertPages(std::vector<PdfPage>& new_pages, size_t new_page_no) -> void;
+    auto appendPage(PdfPage& new_page) -> void;
+    auto appendPages(std::vector<PdfPage>& new_pages) -> void;
+
 };
 } // namespace sru::pdf

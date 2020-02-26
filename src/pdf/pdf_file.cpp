@@ -107,6 +107,8 @@ auto PdfFile::insertPages(std::vector<PdfPage>& new_pages, size_t new_page_no) -
         pages_.emplace_back(new_page_no + i, std::move(new_pages[i]));
     }
 }
+auto PdfFile::appendPage(PdfPage& new_page) -> void { insertPage(new_page, pages_.size()); }
+auto PdfFile::appendPages(std::vector<PdfPage>& new_pages) -> void { insertPages(new_pages, pages_.size()); }
 auto PdfFile::getRaw() -> std::string {
     // TODO: * Dont scan every loop and keep an offset instead
     if (total_pages_ > real_pages_) {
