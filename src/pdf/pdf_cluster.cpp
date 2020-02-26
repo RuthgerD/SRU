@@ -153,9 +153,12 @@ auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& 
     }
 
     if (cc.calc_mode == "USER_INPUT") {
+        #ifndef NDEBUG
+            return {"\\\\", "This is a debug build"};
+        #endif
         std::vector<std::string> input{"\\\\"};
         std::cout << cc.name << " Requires input:" << std::endl;
-
+        std::cout << "-----" << std::endl;
         while (!input.back().empty()) {
             std::string tmp;
             std::cout << "> "<< std::flush;
@@ -164,8 +167,7 @@ auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& 
             sru::util::escape(tmp, '\\', "():\\P/>|*!&}^%");
             input.push_back(tmp);
         }
-
-
+        std::cout << "-----" << std::endl;
         return input;
     }
 
