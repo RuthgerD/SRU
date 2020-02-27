@@ -67,7 +67,6 @@ auto PdfCluster::exportTest() -> void {
                     continue;
                 }
 
-                // TODO: this is horrible, think of a better way of doing stickies.
                 if (object_conf.sticky_id != -1) {
                     for (auto& file : pdf_files_) {
                         auto stickied_obj = file.getMarkedObjects(object_conf.id);
@@ -111,9 +110,7 @@ auto PdfCluster::exportTest() -> void {
         page.commit();
     }
 
-    /*
     std::vector<PdfPage> to_be;
-
     for (int i = 1; i < pdf_files_.size(); ++i) {
         for (const auto& x : pdf_files_[i].getPages()) {
             if (x.second.getConfig().mutate_in_final == "append") {
@@ -121,10 +118,9 @@ auto PdfCluster::exportTest() -> void {
             }
         }
     }
-
     final_pdf.appendPages(to_be);
-    std::vector<size_t> to_die;
 
+    std::vector<size_t> to_die;
     for (const auto& x : final_pdf.getPages()) {
         if (x.second.getConfig().mutate_in_final == "delete") {
             to_die.push_back(x.first);
@@ -133,13 +129,13 @@ auto PdfCluster::exportTest() -> void {
 
     final_pdf.deletePages(to_die);
 
-
-
     refreshNumbering(final_pdf);
-     */
 
-    const auto raw = final_pdf.getRaw();
-    sru::util::QFileWrite(raw, std::filesystem::current_path().append("testing_export.pdf"));
+    std::ofstream out(std::filesystem::current_path().append("testing_export.pdf").lexically_normal(), std::ios::out | std::ios::binary);
+    if (!out) {
+        return;
+    }
+    final_pdf.write(out);
 }
 
 auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& contents, std::string reference) -> std::vector<std::string> {

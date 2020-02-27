@@ -109,8 +109,11 @@ auto PdfFile::insertPages(std::vector<PdfPage>& new_pages, size_t new_page_no) -
 }
 auto PdfFile::appendPage(PdfPage& new_page) -> void { insertPage(new_page, pages_.size()); }
 auto PdfFile::appendPages(std::vector<PdfPage>& new_pages) -> void { insertPages(new_pages, pages_.size()); }
-auto PdfFile::getRaw() -> std::string {
-    // TODO: * Dont scan every loop and keep an offset instead
+auto PdfFile::write(std::ostream& os) -> void {
+    if (total_pages_ == 0) {
+        return;
+    }
+
     if (total_pages_ > real_pages_) {
         sru::qpdf::increase_size(*this, total_pages_ - real_pages_);
         real_pages_ = total_pages_;
@@ -120,16 +123,39 @@ auto PdfFile::getRaw() -> std::string {
     }
 
     auto real_raw = *sru::util::QFileRead(path_);
+    auto sv = std::string_view{real_raw};
+    std::vector<std::vector<std::string_view >> page_matches;
+    if (auto page_matches_opt = sru::re::re_search(sru::re::page_match_key, sv); page_matches_opt) {
+        page_matches = std::move(*page_matches_opt);
+    } else {
+        return;
+    }
+
+    std::vector<std::pair<int, int>> offsets_and_lengths;
+    std::transform(page_matches.begin(), page_matches.end(), std::back_inserter(offsets_and_lengths), [&](const auto& vec_sv) {
+        auto& content_view = vec_sv[2];
+        return std::pair{std::distance(sv.begin(), content_view.begin()), content_view.size()};
+    });
+    sru::util::sink(std::move(page_matches));
+
+    std::vector<std::string_view> sorted_pages;
+    sorted_pages.resize(total_pages_);
     for (size_t j = 0; j < total_pages_; ++j) {
-        auto sv = std::string_view{real_raw};
-        if (auto page_matches_opt = sru::re::re_search(sru::re::page_match_key, sv); page_matches_opt) {
-            auto& matches = *page_matches_opt;
-            auto& match = matches[j];
-            if (auto page = std::find_if(pages_.begin(), pages_.end(), [&](const auto& x) { return x.first == j; }); page != pages_.end()) {
-                real_raw.replace(match[2].data() - sv.data(), match[2].size(), page->second.getRaw());
-            }
+        if (auto page = std::find_if(pages_.begin(), pages_.end(), [&](const auto& x) { return x.first == j; }); page != pages_.end()) {
+            sorted_pages[j] = page->second.getRaw();
         }
     }
-    return real_raw;
+
+    auto raw_offset = 0;
+    for (size_t j = 0; j < total_pages_; ++j) {
+        const auto& [offset, length] = offsets_and_lengths[j];
+        const auto view_length = sorted_pages[j].length();
+        const auto block_length = offsets_and_lengths[j].first - raw_offset;
+        os.write(real_raw.data() + raw_offset,  block_length);
+        os.write(sorted_pages[j].data(), view_length);
+        raw_offset = offset + length;
+    }
+    const auto back_raw_dat = offsets_and_lengths.back();
+    os.write(&real_raw[back_raw_dat.first + back_raw_dat.second], real_raw.length() - back_raw_dat.first + back_raw_dat.second);
 }
 } // namespace sru::pdf
