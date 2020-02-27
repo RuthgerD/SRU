@@ -10,7 +10,7 @@ namespace sru::pdf {
 PdfPage::PdfPage(std::string raw, const PageConfig& config) : raw_{std::move(raw)}, config_{config} {}
 auto PdfPage::getConfig() const -> PageConfig { return config_; }
 auto PdfPage::getAnchorPositions() const -> const std::unordered_map<int, sru::util::Coordinate>& { return anchor_positions_; }
-auto PdfPage::getAnchorObjects() const -> const std::unordered_map<int, offset>& { return anchor_objs_; }
+auto PdfPage::getAnchorObjects() const -> const std::unordered_map<int, Offset>& { return anchor_objs_; }
 void PdfPage::indexObjects() {
     objs_.clear();
     marked_objs_.clear();
@@ -107,7 +107,7 @@ void PdfPage::indexObjects() {
                             }
                             if (found_count >= count_start) {
                                 if (marked_objs_.find(object_conf_id) == marked_objs_.end()) {
-                                    marked_objs_.emplace(object_conf_id, std::vector<offset>{});
+                                    marked_objs_.emplace(object_conf_id, std::vector<Offset>{});
                                 }
                                 marked_objs_[object_conf_id].emplace_back(&comp_obj - objs_.data());
                                 ++captured_count;
@@ -140,17 +140,17 @@ void PdfPage::printObjects() const {
 auto PdfPage::getRaw() const -> const std::string& { return raw_; }
 
 auto PdfPage::getObjects() -> const std::vector<StringObject>& { return objs_; }
-auto PdfPage::getObject(offset id) const -> const StringObject& {
+auto PdfPage::getObject(Offset id) const -> const StringObject& {
     assert(id < objs_.size());
     return objs_[id];
 }
-auto PdfPage::getMarkedObjects(size_t id) -> std::vector<offset> {
+auto PdfPage::getMarkedObjects(size_t id) -> std::vector<Offset> {
     if (marked_objs_.find(id) != marked_objs_.end()) {
         return marked_objs_[id];
     }
     return {};
 }
-auto PdfPage::updateObject(offset id, StringObject& obj) -> bool {
+auto PdfPage::updateObject(Offset id, StringObject& obj) -> bool {
     if (id > objs_.size()) {
         return false;
     }
@@ -158,7 +158,7 @@ auto PdfPage::updateObject(offset id, StringObject& obj) -> bool {
     update_staging_.emplace(id, std::move(obj));
     return true;
 }
-auto PdfPage::deleteObject(offset id) -> bool {
+auto PdfPage::deleteObject(Offset id) -> bool {
     if (id > objs_.size()) {
         return false;
     }

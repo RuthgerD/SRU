@@ -62,7 +62,9 @@ auto ReAccel::getAllMatches(std::string_view key, std::string_view sv, int limit
         if (e.first == key) {
             auto& res = ret.emplace();
             int i = 0;
-            for (const auto& m : e.second(sv)) {
+            auto matches = e.second(sv);
+            res.reserve(10U);
+            for (const auto& m : matches) {
                 if (i > limit && limit > 0) {
                     break;
                 }

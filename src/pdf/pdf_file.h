@@ -25,7 +25,7 @@ class PdfFile {
     [[nodiscard]] auto getPages() -> std::vector<std::pair<size_t, PdfPage>>&;
     [[nodiscard]] auto getPage(size_t page_no) -> PdfPage&;
     [[nodiscard]] auto getRaw() -> std::string;
-    [[nodiscard]] auto getMarkedObjects(int id) -> std::vector<std::pair<int, std::vector<offset>>>;
+    [[nodiscard]] auto getMarkedObjects(int id) -> std::vector<std::pair<int, std::vector<Offset>>>;
     [[nodiscard]] auto getPath() const -> const std::filesystem::path&;
     [[nodiscard]] auto getPageCount() const -> size_t;
     [[nodiscard]] auto getRealPageCount() const -> size_t;

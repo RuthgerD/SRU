@@ -29,18 +29,17 @@ class Coordinate {
     float x_, y_;
 
   public:
-    // TODO: contexpr
-    Coordinate(float x, float y);
-    [[nodiscard]] auto getX() -> float&;
-    [[nodiscard]] auto getX() const noexcept -> float;
-    [[nodiscard]] auto getY() -> float&;
-    [[nodiscard]] auto getY() const noexcept -> float;
-    auto translateX(float amount) -> void;
-    auto translateY(float amount) -> void;
+    constexpr Coordinate(float x, float y) noexcept : x_{x}, y_{y} {}
+    [[nodiscard]] constexpr auto getX() noexcept -> float& { return x_; }
+    [[nodiscard]] constexpr auto getX() const noexcept -> const float& { return x_; }
+    [[nodiscard]] constexpr auto getY() noexcept -> float& { return y_; }
+    [[nodiscard]] constexpr auto getY() const noexcept -> const float& { return y_; }
+    constexpr auto translateX(float amount) noexcept -> void { x_ += amount; }
+    constexpr auto translateY(float amount) noexcept -> void { y_ += amount; }
 };
 struct Color {
     float r_, g_, b_;
-    Color(float r, float g, float b);
+    constexpr Color(float r, float g, float b) noexcept : r_{r}, g_{g}, b_{b} {}
     [[nodiscard]] auto toString() const -> std::string;
 };
 

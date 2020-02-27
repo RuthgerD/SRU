@@ -2,12 +2,7 @@
 #include "../pdf/string_obj.h"
 
 namespace sru::util {
-auto Coordinate::getX() -> float& { return x_; }
-auto Coordinate::getX() const noexcept -> float { return x_; }
-auto Coordinate::getY() -> float& { return y_; }
-auto Coordinate::getY() const noexcept -> float { return y_; }
-auto Coordinate::translateX(float amount) -> void { x_ += amount; }
-auto Coordinate::translateY(float amount) -> void { y_ += amount; }
+auto Color::toString() const -> std::string { return std::to_string(r_) + ' ' + std::to_string(g_) + ' ' + std::to_string(b_) + ' ' + "rg"; }
 auto QFileRead(const std::filesystem::path& path) -> std::optional<std::string> {
     if (auto f = std::fopen(path.lexically_normal().c_str(), "r"); f) {
         std::fseek(f, 0, SEEK_END);
@@ -22,16 +17,12 @@ auto QFileRead(const std::filesystem::path& path) -> std::optional<std::string> 
     }
 }
 auto QFileWrite(const std::string& content, const std::filesystem::path& path) -> bool {
-    if (std::ofstream out(path.lexically_normal().c_str()); out) {
-        out << content;
-        out.close();
+    if (std::ofstream out(path.lexically_normal(), std::ios::out | std::ios::binary); out) {
+        out.write(content.c_str(), content.length());
         return true;
     }
     return false;
 }
-Coordinate::Coordinate(float x, float y) : x_{x}, y_{y} {}
-auto Color::toString() const -> std::string { return std::to_string(r_) + ' ' + std::to_string(g_) + ' ' + std::to_string(b_) + ' ' + "rg"; }
-Color::Color(float r, float g, float b) : r_{r}, g_{g}, b_{b} {}
 auto cmd(const std::string& command) -> int {
     // std::cout << "RUNNING COMMAND: " << command << "\n";
     std::system(command.c_str());

@@ -50,8 +50,8 @@ auto PdfFile::getPage(size_t page_no) const -> const PdfPage& {
     }
     return pages_.back().second;
 }
-auto PdfFile::getMarkedObjects(int id) -> std::vector<std::pair<int, std::vector<offset>>> {
-    std::vector<std::pair<int, std::vector<offset>>> ret;
+auto PdfFile::getMarkedObjects(int id) -> std::vector<std::pair<int, std::vector<Offset>>> {
+    std::vector<std::pair<int, std::vector<Offset>>> ret;
     for (auto& [page_no, page] : pages_) {
         auto mkrd = page.getMarkedObjects(id);
         if (!mkrd.empty()) {
