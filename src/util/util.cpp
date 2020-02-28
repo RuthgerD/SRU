@@ -158,12 +158,15 @@ auto to_string(const float& value, int decimal_point, int zfill_amount) -> std::
     float rounded = value + ((5.0 / 9.0) / accuracy);
     auto str = fmt::format("{:." + std::to_string(decimal_point) + "f}", rounded);
 
-    while (str.back() == '0') {
-        str.pop_back();
+    if (auto dot = str.find_last_of('.'); dot != std::string::npos) {
+        while (str.back() == '0') {
+            str.pop_back();
+        }
+        if (str.back() == '.') {
+            str.append("0");
+        }
     }
-    if (str.back() == '.') {
-        str.append("0");
-    }
+
     zfill(str, zfill_amount);
     return str;
 }

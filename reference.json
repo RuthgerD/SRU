@@ -839,7 +839,7 @@
                 0
             ],
             "avrg_multiplier": 100,
-            "round_cut_off": 1,
+            "round_cut_off": 0.1,
             "decimal_points": 1,
             "re_extract_order": [
                 1
@@ -926,8 +926,8 @@
                 0
             ],
             "avrg_multiplier": 100,
-            "round_cut_off": 1,
-            "decimal_points": 2,
+            "round_cut_off": 0.1,
+            "decimal_points": 1,
             "re_extract_order": [
                 1
             ],
