@@ -7,6 +7,8 @@
     "additionalProperties": false,
     "required": [
         "date_provider",
+        "base_path",
+        "base_size",
         "pages",
         "anchors",
         "objects",
@@ -17,6 +19,16 @@
             "$id": "#/properties/date_provider",
             "type": "integer",
             "title": "The date_provider Schema"
+        },
+        "base_path": {
+            "$id": "#/properties/base_path",
+            "type": "string",
+            "title": "The base_size Schema"
+        },
+        "base_size": {
+            "$id": "#/properties/base_size",
+            "type": "integer",
+            "title": "The base_size Schema"
         },
         "pages": {
             "$id": "#/properties/pages",

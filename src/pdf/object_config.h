@@ -5,7 +5,6 @@
 #include <vector>
 
 namespace sru::pdf {
-extern int DATE_PROVIDER;
 
 struct ObjectConfig {
     size_t id;

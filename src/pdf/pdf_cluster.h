@@ -2,17 +2,17 @@
 #include "../util/qpdf_binding.h"
 #include "../util/util.h"
 #include "anchor_config.h"
-#include "object_config.h"
 #include "calc_config.h"
+#include "object_config.h"
 #include "pdf_file.h"
+#include <boost/functional/hash.hpp>
+#include <ctime>
 #include <filesystem>
 #include <future>
 #include <iostream>
 #include <string>
-#include <vector>
 #include <utility>
-#include <ctime>
-#include <boost/functional/hash.hpp>
+#include <vector>
 
 namespace sru::pdf {
 class PdfCluster {

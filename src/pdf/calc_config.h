@@ -1,10 +1,10 @@
 #pragma once
 
+#include <array>
 #include <iostream>
 #include <optional>
 #include <string>
 #include <vector>
-#include <array>
 
 namespace sru::pdf {
 
@@ -29,7 +29,6 @@ struct CalcConfig {
     std::vector<bool> sort_settings;
     std::vector<int> re_extract_order;
     std::string regex;
-
 };
 extern std::vector<CalcConfig> CalcConfigPool;
 auto getCalcConfig(size_t id) -> std::optional<CalcConfig>;

@@ -46,7 +46,6 @@ class PdfPage {
     auto getRaw() const -> const std::string&;
     void indexObjects();
     void printObjects() const;
-
 };
 
 } // namespace sru::pdf

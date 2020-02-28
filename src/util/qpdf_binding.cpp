@@ -74,8 +74,7 @@ auto delete_page(const sru::pdf::PdfFile& pdf_file, size_t page_no) -> bool {
         return false;
     }
 }
-auto insert_page(const sru::pdf::PdfFile& pdf_file_out, size_t page_no, const sru::pdf::PdfFile& pdf_file_in, size_t new_page_no)
-    -> bool {
+auto insert_page(const sru::pdf::PdfFile& pdf_file_out, size_t page_no, const sru::pdf::PdfFile& pdf_file_in, size_t new_page_no) -> bool {
     ++page_no;
     ++new_page_no;
     auto out_path = std::filesystem::absolute(pdf_file_out.getPath().lexically_normal());
@@ -109,35 +108,36 @@ auto insert_page(const sru::pdf::PdfFile& pdf_file_out, size_t page_no, const sr
         return false;
     }
 }
-auto increase_size(const sru::pdf::PdfFile& pdf_file, size_t size) -> bool {
-    auto page_count = pdf_file.getRealPageCount();
-    while (size > page_count) {
-        increase_size(pdf_file, page_count);
-        size -= page_count;
+auto increase_size(const std::filesystem::path& path, size_t from, size_t size) -> bool {
+    while (size > from) {
+        increase_size(path, from, from);
+        size -= from;
     }
 
-    const auto abs_pdf_file = std::filesystem::absolute(pdf_file.getPath().lexically_normal());
+    const auto abs_pdf_file = std::filesystem::absolute(path.lexically_normal());
     std::string command{};
     if (size > 0) {
         command = qpdf_settings.get_bin() + " " + abs_pdf_file.generic_string() + " --replace-input --stream-data=preserve --pages . 1-z " +
                   std::filesystem::relative(abs_pdf_file).generic_string() + " 1-" + std::to_string(size) + " -- ";
     } else if (size < 0) {
-        command = qpdf_settings.get_bin() + " " + abs_pdf_file.generic_string() + " --replace-input --stream-data=preserve --pages . 1-r" + std::to_string(-1*size+1) + " -- ";
+        command = qpdf_settings.get_bin() + " " + abs_pdf_file.generic_string() + " --replace-input --stream-data=preserve --pages . 1-r" +
+                  std::to_string(-1 * size + 1) + " -- ";
     }
 
     sru::util::cmd(command);
     return std::filesystem::exists(abs_pdf_file);
 }
 
-auto decrease_size(const sru::pdf::PdfFile& pdf_file, size_t size) -> bool {
-    const auto abs_pdf_file = std::filesystem::absolute(pdf_file.getPath().lexically_normal());
+auto decrease_size(const std::filesystem::path& path, size_t from, size_t size) -> bool {
+    const auto abs_pdf_file = std::filesystem::absolute(path.lexically_normal());
     std::string command{};
-    size = pdf_file.getRealPageCount() - size;
-    command = qpdf_settings.get_bin() + " " + abs_pdf_file.generic_string() + " --replace-input --stream-data=preserve --pages . 1-" + std::to_string(size) + " -- ";
+    size = from - size;
+    command = qpdf_settings.get_bin() + " " + abs_pdf_file.generic_string() + " --replace-input --stream-data=preserve --pages . 1-" +
+              std::to_string(size) + " -- ";
 
     sru::util::cmd(command);
     return std::filesystem::exists(abs_pdf_file);
 }
 
-
+auto empty_cache() -> void { std::filesystem::remove_all(qpdf_settings.get_cache_path()); }
 } // namespace sru::qpdf

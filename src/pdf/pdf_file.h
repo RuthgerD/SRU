@@ -24,7 +24,7 @@ class PdfFile {
     [[nodiscard]] auto getPage(size_t page_no) const -> const PdfPage&;
     [[nodiscard]] auto getPages() -> std::vector<std::pair<size_t, PdfPage>>&;
     [[nodiscard]] auto getPage(size_t page_no) -> PdfPage&;
-    auto write(std::ostream& out) -> void;
+    auto write(std::ostream& out, const std::filesystem::path& base) -> void;
     [[nodiscard]] auto getMarkedObjects(int id) -> std::vector<std::pair<int, std::vector<Offset>>>;
     [[nodiscard]] auto getPath() const -> const std::filesystem::path&;
     [[nodiscard]] auto getPageCount() const -> size_t;
@@ -35,6 +35,5 @@ class PdfFile {
     auto insertPages(std::vector<PdfPage>& new_pages, size_t new_page_no) -> void;
     auto appendPage(PdfPage& new_page) -> void;
     auto appendPages(std::vector<PdfPage>& new_pages) -> void;
-
 };
 } // namespace sru::pdf

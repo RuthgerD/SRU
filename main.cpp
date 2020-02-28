@@ -159,8 +159,15 @@ auto main(int argc, char** argv) -> int {
     cache_path.append("import");
     cache_path.append("cache");
     sru::qpdf::set_cache_path(cache_path);
+    sru::pdf::base_path = (std::filesystem::path{d["base_path"].GetString()});
+    if (!std::filesystem::exists(sru::pdf::base_path) && !sru::pdf::base_path.empty()) {
+        std::cout << "Provided base pdf doesnt exist." << std::endl;
+        return -1;
+    }
+    sru::pdf::base_size = d["base_size"].GetInt();
     auto cluster = sru::pdf::PdfCluster{pdf_file_paths};
     cluster.exportTest();
+    sru::qpdf::empty_cache();
 
     const auto end = std::chrono::steady_clock::now();
 

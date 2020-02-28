@@ -1,5 +1,7 @@
 {
     "date_provider": 31,
+    "base_path": "",
+    "base_size": 36,
     "pages": [
         {
             "page_name": "page any",

@@ -74,7 +74,8 @@ auto PdfCluster::exportTest() -> void {
                         if (stickied_obj.empty() || sticky_obj.empty()) {
                             continue;
                         }
-                        if (new_objs.front().getContent() == file.getPage(stickied_obj.front().first).getObjects()[stickied_obj.front().second.front()].getContent()) {
+                        if (new_objs.front().getContent() ==
+                            file.getPage(stickied_obj.front().first).getObjects()[stickied_obj.front().second.front()].getContent()) {
                             page.deleteObject(page.getMarkedObjects(object_conf.sticky_id).front());
                             auto stick_content = file.getPage(sticky_obj.front().first).getObjects()[sticky_obj.front().second.front()];
                             page.insertObject(stick_content);
@@ -85,7 +86,7 @@ auto PdfCluster::exportTest() -> void {
                 const auto& anchor_positions = page.getAnchorPositions();
                 const auto& anchor_objs = page.getAnchorObjects();
                 if (auto anchor_obj = anchor_objs.find(anchor_conf_id); anchor_obj != anchor_objs.end()) {
-                    if(anchor_conf.content_ != anchor_conf.content_alt) {
+                    if (anchor_conf.content_ != anchor_conf.content_alt) {
                         auto new_anchor = page.getObject(anchor_obj->second);
                         new_anchor.setContent(anchor_conf.content_);
                         page.updateObject(anchor_obj->second, new_anchor);
@@ -135,7 +136,27 @@ auto PdfCluster::exportTest() -> void {
     if (!out) {
         return;
     }
-    final_pdf.write(out);
+    const auto& final_path = final_pdf.getPath();
+    auto tmp_path = final_path;
+    auto cbase_path = base_path;
+    auto cbase_size = base_size;
+    if (base_path.empty()) {
+        cbase_path = final_path;
+        cbase_size = final_pdf.getRealPageCount();
+    }
+    tmp_path.concat("-base");
+
+    std::filesystem::copy(cbase_path, tmp_path);
+
+    const auto real_pages = final_pdf.getRealPageCount();
+    const auto total_pages = final_pdf.getPageCount();
+    if (total_pages > cbase_size) {
+        sru::qpdf::increase_size(tmp_path, cbase_size, total_pages - cbase_size);
+    } else if (total_pages < cbase_size) {
+        sru::qpdf::decrease_size(tmp_path, cbase_size, real_pages - cbase_size);
+    }
+
+    final_pdf.write(out, tmp_path);
 }
 
 auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& contents, std::string reference) -> std::vector<std::string> {
@@ -149,22 +170,25 @@ auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& 
     }
 
     if (cc.calc_mode == "USER_INPUT") {
-        #ifndef NDEBUG
-            return {"\\\\", "This is a debug build"};
-        #endif
-        std::vector<std::string> input{"\\\\"};
+#ifdef DEV_BUILT
+        auto end = std::chrono::system_clock::now();
+        auto end_time = std::chrono::system_clock::to_time_t(end);
+        return {" ", "SRU debug build, build at:", std::ctime(&end_time), "Do not use in production."};
+#else
+        std::vector<std::string> input{" "};
         std::cout << cc.name << " Requires input:" << std::endl;
         std::cout << "-----" << std::endl;
         while (!input.back().empty()) {
             std::string tmp;
-            std::cout << "> "<< std::flush;
+            std::cout << "> " << std::flush;
             std::getline(std::cin, tmp);
             std::cout << std::flush;
-            sru::util::escape(tmp, '\\', "():\\P/>|*!&}^%");
+            sru::util::escape(tmp, '\\', "()\\");
             input.push_back(tmp);
         }
         std::cout << "-----" << std::endl;
         return input;
+#endif
     }
 
     auto [extracted_data, extracted_count] = sru::util::multi_search(cc.regex, contents, cc.re_extract_order);

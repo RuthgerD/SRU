@@ -109,22 +109,20 @@ auto PdfFile::insertPages(std::vector<PdfPage>& new_pages, size_t new_page_no) -
 }
 auto PdfFile::appendPage(PdfPage& new_page) -> void { insertPage(new_page, pages_.size()); }
 auto PdfFile::appendPages(std::vector<PdfPage>& new_pages) -> void { insertPages(new_pages, pages_.size()); }
-auto PdfFile::write(std::ostream& os) -> void {
+auto PdfFile::write(std::ostream& os, const std::filesystem::path& base) -> void {
     if (total_pages_ == 0) {
         return;
     }
 
-    if (total_pages_ > real_pages_) {
-        sru::qpdf::increase_size(*this, total_pages_ - real_pages_);
-        real_pages_ = total_pages_;
-    } else if (total_pages_ < real_pages_) {
-        sru::qpdf::decrease_size(*this, real_pages_ - total_pages_);
-        real_pages_ = total_pages_;
+    std::string real_raw;
+    if (auto real_raw_opt = sru::util::QFileRead(base); real_raw_opt) {
+        real_raw = std::move(*sru::util::QFileRead(base));
+    } else {
+        return;
     }
 
-    auto real_raw = *sru::util::QFileRead(path_);
     auto sv = std::string_view{real_raw};
-    std::vector<std::vector<std::string_view >> page_matches;
+    std::vector<std::vector<std::string_view>> page_matches;
     if (auto page_matches_opt = sru::re::re_search(sru::re::page_match_key, sv); page_matches_opt) {
         page_matches = std::move(*page_matches_opt);
     } else {
@@ -151,11 +149,11 @@ auto PdfFile::write(std::ostream& os) -> void {
         const auto& [offset, length] = offsets_and_lengths[j];
         const auto view_length = sorted_pages[j].length();
         const auto block_length = offsets_and_lengths[j].first - raw_offset;
-        os.write(real_raw.data() + raw_offset,  block_length);
+        os.write(real_raw.data() + raw_offset, block_length);
         os.write(sorted_pages[j].data(), view_length);
         raw_offset = offset + length;
     }
-    const auto back_raw_dat = offsets_and_lengths.back();
-    os.write(&real_raw[back_raw_dat.first + back_raw_dat.second], real_raw.length() - back_raw_dat.first + back_raw_dat.second);
+    const auto& [offset, length] = offsets_and_lengths.back();
+    os.write(&real_raw[offset + length], real_raw.length() - offset + length);
 }
 } // namespace sru::pdf

@@ -4,7 +4,8 @@
 namespace sru::pdf {
 StringObject::StringObject(sru::util::Color color, int text_type, double font_size, std::string transform, sru::util::Coordinate position,
                            std::string content)
-    : color_{color}, text_type_{text_type}, font_size_{font_size}, transform_{std::move(transform)}, position_{position}, content_{std::move(content)} {}
+    : color_{color}, text_type_{text_type}, font_size_{font_size}, transform_{std::move(transform)}, position_{position}, content_{
+                                                                                                                              std::move(content)} {}
 auto StringObject::getColor() const -> const sru::util::Color& { return color_; }
 auto StringObject::getTextType() const -> int { return text_type_; }
 auto StringObject::getFontSize() const -> double { return font_size_; }

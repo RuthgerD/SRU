@@ -53,7 +53,7 @@ auto multi_search(const std::string& re, const std::vector<std::string>& content
             for (size_t i = 1; i < f.size(); ++i) {
                 // TODO: do a better job of cleaning shit
                 std::string repl{f[order[i - 1]]};
-                for (auto it = repl.begin(); it != repl.end(); ) {
+                for (auto it = repl.begin(); it != repl.end();) {
                     if (*it == ' ' || *it == '<') {
                         it = repl.erase(it);
                     } else {
@@ -69,7 +69,7 @@ auto multi_search(const std::string& re, const std::vector<std::string>& content
                     count.push_back(1);
                 }
             }
-            if (!extracted.empty()){
+            if (!extracted.empty()) {
                 total_extracted.push_back(std::move(extracted));
                 total_count.push_back(std::move(count));
             }
@@ -184,13 +184,13 @@ auto strptime(const std::string& value, const std::string& pattern) -> std::opti
 
 auto escape(std::string& in, const char escape, std::string_view needs_escape) -> void {
     auto find_any_from = [&](std::size_t pos) {
-      const auto in_length = in.size();
-      while(pos < in_length && std::find(needs_escape.begin(), needs_escape.end(), in[pos]) == needs_escape.end())
-          ++pos;
-      return pos != in_length ? pos : std::string::npos;
+        const auto in_length = in.size();
+        while (pos < in_length && std::find(needs_escape.begin(), needs_escape.end(), in[pos]) == needs_escape.end())
+            ++pos;
+        return pos != in_length ? pos : std::string::npos;
     };
     std::size_t pos{};
-    while((pos = find_any_from(pos)) != std::string::npos){
+    while ((pos = find_any_from(pos)) != std::string::npos) {
         in.insert(in.begin() + pos, escape);
         pos += 2;
     }
