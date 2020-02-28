@@ -21,11 +21,11 @@ class PdfCluster {
 
   public:
     explicit PdfCluster(std::vector<std::filesystem::path> pdf_file_paths);
-    [[nodiscard]] auto getMarkedObjects(int id, std::vector<PdfFile>& files) -> std::vector<StringObject>;
+    [[nodiscard]] static auto getMarkedObjects(int id, std::vector<PdfFile>& files) -> std::vector<StringObject>;
     [[nodiscard]] auto calculateObject(const ObjectConfig& object_conf) -> std::vector<StringObject>;
     auto calculateObject(const ObjectConfig& object_conf, const CalcConfig& calc_config) -> std::vector<std::string>;
     auto calccalc(const CalcConfig& cc, const std::vector<std::string>& contents, std::string reference) -> std::vector<std::string>;
-    auto exportTest() -> void;
-    auto refreshNumbering(PdfFile& file) -> void;
+    auto export_merged() -> void;
+    static auto refreshNumbering(PdfFile& file) -> void;
 };
 } // namespace sru::pdf

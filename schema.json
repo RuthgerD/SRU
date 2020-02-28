@@ -6,6 +6,7 @@
     "title": "The Root Schema",
     "additionalProperties": false,
     "required": [
+        "import_path",
         "date_provider",
         "base_path",
         "base_size",
@@ -15,6 +16,12 @@
         "calcs"
     ],
     "properties": {
+        "import_path": {
+            "$id": "#/properties/import_path",
+            "type": "string",
+            "title": "The import_path Schema",
+            "minLength": 1
+        },
         "date_provider": {
             "$id": "#/properties/date_provider",
             "type": "integer",

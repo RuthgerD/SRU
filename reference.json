@@ -1,6 +1,7 @@
 {
+    "import_path": "import",
     "date_provider": 31,
-    "base_path": "",
+    "base_path": "templates/base.pdf",
     "base_size": 36,
     "pages": [
         {
@@ -759,6 +760,7 @@
             "id": 37,
             "object_name": "page numbering",
             "margin_x": 150,
+            "text_justify": -4.2,
             "calcs": [
                 140
             ]

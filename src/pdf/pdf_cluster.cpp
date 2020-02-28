@@ -48,7 +48,7 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
         return ret;
     });
 }
-auto PdfCluster::exportTest() -> void {
+auto PdfCluster::export_merged() -> void {
     auto final_pdf = pdf_files_.front();
 
     for (auto& [page_no, page] : final_pdf.getPages()) {
@@ -265,8 +265,6 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf) -> std::vector
             std::transform(total_objects.begin(), total_objects.end(), std::back_inserter(content), [](const auto& obj) { return obj.getContent(); });
             new_content = calccalc(calc_config, content, reference);
             if (!new_content.empty()) {
-                std::cout << "Calculating: " << object_conf.name << " -> " << calc_config.name << "\n";
-                std::cout << "Result: " << new_content.front() << "\n";
                 reference = new_content.front();
             }
         }
@@ -318,7 +316,7 @@ auto PdfCluster::refreshNumbering(PdfFile& file) -> void {
                 auto copy = page.getObject(id);
                 auto oldstr = copy.getContent();
                 sru::util::multi_re_place(numbering_confs[i].second.regex, oldstr, {std::to_string(count[i] + 1)});
-                copy.setContent(oldstr);
+                copy.setContent(oldstr, numbering_confs[i].first.text_justify);
                 page.updateObject(id, copy);
                 ++count[i];
             }
