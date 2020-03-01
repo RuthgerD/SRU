@@ -1,4 +1,5 @@
 #pragma once
+#include "fmt.h"
 #include "../pdf/global_settings.h"
 #include "regex.h"
 #include <algorithm>
@@ -9,7 +10,6 @@
 #include <cmath>
 #include <cstdlib>
 #include <filesystem>
-#include <fmt/format.h>
 #include <functional>
 #include <iostream>
 #include <optional>

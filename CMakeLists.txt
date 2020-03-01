@@ -24,10 +24,9 @@ endif()
 find_package(Boost 1.66 REQUIRED COMPONENTS program_options regex)
 find_package (Threads)
 find_package (RE2)
-find_package(fmt)
 
-if (Boost_FOUND AND Threads_FOUND AND RE2_FOUND AND fmt_FOUND)
-include_directories(${Boost_INCLUDE_DIRS} ${RE2_INCLUDE_DIR} thirdparty/ctre/include thirdparty/rapidjson/include thirdparty/gsl/include thirdparty include)
+if (Boost_FOUND AND Threads_FOUND AND RE2_FOUND)
+include_directories(${Boost_INCLUDE_DIRS} ${RE2_INCLUDE_DIR} thirdparty/ctre/include thirdparty/rapidjson/include thirdparty/gsl/include thirdparty/fmt/include thirdparty include)
 
 add_compile_definitions(RAPIDJSON_HAS_STDSTRING)
 add_library(re_accel src/util/re_accel.h src/util/re_accel.cpp)
@@ -36,6 +35,6 @@ add_executable(sru main.cpp src/pdf/string_obj.cpp src/pdf/pdf_cluster.cpp src/p
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
-target_link_libraries(sru ${Boost_LIBRARIES} ${RE2_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} fmt::fmt ${CMAKE_SOURCE_DIR}/build/release/libre_accel.a)
+target_link_libraries(sru ${Boost_LIBRARIES} ${RE2_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_SOURCE_DIR}/build/release/libre_accel.a)
 
 endif()
