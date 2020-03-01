@@ -3,6 +3,7 @@
     "date_provider": 31,
     "base_path": "templates/base.pdf",
     "base_size": 36,
+    "graph_path": "templates/graph",
     "pages": [
         {
             "page_name": "page any",
@@ -60,14 +61,34 @@
             ]
         },
         {
-            "page_name": "Numerical overview of the arrhythmia",
+            "page_name": "Table 1 and or 2 page",
             "priority": 0,
             "mutate_in_final": "delete",
             "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Numerical overview of the arrhythmia)\\)Tj\\nET",
             "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
             "groups": [
                 21,
-                22
+                22,
+                23,
+                24,
+                25,
+                27,
+                28,
+                30
+            ]
+        },
+        {
+            "page_name": "Table2 page",
+            "priority": 0,
+            "mutate_in_final": "delete",
+            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Frequency analysis and ST analysis)\\)Tj\\nET",
+            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
+            "groups": [
+                21,
+                22,
+                27,
+                28,
+                29
             ]
         },
         {
@@ -239,7 +260,8 @@
             "content_id": "Min:",
             "save_anchor": true,
             "sub_groups": [
-                24,25
+                24,
+                25
             ]
         },
         {
@@ -250,7 +272,8 @@
             "content_id": "Max:",
             "save_anchor": true,
             "sub_groups": [
-                26,27
+                26,
+                27
             ]
         },
         {
@@ -374,10 +397,11 @@
             "is_virtual": false,
             "x": 0,
             "y": 842,
-            "anchor_name": "Table - SVPB",
+            "anchor_name": "Table - arrhythmia - SVPB",
             "content_id": "SVPB",
             "save_anchor": true,
             "sub_groups": [
+                38
             ]
         },
         {
@@ -385,9 +409,9 @@
             "is_virtual": false,
             "x": 0,
             "y": 842,
-            "anchor_name": "Table - End",
+            "anchor_name": "Table - arrhythmia - End",
             "content_id": "Total:",
-            "save_anchor": false,
+            "save_anchor": true,
             "sub_groups": [
             ]
         },
@@ -396,10 +420,11 @@
             "is_virtual": false,
             "x": 0,
             "y": 842,
-            "anchor_name": "Table - Time",
+            "anchor_name": "Table - arrhythmia - Time",
             "content_id": "Time",
             "save_anchor": true,
             "sub_groups": [
+                39
             ]
         },
         {
@@ -412,6 +437,53 @@
             "save_anchor": true,
             "sub_groups": [
                 41
+            ]
+        },
+        {
+            "id": 27,
+            "is_virtual": false,
+            "x": 0,
+            "y": 500,
+            "anchor_name": "Table - frequency - End",
+            "content_id": "Result:",
+            "save_anchor": true,
+            "sub_groups": [
+            ]
+        },
+        {
+            "id": 28,
+            "is_virtual": false,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Table - frequency - HRT",
+            "content_id": "HR average",
+            "save_anchor": true,
+            "sub_groups": [
+                43
+            ]
+        },
+        {
+            "id": 29,
+            "is_virtual": false,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Table - frequency - Time",
+            "content_id": "Time",
+            "save_anchor": true,
+            "sub_groups": [
+                42
+            ]
+        },
+        {
+            "id": 30,
+            "is_virtual": false,
+            "x": 0,
+            "y": 500,
+            "anchor_name": "Table - frequency - Time limited",
+            "content_id": "Time",
+            "save_anchor": true,
+            "sub_groups": [
+                42
             ]
         }
     ],
@@ -767,9 +839,9 @@
         },
         {
             "id": 38,
-            "object_name": "SVPB DATA",
+            "object_name": "SVPB DATA - arrhythmia",
             "margin_x": 15,
-            "anchor_margin_y": 7,
+            "anchor_margin_y": 24,
             "object_count": 50,
             "calcs": [
                 151
@@ -777,12 +849,22 @@
         },
         {
             "id": 39,
-            "object_name": "TIME DATA",
+            "object_name": "TIME DATA - arrhythmia",
             "margin_x": -35,
-            "anchor_margin_y": 7,
+            "anchor_margin_y": 24,
             "object_count": 50,
             "calcs": [
                 150
+            ]
+        },
+        {
+            "id": 43,
+            "object_name": "AVRG HRT DATA - frequency",
+            "margin_x": 25,
+            "anchor_margin_y": 27,
+            "object_count": 50,
+            "calcs": [
+                153
             ]
         },
         {
@@ -793,6 +875,16 @@
             "y_object_spacing": -11.33,
             "calcs": [
                 160
+            ]
+        },
+        {
+            "id": 42,
+            "object_name": "TIME DATA - frequency",
+            "margin_x": -35,
+            "anchor_margin_y": 27,
+            "object_count": 50,
+            "calcs": [
+                152
             ]
         }
     ],
@@ -1090,13 +1182,23 @@
             "regex": "Page ([0-9]*)"
         },
         {
+            "id": 150,
+            "calc_name": "TIME DATA",
+            "calc_mode": "TABLE"
+        },
+        {
             "id": 151,
             "calc_name": "SVPB DATA",
             "calc_mode": "TABLE"
         },
         {
-            "id": 150,
+            "id": 152,
             "calc_name": "TIME DATA",
+            "calc_mode": "TABLE"
+        },
+        {
+            "id": 153,
+            "calc_name": "AVRG HRT DATA",
             "calc_mode": "TABLE"
         },
         {

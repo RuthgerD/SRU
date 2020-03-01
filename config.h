@@ -10,6 +10,7 @@ constexpr auto SRU_SCHEMA = R"({
         "date_provider",
         "base_path",
         "base_size",
+        "graph_path",
         "pages",
         "anchors",
         "objects",
@@ -36,6 +37,12 @@ constexpr auto SRU_SCHEMA = R"({
             "$id": "#/properties/base_size",
             "type": "integer",
             "title": "The base_size Schema"
+        },
+        "graph_path": {
+            "$id": "#/properties/graph_path",
+            "type": "string",
+            "title": "The base_size Schema",
+            "minLength": 1
         },
         "pages": {
             "$id": "#/properties/pages",

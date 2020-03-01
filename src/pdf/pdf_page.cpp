@@ -73,10 +73,10 @@ void PdfPage::indexObjects() {
                     auto max_y = ref_y + object_conf.margin_y;
 
                     if (auto anchor_margin = anchor_positions_.find(object_conf.anchor_margin_x); anchor_margin != anchor_positions_.end()) {
-                        max_x = anchor_position.getX();
+                        max_x = anchor_margin->second.getX();
                     }
                     if (auto anchor_margin = anchor_positions_.find(object_conf.anchor_margin_y); anchor_margin != anchor_positions_.end()) {
-                        max_y = anchor_position.getY();
+                        max_y = anchor_margin->second.getY();
                     }
 
                     const auto x1 = ref_x < max_x ? ref_x : max_x;
@@ -94,7 +94,6 @@ void PdfPage::indexObjects() {
                         const auto comp_x = std::fabs(comp_obj.getPosition().getX());
                         const auto comp_y = std::fabs(comp_obj.getPosition().getY());
 
-                        // TODO: use sru::util::Coordinate when its implemented
                         if (((y1 >= comp_y && x1 < comp_x && x2 > comp_x && y2 <= comp_y) ||
                              (y1 > comp_y && x1 <= comp_x && x2 >= comp_x && y2 < comp_y)) ||
                             (comp_x == ref_x && comp_y == ref_y && !anchor_conf->save_anchor)) {

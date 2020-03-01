@@ -168,6 +168,11 @@ auto main(int argc, char** argv) -> int {
         return -1;
     }
     sru::pdf::base_size = d["base_size"].GetInt();
+    sru::pdf::graph_path = std::filesystem::path{d["graph_path"].GetString()};
+    if (!std::filesystem::exists(sru::pdf::base_path)) {
+        std::cout << "Provided graph doesnt exist." << std::endl;
+        return -1;
+    }
     auto cluster = sru::pdf::PdfCluster{pdf_file_paths};
     cluster.export_merged();
     sru::qpdf::empty_cache();
