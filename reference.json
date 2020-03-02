@@ -9,8 +9,8 @@
             "page_name": "page any",
             "priority": 3,
             "mutate_in_final": "delete",
-            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET",
-            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET)",
+            "regex_id": "\\((Page [0-9]*)\\)Tj",
+            "obj_regex": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET",
             "groups": [
                 21,
                 22
@@ -20,8 +20,8 @@
             "page_name": "page 1",
             "priority": 0,
             "mutate_in_final": "none",
-            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page 1)\\)Tj\\nET",
-            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
+            "regex_id": "\\((Page 1)\\)Tj",
+            "obj_regex": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET",
             "groups": [
                 0,
                 1,
@@ -53,8 +53,8 @@
             "page_name": "page 1+",
             "priority": 1,
             "mutate_in_final": "delete",
-            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page 2)\\)Tj\\nET",
-            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
+            "regex_id": "\\((Page 2)\\)Tj",
+            "obj_regex": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET",
             "groups": [
                 21,
                 22
@@ -64,8 +64,8 @@
             "page_name": "Table 1 and or 2 page",
             "priority": 0,
             "mutate_in_final": "delete",
-            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Numerical overview of the arrhythmia)\\)Tj\\nET",
-            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
+            "regex_id": "\\((Numerical overview of the arrhythmia)\\)Tj",
+            "obj_regex": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET",
             "groups": [
                 21,
                 22,
@@ -81,8 +81,8 @@
             "page_name": "Table2 page",
             "priority": 0,
             "mutate_in_final": "delete",
-            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Frequency analysis and ST analysis)\\)Tj\\nET",
-            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET)",
+            "regex_id": "\\((Frequency analysis and ST analysis)\\)Tj",
+            "obj_regex": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET",
             "groups": [
                 21,
                 22,
@@ -95,8 +95,8 @@
             "page_name": "example pages",
             "priority": 0,
             "mutate_in_final": "append",
-            "regex_id": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*)\\)Tj\\nET",
-            "obj_regex": "(?:([\\d.]*) ([\\d.]*) ([\\d.]*) rg\\n)|(?:BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*|Page [0-9]*)\\)Tj\\nET)",
+            "regex_id": "\\((Example No.: [0-9]*)\\)Tj",
+            "obj_regex": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*|Page [0-9]*)\\)Tj\\nET",
             "groups": [
                 21,
                 22

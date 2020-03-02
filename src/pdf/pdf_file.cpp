@@ -14,7 +14,7 @@ PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw_{""},
         for (auto page_match : *page_matches) {
             const PageConfig* best_config = nullptr;
             for (const auto& pconf : sru::pdf::PageConfigPool) {
-                if (sru::re::re_match(pconf.regex_id, page_match[2])) {
+                if (sru::re::re_match(pconf.regex_id, page_match[1])) {
                     if (!best_config || best_config->priority > pconf.priority) {
                         best_config = &pconf;
                     }
@@ -24,7 +24,7 @@ PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw_{""},
                 }
             }
             if (best_config) {
-                pages_.emplace_back(std::pair{total_pages_, sru::pdf::PdfPage{std::move(std::string{page_match[2]}), *best_config}})
+                pages_.emplace_back(std::pair{total_pages_, sru::pdf::PdfPage{std::move(std::string{page_match[1]}), *best_config}})
                     .second.indexObjects();
             }
             ++total_pages_;
@@ -131,7 +131,7 @@ auto PdfFile::write(std::ostream& os, const std::filesystem::path& base) -> void
 
     std::vector<std::pair<int, int>> offsets_and_lengths;
     std::transform(page_matches.begin(), page_matches.end(), std::back_inserter(offsets_and_lengths), [&](const auto& vec_sv) {
-        auto& content_view = vec_sv[2];
+        auto& content_view = vec_sv[1];
         return std::pair{std::distance(sv.begin(), content_view.begin()), content_view.size()};
     });
     sru::util::sink(std::move(page_matches));

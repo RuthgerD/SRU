@@ -19,15 +19,8 @@ void PdfPage::indexObjects() {
     if (const auto found = sru::re::re_search(config_.obj_regex, raw_); found) {
         auto color = sru::util::Color{0, 0, 0};
         for (const auto& x : *found) {
-
-            if (x[1] == "") {
-                objs_.emplace_back(color, *sru::util::svto<int>(x[4]), *sru::util::svto<float>(x[5]), std::string{x[6]},
-                                   sru::util::Coordinate{*sru::util::svto<float>(x[7]), *sru::util::svto<float>(x[8])}, std::string{x[9]});
-            } else {
-                color.r_ = *sru::util::svto<float>(x[1]);
-                color.g_ = *sru::util::svto<float>(x[2]);
-                color.b_ = *sru::util::svto<float>(x[3]);
-            }
+            objs_.emplace_back(color, *sru::util::svto<int>(x[1]), *sru::util::svto<float>(x[2]), std::string{x[3]},
+                               sru::util::Coordinate{*sru::util::svto<float>(x[4]), *sru::util::svto<float>(x[5])}, std::string{x[6]});
         }
     }
     for (auto& obj : objs_) {

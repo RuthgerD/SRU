@@ -4,7 +4,6 @@
 #include <iostream>
 #include <map>
 #include <optional>
-#include <re2/re2.h>
 #include <string>
 #include <string_view>
 #include <tuple>
@@ -25,35 +24,38 @@ template <typename T, typename V> void visit(T&& t, V&& v) {
 
 // Declare your CTRE re's here
 static constexpr auto default_obj_match_key =
-    R"((?:([\d.]*) ([\d.]*) ([\d.]*) rg\n)|(?:BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\(([^\n]*)\)Tj\nET))";
+    R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\(([^\n]*)\)Tj\nET)";
 static constexpr auto default_obj_match =
-    ctll::fixed_string{R"((?:([\d.]*) ([\d.]*) ([\d.]*) rg\n)|(?:BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\(([^\n]*)\)Tj\nET))"};
+    ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\(([^\n]*)\)Tj\nET)"};
 
 static constexpr auto PAGE_EXAMPLE_obj_match_key =
-    R"((?:([\d.]*) ([\d.]*) ([\d.]*) rg\n)|(?:BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [0-9]*)\)Tj\nET))";
+    R"(\((Page [0-9]*)\)Tj\nET)";
 static constexpr auto PAGE_EXAMPLE_obj_match = ctll::fixed_string{
-    R"((?:([\d.]*) ([\d.]*) ([\d.]*) rg\n)|(?:BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [0-9]*)\)Tj\nET))"};
+    R"(\((Page [0-9]*)\)Tj\nET)"};
 
-static constexpr auto page_match_key = R"(([0-9]*?) . obj\n<< /BBox.*?>>\nstream\n((\n|.)*?)\nendstream\nendobj)";
-static constexpr auto page_match = ctll::fixed_string{R"(([0-9]*?) . obj\n<< /BBox.*?>>\nstream\n((\n|.)*?)\nendstream\nendobj)"};
+static constexpr auto page_match_key = R"(BBox [^\n]*?\nstream\n((?:.|\n)*?)endstream)";
+static constexpr auto page_match = ctll::fixed_string{R"(BBox [^\n]*?\nstream\n((?:.|\n)*?)endstream)"};
 
-static constexpr auto page_1_id_key = R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page 1)\)Tj\nET)";
-static constexpr auto page_1_id = ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page 1)\)Tj\nET)"};
+static constexpr auto page_1_id_key = R"(\((Page 1)\)Tj)";
+static constexpr auto page_1_id = ctll::fixed_string{R"(\((Page 1)\)Tj)"};
 
-static constexpr auto page_any_id_key = R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [0-9]*)\)Tj\nET)";
-static constexpr auto page_any_id = ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page [0-9]*)\)Tj\nET)"};
+static constexpr auto page_any_id_key = R"(\((Page [0-9]*)\)Tj)";
+static constexpr auto page_any_id = ctll::fixed_string{R"(\((Page [0-9]*)\)Tj)"};
 
-static constexpr auto page_example_id_key = R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Example No.: [0-9]*)\)Tj\nET)";
-static constexpr auto page_example_id = ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Example No.: [0-9]*)\)Tj\nET)"};
+static constexpr auto page_example_id_key = R"(\((Example No.: [0-9]*)\)Tj)";
+static constexpr auto page_example_id = ctll::fixed_string{R"(\((Example No.: [0-9]*)\)Tj)"};
 
-static constexpr auto page_example_obj_key = R"((?:([\d.]*) ([\d.]*) ([\d.]*) rg\n)|(?:BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Example No.: [0-9]*|Page [0-9]*)\)Tj\nET))";
-static constexpr auto page_example_obj_id = ctll::fixed_string{R"((?:([\d.]*) ([\d.]*) ([\d.]*) rg\n)|(?:BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Example No.: [0-9]*|Page [0-9]*)\)Tj\nET))"};
+static constexpr auto page_example_obj_key = R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Example No.: [0-9]*|Page [0-9]*)\)Tj\nET)";
+static constexpr auto page_example_obj_id = ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Example No.: [0-9]*|Page [0-9]*)\)Tj\nET)"};
 
-static constexpr auto page_1_plus_key = R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page 2)\)Tj\nET)";
-static constexpr auto page_1_plus = ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page 2)\)Tj\nET)"};
+static constexpr auto page_1_plus_key = R"(\((Page 2)\)Tj)";
+static constexpr auto page_1_plus = ctll::fixed_string{R"(\((Page 2)\)Tj)"};
 
-static constexpr auto arrhythmia_key = R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Numerical overview of the arrhythmia)\)Tj\nET)";
-static constexpr auto arrhythmia = ctll::fixed_string{R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Page 2)\)Tj\nET)"};
+static constexpr auto arrhythmia_key = R"(\((Numerical overview of the arrhythmia)\)Tj)";
+static constexpr auto arrhythmia = ctll::fixed_string{R"(\((Numerical overview of the arrhythmia)\)Tj)"};
+
+static constexpr auto freq_key = R"(\((Frequency analysis and ST analysis)\)Tj)";
+static constexpr auto freq = ctll::fixed_string{R"(\((Frequency analysis and ST analysis)\)Tj)"};
 
 static constexpr auto r0_key = R"(Page [0-9]*)";
 static constexpr auto r0 = ctll::fixed_string{R"(Page [0-9]*)"};

@@ -13,6 +13,7 @@ static constexpr std::tuple ctre_regexs = {
     std::pair{page_example_obj_key, [](std::string_view sv) { return ctre::range<page_example_obj_id>(sv); }},
     std::pair{page_1_plus_key, [](std::string_view sv) { return ctre::range<page_1_plus>(sv); }},
     std::pair{arrhythmia_key, [](std::string_view sv) { return ctre::range<arrhythmia>(sv); }},
+    std::pair{freq_key, [](std::string_view sv) { return ctre::range<freq>(sv); }},
     std::pair{r0_key, [](std::string_view sv) { return ctre::range<r0>(sv); }},
     std::pair{r1_key, [](std::string_view sv) { return ctre::range<r1>(sv); }},
     std::pair{r2_key, [](std::string_view sv) { return ctre::range<r2>(sv); }},
