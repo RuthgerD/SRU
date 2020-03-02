@@ -10,7 +10,7 @@
 namespace sru::pdf {
 PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw_{""}, path_{path} {
     total_pages_ = 0;
-    if (auto page_matches = sru::re::re_search(sru::re::page_match_key, raw); page_matches) {
+    if (auto page_matches = sru::re::re_search(sru::re::r41_key, raw); page_matches) {
         for (auto page_match : *page_matches) {
             const PageConfig* best_config = nullptr;
             for (const auto& pconf : sru::pdf::PageConfigPool) {
@@ -123,7 +123,7 @@ auto PdfFile::write(std::ostream& os, const std::filesystem::path& base) -> void
 
     auto sv = std::string_view{real_raw};
     std::vector<std::vector<std::string_view>> page_matches;
-    if (auto page_matches_opt = sru::re::re_search(sru::re::page_match_key, sv); page_matches_opt) {
+    if (auto page_matches_opt = sru::re::re_search(sru::re::r41_key, sv); page_matches_opt) {
         page_matches = std::move(*page_matches_opt);
     } else {
         return;
