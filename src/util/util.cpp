@@ -4,13 +4,14 @@
 namespace sru::util {
 auto Color::toString() const -> std::string { return std::to_string(r_) + ' ' + std::to_string(g_) + ' ' + std::to_string(b_) + ' ' + "rg"; }
 auto QFileRead(const std::filesystem::path& path) -> std::optional<std::string> {
-    if (auto f = std::fopen(path.lexically_normal().c_str(), "r"); f) {
-        std::fseek(f, 0, SEEK_END);
+    if (auto is = std::ifstream(path.lexically_normal().string(), std::ios::in | std::ios::binary); is) {
+        is.seekg(0, std::ios::end);
         std::string str;
-        str.resize(std::ftell(f));
-        std::fseek(f, 0, SEEK_SET);
-        std::fread(str.data(), str.length(), 1, f);
-        std::fclose(f);
+        str.resize(is.tellg());
+        is.seekg(0, std::ios::beg);
+        is.read(str.data(), str.length());
+        if (is.gcount() != str.length())
+            return {};
         return str;
     } else {
         return {};
@@ -36,9 +37,7 @@ auto multi_search(const std::string& re, const std::vector<std::string>& content
 
     // checks if we can use it
     order.erase(std::unique(order.begin(), order.end()), order.end());
-    if (sru::re::re_group_count(re) != order.size()) {
-        return {total_extracted, total_count};
-    }
+
     const auto& max = *std::max_element(order.begin(), order.end());
     const auto& min = *std::min_element(order.begin(), order.end());
     if (max > order.size() || min < 0) {
@@ -135,10 +134,6 @@ auto multi_avrg(const std::vector<float>& values, const std::vector<float>& comp
     return result;
 }
 auto multi_re_place(const std::string& regex, std::string& base, std::vector<std::string> content) -> bool {
-    if (sru::re::re_group_count(regex) != content.size()) {
-        std::cout << "warning: multi_re_place: content doesnt match regex groups" << std::endl;
-        return false;
-    }
     size_t i = 0;
     for (; i < content.size(); ++i) {
         if (auto tmp = sru::re::re_search(regex, base, 1); tmp) {

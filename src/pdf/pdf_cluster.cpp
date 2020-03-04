@@ -66,7 +66,6 @@ auto PdfCluster::export_merged() -> void {
                 if (new_objs.empty()) {
                     continue;
                 }
-
                 if (object_conf.sticky_id != -1) {
                     for (auto& file : pdf_files_) {
                         auto stickied_obj = file.getMarkedObjects(object_conf.id);
@@ -273,11 +272,10 @@ auto PdfCluster::calculateObject(const ObjectConfig& object_conf) -> std::vector
     if (!new_content.empty()) {
         for (const auto& j : new_content) {
             auto new_obj = total_objects.front();
-
             new_obj.setContent(j, object_conf.text_justify);
             new_objects.push_back(std::move(new_obj));
         }
-        return std::move(new_objects);
+        return new_objects;
     }
     return {};
 }

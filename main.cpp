@@ -6,7 +6,6 @@
 #include "src/pdf/pdf_cluster.h"
 #include "src/util/util.h"
 #include <boost/algorithm/string/predicate.hpp>
-#include <boost/program_options.hpp>
 #include <chrono>
 #include <filesystem>
 #include <iostream>
@@ -173,6 +172,7 @@ auto main(int argc, char** argv) -> int {
         std::cout << "Provided graph doesnt exist." << std::endl;
         return -1;
     }
+    sru::qpdf::empty_cache();
     auto cluster = sru::pdf::PdfCluster{pdf_file_paths};
     cluster.export_merged();
     sru::qpdf::empty_cache();

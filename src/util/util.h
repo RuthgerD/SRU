@@ -14,6 +14,7 @@
 #include <iostream>
 #include <optional>
 #include <string>
+#include <wchar.h>
 #include <string_view>
 #include <tuple>
 #include <utility>

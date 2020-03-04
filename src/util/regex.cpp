@@ -43,6 +43,7 @@ auto re_search(const std::string& re, const std::string_view data, int limit) ->
     }
     if (!ret) {
         ret = re2_search(re, data, limit);
+        std::cout << "using re2 for: " << re << std::endl;
     }
     if (!ret->empty()) {
         return ret;

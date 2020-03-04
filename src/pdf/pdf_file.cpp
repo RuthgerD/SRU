@@ -24,7 +24,7 @@ PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw_{""},
                 }
             }
             if (best_config) {
-                pages_.emplace_back(std::pair{total_pages_, sru::pdf::PdfPage{std::move(std::string{page_match[1]}), *best_config}})
+                pages_.emplace_back(std::pair{total_pages_, sru::pdf::PdfPage{std::string{page_match[1]}, *best_config}})
                     .second.indexObjects();
             }
             ++total_pages_;
@@ -109,7 +109,7 @@ auto PdfFile::insertPages(std::vector<PdfPage>& new_pages, size_t new_page_no) -
 }
 auto PdfFile::appendPage(PdfPage& new_page) -> void { insertPage(new_page, pages_.size()); }
 auto PdfFile::appendPages(std::vector<PdfPage>& new_pages) -> void { insertPages(new_pages, pages_.size()); }
-auto PdfFile::write(std::ostream& os, const std::filesystem::path& base) -> void {
+auto PdfFile::write(std::ofstream& os, const std::filesystem::path& base) -> void {
     if (total_pages_ == 0) {
         return;
     }
@@ -120,7 +120,6 @@ auto PdfFile::write(std::ostream& os, const std::filesystem::path& base) -> void
     } else {
         return;
     }
-
     auto sv = std::string_view{real_raw};
     std::vector<std::vector<std::string_view>> page_matches;
     if (auto page_matches_opt = sru::re::re_search(sru::re::r41_key, sv); page_matches_opt) {
@@ -132,6 +131,7 @@ auto PdfFile::write(std::ostream& os, const std::filesystem::path& base) -> void
     std::vector<std::pair<int, int>> offsets_and_lengths;
     std::transform(page_matches.begin(), page_matches.end(), std::back_inserter(offsets_and_lengths), [&](const auto& vec_sv) {
         auto& content_view = vec_sv[1];
+
         return std::pair{std::distance(sv.begin(), content_view.begin()), content_view.size()};
     });
     sru::util::sink(std::move(page_matches));
@@ -154,6 +154,8 @@ auto PdfFile::write(std::ostream& os, const std::filesystem::path& base) -> void
         raw_offset = offset + length;
     }
     const auto& [offset, length] = offsets_and_lengths.back();
-    os.write(&real_raw[offset + length], real_raw.length() - offset + length);
+    os.write(&real_raw[offset + length], std::distance(real_raw.begin() + offset + length, real_raw.end()));
+    auto last_block = std::string_view(&real_raw[offset + length], std::distance(real_raw.begin() + offset + length, real_raw.end()));
+    os.flush();
 }
 } // namespace sru::pdf
