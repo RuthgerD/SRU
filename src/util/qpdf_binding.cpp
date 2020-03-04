@@ -9,7 +9,11 @@ namespace sru::qpdf {
 
 class Qpdf {
     std::filesystem::path cache_path;
+#ifdef __linux__
+    const std::string bin{"qpdf"};
+#else
     const std::string bin{"qpdf\\qpdf.exe"};
+#endif
   public:
     Qpdf() : cache_path{std::filesystem::current_path()} { cache_path.append(".qpdf_cache"); }
     [[nodiscard]] auto get_bin() const -> const std::string& { return bin; }

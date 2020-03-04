@@ -96,7 +96,7 @@
             "priority": 0,
             "mutate_in_final": "append",
             "regex_id": "\\((Example No.: [0-9]*)\\)Tj",
-            "obj_regex": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [0-9]*|Page [0-9]*)\\)Tj\\nET",
+            "obj_regex": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Example No.: [\\d]*?|Page [\\d]*?)\\)Tj\\nET",
             "groups": [
                 21,
                 22

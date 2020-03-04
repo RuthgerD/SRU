@@ -154,7 +154,7 @@ extern std::vector<std::vector<std::string_view>> fc44(std::string_view subject,
 
 
 static constexpr const char r45_key[] =
-    R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Example No.: [0-9]*|Page [0-9]*)\)Tj\nET)";
+    R"(BT\n/F(\d+) ([\d.]+) Tf\n([^\n]*) ([\d.]*) ([\d.]*) Tm\n\((Example No.: [\d]*?|Page [\d]*?)\)Tj\nET)";
 extern std::vector<std::vector<std::string_view>> fc45(std::string_view subject, std::size_t limit);
 
 
@@ -203,7 +203,10 @@ extern std::vector<std::vector<std::string_view>> fc58(std::string_view subject,
 template <const auto&... FSes>
 struct FxStrList {};
 
-using RegexList = FxStrList<fc0,fc1,fc2,fc3,fc4,fc5,fc6,fc7,fc8,fc9,fc10,fc11,fc12,fc13,fc14,fc15,fc16,fc17,fc18,fc19,fc20,fc21,fc22,fc23,fc24,fc25,fc26,fc27,fc28,fc29,fc30,fc31,fc32,fc33,fc34,fc35,fc36,fc37,fc38,fc39,fc40,fc41,fc42,fc43,fc44,fc45,fc46,fc47,fc48,fc49,fc50,fc51,fc52,fc53,fc54,fc55,fc56,fc57,fc58>;
+template <auto*... Fcns>
+struct FcnPtrList {};
+
+using RegexList = FcnPtrList<&fc0,&fc1,&fc2,&fc3,&fc4,&fc5,&fc6,&fc7,&fc8,&fc9,&fc10,&fc11,&fc12,&fc13,&fc14,&fc15,&fc16,&fc17,&fc18,&fc19,&fc20,&fc21,&fc22,&fc23,&fc24,&fc25,&fc26,&fc27,&fc28,&fc29,&fc30,&fc31,&fc32,&fc33,&fc34,&fc35,&fc36,&fc37,&fc38,&fc39,&fc40,&fc41,&fc42,&fc43,&fc44,&fc45,&fc46,&fc47,&fc48,&fc49,&fc50,&fc51,&fc52,&fc53,&fc54,&fc55,&fc56,&fc57,fc58>;
 using SvList = FxStrList<r0_key,r1_key,r2_key,r3_key,r4_key,r5_key,r6_key,r7_key,r8_key,r9_key,r10_key,r11_key,r12_key,r13_key,r14_key,r15_key,r16_key,r17_key,r18_key,r19_key,r20_key,r21_key,r22_key,r23_key,r24_key,r25_key,r26_key,r27_key,r28_key,r29_key,r30_key,r31_key,r32_key,r33_key,r34_key,r35_key,r36_key,r37_key,r38_key,r39_key,r40_key,r41_key,r42_key,r43_key,r44_key,r45_key,r46_key,r47_key,r48_key, r49_key,r50_key,r51_key,r52_key,r53_key,r54_key,r55_key,r56_key,r57_key,r58_key>;
 
 using LType = std::vector<std::vector<std::string_view>>(*)(std::string_view, std::size_t);

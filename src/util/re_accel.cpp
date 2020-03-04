@@ -8,8 +8,8 @@ namespace sru::re {
 
 using LType = std::vector<std::vector<std::string_view>>(*)(std::string_view, std::size_t);
 
-template <const auto&... SVes, const auto&... FSes>
-constexpr auto gen_tbl(FxStrList<SVes...>, FxStrList<FSes...>) noexcept -> std::array<std::pair<std::string_view, LType>, sizeof...(SVes)> {
+template <const auto&... SVes, auto*... FSes>
+constexpr auto gen_tbl(FxStrList<SVes...>, FcnPtrList<FSes...>) noexcept -> std::array<std::pair<std::string_view, LType>, sizeof...(SVes)> {
     static_assert(sizeof...(SVes) == sizeof...(FSes), "There must be as many keys as there are values");
     return {std::pair{SVes, FSes}...};
 }
