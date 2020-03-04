@@ -6,6 +6,8 @@
     "title": "The Root Schema",
     "additionalProperties": false,
     "required": [
+        "qpdf_bin",
+        "dcmtk_bin",
         "import_path",
         "date_provider",
         "base_path",
@@ -17,6 +19,47 @@
         "calcs"
     ],
     "properties": {
+        "qpdf_bin": {
+            "$id": "#/properties/qpdf_bin",
+            "type": "string",
+            "title": "The qpdf_bin Schema",
+            "minLength": 1
+        },
+        "dcmtk_bin": {
+            "$id": "#/properties/dcmtk_bin",
+            "type": "string",
+            "title": "The dcmtk_bin Schema"
+        },
+        "dcmtk_name_obj": {
+            "$id": "#/properties/dcmtk_name_obj",
+            "type": "integer",
+            "title": "The dcmtk_name_obj Schema",
+            "minimum": 0
+        },
+        "dcmtk_surname_obj": {
+            "$id": "#/properties/dcmtk_surname_obj",
+            "type": "integer",
+            "title": "The dcmtk_surname_obj Schema",
+            "minimum": 0
+        },
+        "dcmtk_id_obj": {
+            "$id": "#/properties/dcmtk_id_obj",
+            "type": "integer",
+            "title": "The dcmtk_id_obj Schema",
+            "minimum": 0
+        },
+        "dcmtk_birth_obj": {
+            "$id": "#/properties/dcmtk_birth_obj",
+            "type": "integer",
+            "title": "The dcmtk_birth_obj Schema",
+            "minimum": 0
+        },
+        "dcmtk_sex_obj": {
+            "$id": "#/properties/dcmtk_sex_obj",
+            "type": "integer",
+            "title": "The dcmtk_sex_obj Schema",
+            "minimum": 0
+        },
         "import_path": {
             "$id": "#/properties/import_path",
             "type": "string",
@@ -77,7 +120,11 @@
                         "$id": "#/properties/pages/items/properties/mutate_in_final",
                         "type": "string",
                         "title": "The mutate_in_final Schema",
-                        "enum": ["append", "delete", "none"]
+                        "enum": [
+                            "append",
+                            "delete",
+                            "none"
+                        ]
                     },
                     "regex_id": {
                         "$id": "#/properties/pages/items/properties/regex_id",
@@ -509,5 +556,25 @@
                 ]
             }
         }
-    }
+    },
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "dcmtk_bin": {
+                        "pattern": ".+"
+                    }
+                }
+            },
+            "then": {
+                "required": [
+                    "dcmtk_name_obj",
+                    "dcmtk_surname_obj",
+                    "dcmtk_id_obj",
+                    "dcmtk_birth_obj",
+                    "dcmtk_sex_obj"
+                ]
+            }
+        }
+    ]
 }

@@ -1,3 +1,4 @@
+#pragma once
 #include <ctre.hpp>
 #include "re_accel.h"
 namespace sru::re {

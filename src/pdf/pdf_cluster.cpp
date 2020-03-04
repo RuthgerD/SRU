@@ -10,8 +10,7 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
             if (const auto deflated_path_opt = sru::qpdf::decompress(path); deflated_path_opt) {
                 const auto& deflated_path = *deflated_path_opt;
                 if (const auto tmp_opt = sru::util::QFileRead(deflated_path); tmp_opt) {
-                    const auto& tmp = *tmp_opt;
-                    return std::optional{PdfFile{tmp, deflated_path}};
+                    return std::optional{PdfFile{*tmp_opt, deflated_path}};
                 }
             }
             return std::optional<sru::pdf::PdfFile>{};
@@ -131,7 +130,8 @@ auto PdfCluster::export_merged() -> void {
 
     refreshNumbering(final_pdf);
 
-    std::ofstream out(std::filesystem::current_path().append("testing_export.pdf").lexically_normal(), std::ios::out | std::ios::binary);
+    auto export_path = std::filesystem::current_path().append("testing_export.pdf").lexically_normal();
+    std::ofstream out(export_path, std::ios::out | std::ios::binary);
     if (!out) {
         return;
     }
@@ -156,6 +156,14 @@ auto PdfCluster::export_merged() -> void {
     }
 
     final_pdf.write(out, tmp_path);
+    std::cout << "Fixing and compressing file." << std::endl;
+    // sru::qpdf::compress(export_path);
+
+    if (!sru::pdf::dcmtk_bin.empty()) {
+        auto dicom_export = export_path;
+        dicom_export.replace_filename(std::string{"dicom-"} + "testing_export");
+        sru::dcmtk::convert(export_path, dicom_export, GenDicom());
+    }
 }
 
 auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& contents, std::string reference) -> std::vector<std::string> {
@@ -321,5 +329,50 @@ auto PdfCluster::refreshNumbering(PdfFile& file) -> void {
         }
         page.commit();
     }
+}
+auto PdfCluster::GenDicom() -> sru::dcmtk::PatientData {
+    auto& file = pdf_files_.front();
+    auto ids = file.getMarkedObjects(sru::pdf::dcmtk_id_obj);
+    int id = 0;
+    if (auto opt = sru::util::svto<int>(file.getPage(ids.front().first).getObject(ids.front().second.front()).getContent()); opt) {
+        id = *opt;
+    }
+    auto names = file.getMarkedObjects(sru::pdf::dcmtk_name_obj);
+    auto name = names.empty() ? "error" : file.getPage(names.front().first).getObject(names.front().second.front()).getContent();
+    auto surnames = file.getMarkedObjects(sru::pdf::dcmtk_surname_obj);
+    auto surname = surnames.empty() ? "error" : file.getPage(surnames.front().first).getObject(surnames.front().second.front()).getContent();
+    auto births = file.getMarkedObjects(sru::pdf::dcmtk_birth_obj);
+    std::chrono::system_clock::time_point birth;
+    if (auto opt = sru::util::strptime(file.getPage(births.front().first).getObject(births.front().second.front()).getContent(), "%d.%m.%Y"); opt) {
+        birth = *opt;
+    }
+    auto sexs = file.getMarkedObjects(sru::pdf::dcmtk_sex_obj);
+    bool sex = true;
+    if (!sexs.empty()) {
+        const auto& sex_tmp = file.getPage(sexs.front().first).getObject(sexs.front().second.front()).getContent();
+        sex = sex_tmp == "M" ? true : (sex_tmp == "F" ? false : true);
+    }
+    std::chrono::system_clock::time_point start_date;
+
+    auto b_found = file.getMarkedObjects(DATE_PROVIDER);
+    if (!b_found.empty()) {
+        const auto& b_date = file.getPage(b_found.front().first).getObject(b_found.front().second.front());
+        auto DATE_FORMAT = "%d.%m.%Y %H:%M:%S";
+        auto tp1 = sru::util::strptime(b_date.getContent(), DATE_FORMAT);
+        if (tp1) {
+            start_date = *tp1;
+        }
+    }
+
+    auto patient_data = sru::dcmtk::PatientData{
+        id,
+        name + " " + surname,
+        birth,
+        start_date,
+        sex,
+        "company",
+        "device"
+    };
+    return patient_data;
 }
 } // namespace sru::pdf

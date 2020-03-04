@@ -1,4 +1,11 @@
 {
+    "qpdf_bin": "qpdf",
+    "dcmtk_bin": "pdf2dcm",
+    "dcmtk_name_obj": 52,
+    "dcmtk_surname_obj": 51,
+    "dcmtk_id_obj": 50,
+    "dcmtk_birth_obj": 53,
+    "dcmtk_sex_obj": 54,
     "import_path": "import",
     "date_provider": 31,
     "base_path": "templates/base.pdf",
@@ -46,7 +53,12 @@
                 20,
                 21,
                 22,
-                26
+                26,
+                50,
+                51,
+                52,
+                53,
+                54
             ]
         },
         {
@@ -485,6 +497,51 @@
             "sub_groups": [
                 42
             ]
+        },
+        {
+            "id": 50,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Patient ID",
+            "content_id": "Patient ID",
+            "save_anchor": true,
+            "sub_groups": [50]
+        },
+        {
+            "id": 51,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Surname",
+            "content_id": "Surname",
+            "save_anchor": true,
+            "sub_groups": [51]
+        },
+        {
+            "id": 52,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "First name",
+            "content_id": "First name",
+            "save_anchor": true,
+            "sub_groups": [52]
+        },
+        {
+            "id": 53,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Date of birth",
+            "content_id": "Date of birth",
+            "save_anchor": true,
+            "sub_groups": [53]
+        },
+        {
+            "id": 54,
+            "x": 0,
+            "y": 842,
+            "anchor_name": "Sex",
+            "content_id": "Sex",
+            "save_anchor": true,
+            "sub_groups": [54]
         }
     ],
     "objects": [
@@ -886,6 +943,36 @@
             "calcs": [
                 152
             ]
+        },
+        {
+            "id": 50,
+            "object_name": "Patient ID",
+            "margin_x": 70,
+            "calcs": []
+        },
+        {
+            "id": 51,
+            "object_name": "Surname",
+            "margin_x": 70,
+            "calcs": []
+        },
+        {
+            "id": 52,
+            "object_name": "First name",
+            "margin_x": 70,
+            "calcs": []
+        },
+        {
+            "id": 53,
+            "object_name": "Date of birth",
+            "margin_x": 70,
+            "calcs": []
+        },
+        {
+            "id": 54,
+            "object_name": "Sex",
+            "margin_x": 70,
+            "calcs": []
         }
     ],
     "calcs": [

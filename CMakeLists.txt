@@ -56,7 +56,7 @@ add_compile_definitions(RAPIDJSON_HAS_STDSTRING)
 file(GLOB regexs
     "src/util/regexs/*.cpp"
 )
-add_executable(sru main.cpp src/pdf/string_obj.cpp src/pdf/pdf_cluster.cpp src/pdf/pdf_file.cpp src/pdf/pdf_page.cpp src/pdf/object_config.cpp src/pdf/anchor_config.cpp src/pdf/page_config.cpp src/util/util.cpp src/util/qpdf_binding.cpp src/util/regex.cpp src/pdf/calc_config.cpp src/pdf/global_settings.cpp src/util/re_accel.cpp ${regexs})
+add_executable(sru main.cpp src/pdf/string_obj.cpp src/pdf/pdf_cluster.cpp src/pdf/pdf_file.cpp src/pdf/pdf_page.cpp src/pdf/object_config.cpp src/pdf/anchor_config.cpp src/pdf/page_config.cpp src/util/util.cpp src/util/qpdf_binding.cpp src/util/regex.cpp src/pdf/calc_config.cpp src/pdf/global_settings.cpp src/util/re_accel.cpp ${regexs} src/util/pdf2dcm.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

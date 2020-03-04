@@ -7,8 +7,9 @@
 
 namespace sru::qpdf {
 auto set_cache_path(std::filesystem::path& path) -> void;
+auto set_bin(std::string& path) -> void;
 auto decompress(const std::filesystem::path& pdf_file) -> std::optional<std::filesystem::path>;
-auto compress(const std::filesystem::path& pdf_file) -> std::optional<std::filesystem::path>;
+auto compress(const std::filesystem::path& pdf_file) -> bool;
 auto delete_page(const sru::pdf::PdfFile& pdf_file, size_t page_no) -> bool;
 auto insert_page(const sru::pdf::PdfFile& pdf_file_out, size_t page_no, const sru::pdf::PdfFile& pdf_file_in, size_t new_page_no) -> bool;
 auto append_page(const sru::pdf::PdfFile& pdf_file_out, size_t page_no, const sru::pdf::PdfFile& pdf_file_in, size_t new_page_no) -> bool;

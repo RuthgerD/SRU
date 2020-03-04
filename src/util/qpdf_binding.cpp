@@ -9,13 +9,19 @@ namespace sru::qpdf {
 
 class Qpdf {
     std::filesystem::path cache_path;
-#ifdef __linux__
-    const std::string bin{"qpdf"};
-#else
-    const std::string bin{"qpdf\\qpdf.exe"};
-#endif
+    std::string bin;
+
   public:
-    Qpdf() : cache_path{std::filesystem::current_path()} { cache_path.append(".qpdf_cache"); }
+    Qpdf()
+        : cache_path{std::filesystem::current_path()}, bin{
+#ifdef __linux__
+                                                           "qpdf"
+#else
+                                                           "qpdf\\qpdf.exe"
+#endif
+                                                       } {
+        cache_path.append(".qpdf_cache");
+    }
     [[nodiscard]] auto get_bin() const -> const std::string& { return bin; }
     [[nodiscard]] auto get_cache_path() const -> const std::filesystem::path& {
         if (!std::filesystem::is_directory(cache_path)) {
@@ -24,13 +30,16 @@ class Qpdf {
         return cache_path;
     }
     auto set_cache_path(std::filesystem::path& path) -> bool {
-        // TODO: add checks
         cache_path = path;
         return true;
     }
+    auto set_bin(std::string& path) -> bool {
+        bin = path;
+        return true;
+    }
 } qpdf_settings{};
-
 auto set_cache_path(std::filesystem::path& path) -> void { qpdf_settings.set_cache_path(path); }
+auto set_bin(std::string& path) -> void { qpdf_settings.set_bin(path); };
 
 auto decompress(const std::filesystem::path& pdf_file) -> std::optional<std::filesystem::path> {
     const auto abs_pdf_file = std::filesystem::absolute(pdf_file.lexically_normal());
@@ -43,6 +52,21 @@ auto decompress(const std::filesystem::path& pdf_file) -> std::optional<std::fil
     sru::util::cmd(command);
 
     return abs_cache_path;
+}
+auto compress(const std::filesystem::path& pdf_file) -> bool {
+    const auto abs_pdf_file = std::filesystem::absolute(pdf_file.lexically_normal());
+    auto retard_cache = abs_pdf_file;
+    retard_cache.concat("-compress");
+    auto command = qpdf_settings.get_bin() + " --stream-data=compress \"" + abs_pdf_file.generic_string() + "\" -- \"" +
+                   retard_cache.generic_string() + "\"";
+    sru::util::cmd(command);
+
+    if (std::filesystem::exists(retard_cache)) {
+        std::filesystem::remove(abs_pdf_file);
+        std::filesystem::rename(retard_cache, abs_pdf_file);
+        return true;
+    }
+    return false;
 }
 auto delete_page(const sru::pdf::PdfFile& pdf_file, size_t page_no) -> bool {
     ++page_no;
@@ -120,7 +144,8 @@ auto increase_size(const std::filesystem::path& path, size_t from, size_t size) 
     std::string command{};
     if (size > 0) {
         command = qpdf_settings.get_bin() + " \"" + abs_pdf_file.generic_string() + "\" --stream-data=preserve --pages . 1-z \"" +
-                  std::filesystem::relative(abs_pdf_file).generic_string() + "\" 1-" + std::to_string(size) + " -- \"" + retard_cache.generic_string() + "\"";
+                  std::filesystem::relative(abs_pdf_file).generic_string() + "\" 1-" + std::to_string(size) + " -- \"" +
+                  retard_cache.generic_string() + "\"";
     } else if (size < 0) {
         command = qpdf_settings.get_bin() + " \"" + abs_pdf_file.generic_string() + "\" --stream-data=preserve --pages . 1-r" +
                   std::to_string(-1 * size + 1) + " -- \"" + retard_cache.generic_string() + "\"";

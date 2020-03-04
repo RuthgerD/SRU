@@ -37,6 +37,9 @@ auto multi_search(const std::string& re, const std::vector<std::string>& content
 
     // checks if we can use it
     order.erase(std::unique(order.begin(), order.end()), order.end());
+    if (sru::re::re_group_count(re) != order.size()) {
+        return {total_extracted, total_count};
+    }
 
     const auto& max = *std::max_element(order.begin(), order.end());
     const auto& min = *std::min_element(order.begin(), order.end());
@@ -134,6 +137,10 @@ auto multi_avrg(const std::vector<float>& values, const std::vector<float>& comp
     return result;
 }
 auto multi_re_place(const std::string& regex, std::string& base, std::vector<std::string> content) -> bool {
+    if (sru::re::re_group_count(regex) != content.size()) {
+        std::cout << "warning: multi_re_place: content doesnt match regex groups" << std::endl;
+        return false;
+    }
     size_t i = 0;
     for (; i < content.size(); ++i) {
         if (auto tmp = sru::re::re_search(regex, base, 1); tmp) {
@@ -179,7 +186,15 @@ auto strptime(const std::string& value, const std::string& pattern) -> std::opti
         return {};
     return std::chrono::system_clock::from_time_t(std::mktime(&tm));
 }
-
+auto strftime(const std::chrono::system_clock::time_point& value, const std::string& pattern) -> std::optional<std::string> {
+    std::time_t now_c = std::chrono::system_clock::to_time_t(value);
+    std::tm now_tm = *std::localtime(&now_c);
+    char mbstr[100];
+    if (std::strftime(mbstr, sizeof(mbstr), pattern.c_str(), &now_tm)) {
+        return mbstr;
+    }
+    return {};
+}
 auto escape(std::string& in, const char escape, std::string_view needs_escape) -> void {
     auto find_any_from = [&](std::size_t pos) {
         const auto in_length = in.size();

@@ -157,7 +157,8 @@ auto main(int argc, char** argv) -> int {
             pdf_file_paths.push_back(file_path);
         }
     }
-
+    sru::pdf::qpdf_bin = d["qpdf_bin"].GetString();
+    sru::qpdf::set_bin(sru::pdf::qpdf_bin);
     auto cache_path = import_path;
     cache_path.append("cache");
     sru::qpdf::set_cache_path(cache_path);
@@ -171,6 +172,14 @@ auto main(int argc, char** argv) -> int {
     if (!std::filesystem::exists(sru::pdf::base_path)) {
         std::cout << "Provided graph doesnt exist." << std::endl;
         return -1;
+    }
+    sru::pdf::dcmtk_bin = d["dcmtk_bin"].GetString();
+    if (!sru::pdf::dcmtk_bin.empty()) {
+        sru::pdf::dcmtk_name_obj = d["dcmtk_name_obj"].GetInt();
+        sru::pdf::dcmtk_surname_obj = d["dcmtk_surname_obj"].GetInt();
+        sru::pdf::dcmtk_id_obj = d["dcmtk_id_obj"].GetInt();
+        sru::pdf::dcmtk_birth_obj = d["dcmtk_birth_obj"].GetInt();
+        sru::pdf::dcmtk_sex_obj = d["dcmtk_sex_obj"].GetInt();
     }
     sru::qpdf::empty_cache();
     auto cluster = sru::pdf::PdfCluster{pdf_file_paths};

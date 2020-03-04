@@ -14,7 +14,6 @@
 #include <iostream>
 #include <optional>
 #include <string>
-#include <wchar.h>
 #include <string_view>
 #include <tuple>
 #include <utility>
@@ -76,6 +75,7 @@ auto zfill(std::string& string, int amount) -> void;
 auto to_string(const float& value, int decimal_point, int zfill_amount = 0) -> std::string;
 auto to_string(const float& value, float cut_off, int decimal_point, int zfill_amount = 0) -> std::string;
 auto strptime(const std::string& value, const std::string& pattern) -> std::optional<std::chrono::system_clock::time_point>;
+auto strftime(const std::chrono::system_clock::time_point& value, const std::string& pattern) -> std::optional<std::string>;
 auto escape(std::string& in, const char escape, std::string_view needs_escape) -> void;
 template <class T> auto sink(T&&) noexcept {}
 } // namespace sru::util

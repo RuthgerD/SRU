@@ -3,12 +3,11 @@
 #include "../util/re_accel.h"
 #include "object_config.h"
 #include "pdf_page.h"
-#include <future>
 #include <utility>
 #include <vector>
 
 namespace sru::pdf {
-PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw_{""}, path_{path} {
+PdfFile::PdfFile(const std::string& raw, std::filesystem::path path) : raw_{""}, path_{std::move(path)} {
     total_pages_ = 0;
     if (auto page_matches = sru::re::re_search(sru::re::r41_key, raw); page_matches) {
         for (auto page_match : *page_matches) {
@@ -155,7 +154,6 @@ auto PdfFile::write(std::ofstream& os, const std::filesystem::path& base) -> voi
     }
     const auto& [offset, length] = offsets_and_lengths.back();
     os.write(&real_raw[offset + length], std::distance(real_raw.begin() + offset + length, real_raw.end()));
-    auto last_block = std::string_view(&real_raw[offset + length], std::distance(real_raw.begin() + offset + length, real_raw.end()));
     os.flush();
 }
 } // namespace sru::pdf
