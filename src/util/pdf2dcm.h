@@ -12,5 +12,6 @@ namespace sru::dcmtk {
         std::string device;
         auto to_command() -> std::string;
     };
+    auto set_bin(std::string bin) -> void;
     auto convert(const std::filesystem::path& pdf_file, const std::filesystem::path& out, PatientData data) -> bool;
 } // namespace sru::dcmtk

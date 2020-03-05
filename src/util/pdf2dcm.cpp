@@ -10,16 +10,17 @@ class Dcm {
 #ifdef __linux__
         "pdf2dcm"
 #else
-        "dcmtk\\pdf2dcm.exe"
+        "dcmtk/pdf2dcm.exe"
 #endif
     } {
     }
     [[nodiscard]] auto get_bin() const -> const std::string& { return bin; }
-    auto set_bin(std::filesystem::path& path) -> bool {
+    auto set_bin(std::string& path) -> bool {
         bin = path;
         return true;
     }
 } dcm_settings{};
+auto set_bin(std::string bin) -> void { dcm_settings.set_bin(bin); }
 auto PatientData::to_command() -> std::string {
     std::string data_set;
     std::string date_of_birth = "00000000";

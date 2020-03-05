@@ -174,6 +174,7 @@ auto main(int argc, char** argv) -> int {
         return -1;
     }
     sru::pdf::dcmtk_bin = d["dcmtk_bin"].GetString();
+    sru::dcmtk::set_bin(sru::pdf::dcmtk_bin);
     if (!sru::pdf::dcmtk_bin.empty()) {
         sru::pdf::dcmtk_name_obj = d["dcmtk_name_obj"].GetInt();
         sru::pdf::dcmtk_surname_obj = d["dcmtk_surname_obj"].GetInt();
