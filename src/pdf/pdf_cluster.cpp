@@ -156,8 +156,13 @@ auto PdfCluster::export_merged() -> void {
     }
 
     final_pdf.write(out, tmp_path);
-    std::cout << "Fixing and compressing file." << std::endl;
-    // sru::qpdf::compress(export_path);
+#ifdef DEV_BUILT
+    std::cout << "Validating export.." << std::endl;
+    sru::qpdf::validate(export_path);
+#else
+    std::cout << "Compressing export.." << std::endl;
+    sru::qpdf::compress(export_path);
+#endif
 
     if (!sru::pdf::dcmtk_bin.empty()) {
         auto dicom_export = export_path;
