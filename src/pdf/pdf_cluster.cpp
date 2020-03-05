@@ -162,7 +162,9 @@ auto PdfCluster::export_merged() -> void {
     if (!sru::pdf::dcmtk_bin.empty()) {
         auto dicom_export = export_path;
         dicom_export.replace_filename(std::string{"dicom-"} + "testing_export");
-        sru::dcmtk::convert(export_path, dicom_export, GenDicom());
+        if (!sru::dcmtk::convert(export_path, dicom_export, GenDicom())) {
+            std::cout << "DICOM generation failed" << std::endl;
+        };
     }
 }
 
