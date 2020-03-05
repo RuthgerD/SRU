@@ -68,6 +68,21 @@ auto compress(const std::filesystem::path& pdf_file) -> bool {
     }
     return false;
 }
+auto validate(const std::filesystem::path& pdf_file) -> bool {
+    const auto abs_pdf_file = std::filesystem::absolute(pdf_file.lexically_normal());
+    auto retard_cache = abs_pdf_file;
+    retard_cache.concat("-compress");
+    auto command = qpdf_settings.get_bin() + " --stream-data=preserve \"" + abs_pdf_file.generic_string() + "\" -- \"" +
+                   retard_cache.generic_string() + "\"";
+    sru::util::cmd(command);
+
+    if (std::filesystem::exists(retard_cache)) {
+        std::filesystem::remove(abs_pdf_file);
+        std::filesystem::rename(retard_cache, abs_pdf_file);
+        return true;
+    }
+    return false;
+}
 auto delete_page(const sru::pdf::PdfFile& pdf_file, size_t page_no) -> bool {
     ++page_no;
     const auto abs_pdf_file = std::filesystem::absolute(pdf_file.getPath().lexically_normal());

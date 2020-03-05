@@ -15,7 +15,7 @@
         {
             "page_name": "page any",
             "priority": 3,
-            "mutate_in_final": "delete",
+            "mutate_in_final": "none",
             "regex_id": "\\((Page [0-9]*)\\)Tj",
             "obj_regex": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\((Page [0-9]*)\\)Tj\\nET",
             "groups": [
@@ -75,7 +75,7 @@
         {
             "page_name": "Table 1 and or 2 page",
             "priority": 0,
-            "mutate_in_final": "delete",
+            "mutate_in_final": "none",
             "regex_id": "\\((Numerical overview of the arrhythmia)\\)Tj",
             "obj_regex": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET",
             "groups": [
@@ -92,7 +92,7 @@
         {
             "page_name": "Table2 page",
             "priority": 0,
-            "mutate_in_final": "delete",
+            "mutate_in_final": "none",
             "regex_id": "\\((Frequency analysis and ST analysis)\\)Tj",
             "obj_regex": "BT\\n/F(\\d+) ([\\d.]+) Tf\\n([^\\n]*) ([\\d.]*) ([\\d.]*) Tm\\n\\(([^\\n]*)\\)Tj\\nET",
             "groups": [

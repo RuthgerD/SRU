@@ -156,13 +156,18 @@ auto PdfCluster::export_merged() -> void {
     }
 
     final_pdf.write(out, tmp_path);
-    std::cout << "Fixing and compressing file." << std::endl;
-    // sru::qpdf::compress(export_path);
+#ifdef DEV_BUILT
+    std::cout << "Validating export.." << std::endl;
+    sru::qpdf::validate(export_path);
+#else
+    std::cout << "Compressing export.." << std::endl;
+    sru::qpdf::compress(export_path);
+#endif
 
     if (!sru::pdf::dcmtk_bin.empty()) {
         auto dicom_export = export_path;
         dicom_export.replace_filename(std::string{"dicom-"} + "testing_export");
-        if (!sru::dcmtk::convert(export_path, dicom_export, GenDicom())) {
+        if (!sru::dcmtk::convert(export_path, dicom_export, GenDicom(final_pdf))) {
             std::cout << "DICOM generation failed" << std::endl;
         };
     }
@@ -332,8 +337,7 @@ auto PdfCluster::refreshNumbering(PdfFile& file) -> void {
         page.commit();
     }
 }
-auto PdfCluster::GenDicom() -> sru::dcmtk::PatientData {
-    auto& file = pdf_files_.front();
+auto PdfCluster::GenDicom(sru::pdf::PdfFile& file) -> sru::dcmtk::PatientData {
     auto ids = file.getMarkedObjects(sru::pdf::dcmtk_id_obj);
     int id = 0;
     if (auto opt = sru::util::svto<int>(file.getPage(ids.front().first).getObject(ids.front().second.front()).getContent()); opt) {

@@ -28,6 +28,6 @@ class PdfCluster {
     auto calccalc(const CalcConfig& cc, const std::vector<std::string>& contents, std::string reference) -> std::vector<std::string>;
     auto export_merged() -> void;
     static auto refreshNumbering(PdfFile& file) -> void;
-    auto GenDicom() -> sru::dcmtk::PatientData;
+    auto GenDicom(sru::pdf::PdfFile& pdf_file) -> sru::dcmtk::PatientData;
 };
 } // namespace sru::pdf
