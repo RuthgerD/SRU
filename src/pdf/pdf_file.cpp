@@ -190,7 +190,7 @@ auto PdfFile::write(std::ofstream& os, const std::filesystem::path& base) -> voi
     auto t2 = std::chrono::steady_clock::now().time_since_epoch() - t1;
     id += fmt::format("{:x}", t2.count());
     id += id + id;
-    new_xref += "trailer << /Root 1 0 R /Size " + std::to_string(xref.size() + 1) +
+    new_xref += "trailer << /Info 2 0 R /Root 1 0 R /Size " + std::to_string(xref.size() + 1) +
                 " /ID [<"+id.substr(0,32)+"><"+id.substr(0,32)+">] >>\n";
     new_xref += "startxref\n" + std::to_string((unsigned long)start_xref + os.tellp() + 1) + "\n";
     new_xref += "%%EOF\n";
