@@ -167,7 +167,7 @@ auto PdfCluster::export_merged() -> void {
     if (!sru::pdf::dcmtk_bin.empty()) {
         auto dicom_export = export_path;
         dicom_export.replace_filename(std::string{"dicom-"} + "testing_export");
-        sru::dcmtk::convert(export_path, dicom_export, GenDicom());
+        sru::dcmtk::convert(export_path, dicom_export, GenDicom(final_pdf));
     }
 }
 
@@ -335,8 +335,7 @@ auto PdfCluster::refreshNumbering(PdfFile& file) -> void {
         page.commit();
     }
 }
-auto PdfCluster::GenDicom() -> sru::dcmtk::PatientData {
-    auto& file = pdf_files_.front();
+auto PdfCluster::GenDicom(sru::pdf::PdfFile& file) -> sru::dcmtk::PatientData {
     auto ids = file.getMarkedObjects(sru::pdf::dcmtk_id_obj);
     int id = 0;
     if (auto opt = sru::util::svto<int>(file.getPage(ids.front().first).getObject(ids.front().second.front()).getContent()); opt) {
