@@ -188,10 +188,13 @@ auto strptime(const std::string& value, const std::string& pattern) -> std::opti
 }
 auto strftime(const std::chrono::system_clock::time_point& value, const std::string& pattern) -> std::optional<std::string> {
     std::time_t now_c = std::chrono::system_clock::to_time_t(value);
-    std::tm now_tm = *std::localtime(&now_c);
-    char mbstr[100];
-    if (std::strftime(mbstr, sizeof(mbstr), pattern.c_str(), &now_tm)) {
-        return mbstr;
+    std::tm now_tm;
+    if (auto opt = std::gmtime(&now_c); opt) {
+        now_tm = *opt;
+        char mbstr[100];
+        if (std::strftime(mbstr, sizeof(mbstr), pattern.c_str(), &now_tm)) {
+            return mbstr;
+        }
     }
     return {};
 }
