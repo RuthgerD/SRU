@@ -197,5 +197,6 @@ auto PdfFile::write(std::ofstream& os, const std::filesystem::path& base) -> voi
     os.write(last_view.data(), start_xref);
     os.write(new_xref.data(), new_xref.size());
     os.flush();
+    os.close();
 }
 } // namespace sru::pdf

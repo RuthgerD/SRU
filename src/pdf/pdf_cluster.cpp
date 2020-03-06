@@ -131,6 +131,9 @@ auto PdfCluster::export_merged() -> void {
     refreshNumbering(final_pdf);
 
     auto export_path = std::filesystem::current_path().append("testing_export.pdf").lexically_normal();
+    if (std::filesystem::exists(export_path)){
+        std::filesystem::remove(export_path);
+    }
     std::ofstream out(export_path, std::ios::out | std::ios::binary);
     if (!out) {
         return;
