@@ -1,5 +1,6 @@
 #include "util.h"
 #include "../pdf/string_obj.h"
+#include "../../thirdparty/date/include/date/date.h"
 
 namespace sru::util {
 auto Color::toString() const -> std::string { return std::to_string(r_) + ' ' + std::to_string(g_) + ' ' + std::to_string(b_) + ' ' + "rg"; }
@@ -178,29 +179,25 @@ auto to_string(const float& value, float cut_off, int decimal_point, int zfill_a
     }
     return to_string(value, decimal_point, zfill_amount);
 }
+auto tm_to_timepoint(const tm& dt) -> std::optional<std::chrono::system_clock::time_point> {
+    using namespace std::chrono;
+    using namespace date;
+    auto ymd = date::year_month_day{year(dt.tm_year + 1900) / (dt.tm_mon + 1) / dt.tm_mday}; // year_month_day type
+    if (!ymd.ok()) {
+        return {};
+    }
+    return sys_days(ymd) + hours(dt.tm_hour) + minutes(dt.tm_min) + seconds(dt.tm_sec);
+}
 auto strptime(const std::string& value, const std::string& pattern) -> std::optional<std::chrono::system_clock::time_point> {
-    std::tm tm = {};
+    std::tm t = {};
     std::stringstream ss(value);
-    ss >> std::get_time(&tm, pattern.data());
+    ss >> std::get_time(&t, pattern.data());
     if (ss.fail())
         return {};
-    return std::chrono::system_clock::from_time_t(std::mktime(&tm));
+    return tm_to_timepoint(t);
 }
 auto strftime(const std::chrono::system_clock::time_point& value, const std::string& pattern) -> std::optional<std::string> {
-    std::time_t now_c = std::chrono::system_clock::to_time_t(value);
-    std::tm now_tm;
-#ifdef __linux__
-    if (auto opt = std::localtime(&now_c); opt) {
-#else
-    if (auto opt = std::_localtime64(&now_c); opt) {
-#endif
-        now_tm = *opt;
-        char mbstr[100];
-        if (std::strftime(mbstr, sizeof(mbstr), pattern.c_str(), &now_tm)) {
-            return mbstr;
-        }
-    }
-    return {};
+    return date::format(pattern, value);
 }
 auto escape(std::string& in, const char escape, std::string_view needs_escape) -> void {
     auto find_any_from = [&](std::size_t pos) {

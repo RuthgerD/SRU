@@ -50,7 +50,7 @@ endif ()
 find_package(re2 REQUIRED)
 find_package (Threads REQUIRED)
 
-include_directories(${BOOST_INCLUDE_DIRS} ${RE2_INCLUDE_DIRS} thirdparty/ctre/include thirdparty/rapidjson/include thirdparty/gsl/include thirdparty/fmt/include thirdparty include)
+include_directories(${BOOST_INCLUDE_DIRS} ${RE2_INCLUDE_DIRS} thirdparty/ctre/include thirdparty/rapidjson/include thirdparty/gsl/include thirdparty/fmt/include thirdparty/date/include thirdparty include)
 
 add_compile_definitions(RAPIDJSON_HAS_STDSTRING)
 file(GLOB regexs
