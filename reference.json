@@ -135,6 +135,7 @@
             "content_id": "(Bradycardias:)|(No bradycardia found)",
             "content_": "Bradycardias:",
             "content_alt": "No bradycardia found",
+            "color": [0.0902, 0.27843, 0.45882],
             "save_anchor": true,
             "sub_groups": [
                 2,
@@ -150,6 +151,7 @@
             "content_id": "(Tachycardias:)|(No tachycardia found)",
             "content_": "Tachycardias:",
             "content_alt": "No tachycardia found",
+            "color": [0.0902, 0.27843, 0.45882],
             "save_anchor": true,
             "sub_groups": [
                 5,
@@ -165,6 +167,7 @@
             "content_id": "(Pauses:)|(No pauses found)",
             "content_": "Pauses:",
             "content_alt": "No pauses found",
+            "color": [0.0902, 0.27843, 0.45882],
             "save_anchor": true,
             "sub_groups": [
                 40,
@@ -223,6 +226,7 @@
             "content_id": "(Couplets:)|(No couplets found)",
             "content_": "Couplets:",
             "content_alt": "No couplets found",
+            "color": [0.0902, 0.27843, 0.45882],
             "save_anchor": true,
             "sub_groups": [
                 14,
@@ -239,6 +243,7 @@
             "content_id": "(Triplets:)|(No triplets found)",
             "content_": "Triplets:",
             "content_alt": "No triplets found",
+            "color": [0.0902, 0.27843, 0.45882],
             "save_anchor": true,
             "sub_groups": [
                 17,
@@ -255,6 +260,7 @@
             "content_id": "(Salvos \/ VTA:)|(No salvos \/ VTA found)",
             "content_": "Salvos / VTA:",
             "content_alt": "No salvos / VTA found",
+            "color": [0.0902, 0.27843, 0.45882],
             "save_anchor": true,
             "sub_groups": [
                 20,
@@ -383,8 +389,6 @@
             "y": 842,
             "anchor_name": "Example no",
             "content_id": "Example No.: (.*)",
-            "content_": "",
-            "content_alt": "",
             "save_anchor": false,
             "sub_groups": [
                 36
@@ -397,8 +401,6 @@
             "y": 842,
             "anchor_name": "Page no",
             "content_id": "Page [0-9]*",
-            "content_": "",
-            "content_alt": "",
             "save_anchor": false,
             "sub_groups": [
                 37

@@ -87,6 +87,7 @@ auto PdfCluster::export_merged() -> void {
                     if (anchor_conf.content_ != anchor_conf.content_alt) {
                         auto new_anchor = page.getObject(anchor_obj->second);
                         new_anchor.setContent(anchor_conf.content_);
+                        new_anchor.setColor(anchor_conf.color);
                         page.updateObject(anchor_obj->second, new_anchor);
                     }
                 }
@@ -99,6 +100,7 @@ auto PdfCluster::export_merged() -> void {
                     }
                 }
                 for (auto& obj : new_objs) {
+                    obj.setColor(object_conf.color);
                     page.insertObject(obj);
                 }
                 for (auto& obj : page.getMarkedObjects(object_conf_id)) {

@@ -14,6 +14,7 @@ struct AnchorConfig {
     std::string content_id;
     std::string content_;
     std::string content_alt;
+    sru::util::Color color;
     bool save_anchor;
     std::vector<int> sub_groups;
 };

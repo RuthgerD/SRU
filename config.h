@@ -220,6 +220,18 @@ constexpr auto SRU_SCHEMA = R"({
                         "type": "boolean",
                         "title": "The Save_anchor Schema"
                     },
+                    "color": {
+                        "$id": "#/properties/anchors/items/properties/color",
+                        "type": "array",
+                        "title": "The color Schema",
+                        "items": {
+                            "$id": "#/properties/anchors/items/properties/sub_groups/items",
+                            "type": "number",
+                            "title": "The Items Schema"
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                    },
                     "sub_groups": {
                         "$id": "#/properties/anchors/items/properties/sub_groups",
                         "type": "array",
@@ -293,9 +305,21 @@ constexpr auto SRU_SCHEMA = R"({
                         "title": "The y_object_spacing Schema"
                     },
                     "text_justify": {
-                        "$id": "#/properties/calcs/properties/items/properties/text_justify",
+                        "$id": "#/properties/objects/properties/items/properties/text_justify",
                         "type": "number",
                         "title": "The text_justify Schema"
+                    },
+                    "color": {
+                        "$id": "#/properties/objects/items/properties/color",
+                        "type": "array",
+                        "title": "The color Schema",
+                        "items": {
+                            "$id": "#/properties/objects/items/properties/sub_groups/items",
+                            "type": "number",
+                            "title": "The Items Schema"
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
                     },
                     "sticky_id": {
                         "$id": "#/properties/objects/properties/items/properties/sticky_id",

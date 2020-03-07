@@ -71,6 +71,14 @@ auto main(int argc, char** argv) -> int {
         for (auto& val : obb["sub_groups"].GetArray()) {
             sub_groups.push_back(val.Get<int>());
         }
+
+        sru::util::Color color{0,0,0};
+        if (obb.HasMember("color")) {
+            auto ccolor = obb["color"].GetArray();
+            color.r_ = ccolor[0].GetFloat();
+            color.g_ = ccolor[1].GetFloat();
+            color.b_ = ccolor[2].GetFloat();
+        }
         sru::pdf::AnchorConfig anchor{obb["id"].Get<size_t>(),
                                       obb.HasMember("is_virtual") ? obb["is_virtual"].GetBool() : false,
                                       sru::util::Coordinate(obb["x"].GetFloat(), obb["y"].GetFloat()),
@@ -78,6 +86,7 @@ auto main(int argc, char** argv) -> int {
                                       obb["content_id"].GetString(),
                                       obb.HasMember("content_") ? obb["content_"].GetString() : "",
                                       obb.HasMember("content_alt") ? obb["content_alt"].GetString() : "",
+                                      color,
                                       obb.HasMember("save_anchor") ? obb["save_anchor"].GetBool() : true,
                                       sub_groups};
         sru::pdf::AnchorConfigPool.push_back(std::move(anchor)); // REMINDER TO DO THIS FOR EVERYTHING
@@ -90,7 +99,13 @@ auto main(int argc, char** argv) -> int {
                 calcs.push_back(val.Get<int>());
             }
         }
-
+        sru::util::Color color{0,0,0};
+        if (obb.HasMember("color")) {
+            auto ccolor = obb["color"].GetArray();
+            color.r_ = ccolor[0].GetFloat();
+            color.g_ = ccolor[1].GetFloat();
+            color.b_ = ccolor[2].GetFloat();
+        }
         sru::pdf::ObjectConfig config{obb["id"].Get<size_t>(),
                                       obb["object_name"].GetString(),
                                       obb.HasMember("margin_x") ? obb["margin_x"].GetFloat() : 0,
@@ -100,6 +115,7 @@ auto main(int argc, char** argv) -> int {
                                       obb.HasMember("object_count") ? obb["object_count"].Get<size_t>() : 1,
                                       obb.HasMember("y_object_spacing") ? obb["y_object_spacing"].GetFloat() : 0,
                                       obb.HasMember("text_justify") ? obb["text_justify"].GetFloat() : 0,
+                                      color,
                                       obb.HasMember("sticky_id") ? obb["sticky_id"].GetInt() : -1,
                                       calcs};
         sru::pdf::ObjectConfigPool.push_back(std::move(config));

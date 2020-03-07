@@ -24,6 +24,7 @@ class StringObject {
     [[nodiscard]] auto getContent() const -> const std::string&;
     [[nodiscard]] auto toString() const -> std::string;
     auto setColor(float r, float g, float b) -> void;
+    auto setColor(sru::util::Color& color) -> void;
     auto setContent(const std::string& new_content, float justify = 0) -> void;
     auto setTextType(int type) -> void;
     auto setFontSize(float size) -> void;

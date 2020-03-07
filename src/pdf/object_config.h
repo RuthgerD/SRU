@@ -1,4 +1,5 @@
 #pragma once
+#include "../util/util.h"
 #include <iostream>
 #include <optional>
 #include <string>
@@ -17,6 +18,7 @@ struct ObjectConfig {
     size_t object_count;
     float y_object_spacing;
     float text_justify;
+    sru::util::Color color;
     int sticky_id;
     std::vector<size_t> calcs;
 };

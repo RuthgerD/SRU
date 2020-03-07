@@ -27,6 +27,9 @@ auto StringObject::setColor(float r, float g, float b) -> void {
     color_.g_ = g;
     color_.b_ = b;
 }
+auto StringObject::setColor(sru::util::Color& color) -> void {
+    color_ = color;
+}
 auto StringObject::setTextType(int type) -> void { text_type_ = type; }
 auto StringObject::setFontSize(float size) -> void { font_size_ = size; }
 auto StringObject::setPosition(float x, float y) -> void { position_ = sru::util::Coordinate{x, y}; }
