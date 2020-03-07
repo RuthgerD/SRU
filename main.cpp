@@ -193,6 +193,8 @@ auto main(int argc, char** argv) -> int {
     sru::pdf::dcmtk_bin = d["dcmtk_bin"].GetString();
     sru::dcmtk::set_bin(sru::pdf::dcmtk_bin);
     if (!sru::pdf::dcmtk_bin.empty()) {
+        sru::pdf::dcmtk_company = d["dcmtk_company"].GetString();
+        sru::pdf::dcmtk_device = d["dcmtk_device"].GetString();
         sru::pdf::dcmtk_name_obj = d["dcmtk_name_obj"].GetInt();
         sru::pdf::dcmtk_surname_obj = d["dcmtk_surname_obj"].GetInt();
         sru::pdf::dcmtk_id_obj = d["dcmtk_id_obj"].GetInt();

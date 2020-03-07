@@ -1,6 +1,8 @@
 {
     "qpdf_bin": "qpdf",
     "dcmtk_bin": "pdf2dcm",
+    "dcmtk_company": "PUT YOUR COMPANY HERE",
+    "dcmtk_device":  "PUT YOUR DEVICE HERE",
     "dcmtk_name_obj": 52,
     "dcmtk_surname_obj": 51,
     "dcmtk_id_obj": 50,

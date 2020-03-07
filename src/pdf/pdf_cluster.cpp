@@ -393,8 +393,8 @@ auto PdfCluster::GenDicom(sru::pdf::PdfFile& file) -> sru::dcmtk::PatientData {
         birth,
         start_date,
         sex,
-        "company",
-        "device"
+        dcmtk_company,
+        dcmtk_device
     };
     return patient_data;
 }

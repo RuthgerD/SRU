@@ -4,6 +4,8 @@ namespace sru::pdf {
 int DATE_PROVIDER;
 std::string qpdf_bin;
 std::string dcmtk_bin;
+std::string dcmtk_company;
+std::string dcmtk_device;
 int dcmtk_name_obj;
 int dcmtk_surname_obj;
 int dcmtk_id_obj;

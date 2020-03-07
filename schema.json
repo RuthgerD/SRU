@@ -30,6 +30,18 @@
             "type": "string",
             "title": "The dcmtk_bin Schema"
         },
+		"dcmtk_company": {
+		  "$id": "#/properties/dcmtk_company",
+		  "type": "string",
+		  "title": "The dcmtk_company Schema",
+		  "minLength": 1
+		},
+		"dcmtk_device": {
+		  "$id": "#/properties/dcmtk_device",
+		  "type": "string",
+		  "title": "The dcmtk_device Schema",
+		  "minLength": 1
+		},
         "dcmtk_name_obj": {
             "$id": "#/properties/dcmtk_name_obj",
             "type": "integer",
@@ -592,6 +604,8 @@
             },
             "then": {
                 "required": [
+					"dcmtk_company",
+					"dcmtk_device",
                     "dcmtk_name_obj",
                     "dcmtk_surname_obj",
                     "dcmtk_id_obj",
