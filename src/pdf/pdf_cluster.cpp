@@ -59,6 +59,7 @@ auto PdfCluster::export_merged() -> void {
     auto final_pdf = pdf_files_.front();
     int calculated_count = 0;
 
+    auto dicom_data = GenDicom(final_pdf);
     for (auto& [page_no, page] : final_pdf.getPages()) {
         for (auto& [anchor_conf_id, val] : page.getAnchorPositions()) {
             auto anchor_conf = *getAnchorConfig(anchor_conf_id); // if the page got it then we dont need to check :)
@@ -182,7 +183,7 @@ auto PdfCluster::export_merged() -> void {
     if (!sru::pdf::dcmtk_bin.empty()) {
         auto dicom_export = export_path;
         dicom_export.replace_filename(std::string{"dicom-"} + "testing_export");
-        if (!sru::dcmtk::convert(export_path, dicom_export, GenDicom(final_pdf))) {
+        if (!sru::dcmtk::convert(export_path, dicom_export, dicom_data)) {
             std::cout << "DICOM generation failed" << std::endl;
         };
         std::cout << "DICOM generated." << std::endl;
