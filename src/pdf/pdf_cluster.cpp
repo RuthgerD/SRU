@@ -28,7 +28,8 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
             pdf_files_.emplace_back(std::move(*tmp));
         }
     }
-    std::sort(pdf_files_.begin(), pdf_files_.end(), [](PdfFile& a, PdfFile& b) {
+    bool properly_sorted = true;
+    std::sort(pdf_files_.begin(), pdf_files_.end(), [&](PdfFile& a, PdfFile& b) {
         // TODO: dont hardcode
         auto DATE_FORMAT = "%d.%m.%Y %H:%M:%S";
         bool ret = false;
@@ -43,12 +44,20 @@ PdfCluster::PdfCluster(std::vector<std::filesystem::path> pdf_file_paths) {
             if (tp1 && tp2) {
                 ret = *tp1 < *tp2;
             }
+        } else if (properly_sorted) {
+            std::cout << "Warning: failed to sort all files." << std::endl;
+            properly_sorted = false;
         }
         return ret;
     });
+    std::cout << "Processed " << pdf_files_.size() << " files" << (properly_sorted ? " (sorted)" : "") <<": " << std::endl;
+    for (auto& file : pdf_files_) {
+        std::cout << "* " << file.getPath().filename().generic_string() << std::endl;
+    }
 }
 auto PdfCluster::export_merged() -> void {
     auto final_pdf = pdf_files_.front();
+    int calculated_count = 0;
 
     for (auto& [page_no, page] : final_pdf.getPages()) {
         for (auto& [anchor_conf_id, val] : page.getAnchorPositions()) {
@@ -61,7 +70,6 @@ auto PdfCluster::export_merged() -> void {
                 auto& object_conf = *object_conf_opt;
 
                 auto new_objs = calculateObject(object_conf);
-
                 if (new_objs.empty()) {
                     continue;
                 }
@@ -110,7 +118,6 @@ auto PdfCluster::export_merged() -> void {
         }
         page.commit();
     }
-
     std::vector<PdfPage> to_be;
     for (int i = 1; i < pdf_files_.size(); ++i) {
         for (const auto& x : pdf_files_[i].getPages()) {
@@ -119,6 +126,8 @@ auto PdfCluster::export_merged() -> void {
             }
         }
     }
+    if (to_be.size() > 0)
+        std::cout << "Appended " << to_be.size() << " page"<< (to_be.size() > 1 ? "s." : ".") << std::endl;
     final_pdf.appendPages(to_be);
 
     std::vector<size_t> to_die;
@@ -127,7 +136,8 @@ auto PdfCluster::export_merged() -> void {
             to_die.push_back(x.first);
         }
     }
-
+    if (to_die.size() > 0)
+        std::cout << "Deleted " << to_die.size() << " page"<< (to_die.size() > 1 ? "s." : ".") << std::endl;
     final_pdf.deletePages(to_die);
 
     refreshNumbering(final_pdf);
@@ -161,20 +171,21 @@ auto PdfCluster::export_merged() -> void {
     }
 
     final_pdf.write(out, tmp_path);
+    std::cout << "Exported to: \"" << export_path.generic_string() << "\" ";
 #ifdef DEV_BUILT
-    std::cout << "Validating export.." << std::endl;
     sru::qpdf::validate(export_path);
+    std::cout << "(uncompressed)." << std::endl;
 #else
-    std::cout << "Compressing export.." << std::endl;
     sru::qpdf::compress(export_path);
+    std::cout << "(compressed)." << std::endl;
 #endif
-
     if (!sru::pdf::dcmtk_bin.empty()) {
         auto dicom_export = export_path;
         dicom_export.replace_filename(std::string{"dicom-"} + "testing_export");
         if (!sru::dcmtk::convert(export_path, dicom_export, GenDicom(final_pdf))) {
             std::cout << "DICOM generation failed" << std::endl;
         };
+        std::cout << "DICOM generated." << std::endl;
     }
 }
 
@@ -192,10 +203,10 @@ auto PdfCluster::calccalc(const CalcConfig& cc, const std::vector<std::string>& 
 #ifdef DEV_BUILT
         auto end = std::chrono::system_clock::now();
         auto end_time = std::chrono::system_clock::to_time_t(end);
-        return {" ", "SRU debug build, build at:", std::ctime(&end_time), "Do not use in production."};
+        return {" ", "SRU dev build, pdf generated at:", std::ctime(&end_time), "Do not use in production."};
 #else
         std::vector<std::string> input{" "};
-        std::cout << cc.name << " Requires input:" << std::endl;
+        std::cout << "\"" << cc.name << "\", Requires input:" << std::endl;
         std::cout << "-----" << std::endl;
         while (!input.back().empty()) {
             std::string tmp;

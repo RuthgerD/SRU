@@ -10,11 +10,11 @@
 #include <filesystem>
 #include <iostream>
 #include <rapidjson/schema.h>
-#include <string_view>
 #include <utility>
 #include <vector>
 
 auto main(int argc, char** argv) -> int {
+    std::ios_base::sync_with_stdio(false);
     const auto start = std::chrono::steady_clock::now();
     [[maybe_unused]] int program_ver = 1;
     [[maybe_unused]] int program_min_ver = 0;
@@ -49,11 +49,11 @@ auto main(int argc, char** argv) -> int {
     rapidjson::SchemaDocument schema{sd};
     rapidjson::SchemaValidator validator{schema};
     if (!d.Accept(validator)) {
-        std::cout << "JSON does not follow schema.\n" << std::endl;
+        std::cout << "Config does not follow schema.\n" << std::endl;
         return -1;
     }
 
-    std::cout << "JSON successfully parsed.\n";
+    std::cout << "Parsed config file." << std::endl;
 
     sru::pdf::DATE_PROVIDER = d["date_provider"].GetInt();
 
@@ -168,6 +168,7 @@ auto main(int argc, char** argv) -> int {
         std::cout << "Import folder not found, created directory." << std::endl;
         return -1;
     }
+
     for (auto& file : std::filesystem::directory_iterator{import_path}) {
         if (const auto& file_path = file.path(); boost::iequals(file_path.extension().generic_string(), ".pdf")) {
             pdf_file_paths.push_back(file_path);
@@ -205,6 +206,6 @@ auto main(int argc, char** argv) -> int {
 
     const auto end = std::chrono::steady_clock::now();
 
-    std::cout << "Time difference (sec) = " << (std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()) / 1000000.0 << std::endl;
+    std::cout << "Finished, took " << (std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()) / 1000000.0 << " sec." << std::endl;
     return 0;
 }
