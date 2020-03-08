@@ -176,7 +176,6 @@ auto increase_size(const std::filesystem::path& path, size_t from, size_t size) 
 auto decrease_size(const std::filesystem::path& path, size_t from, size_t size) -> bool {
     const auto abs_pdf_file = std::filesystem::absolute(path.lexically_normal());
     std::string command{};
-    size = from - size;
     command = qpdf_settings.get_bin() + " \"" + abs_pdf_file.generic_string() + "\" --replace-input --stream-data=preserve --pages . 1-" +
               std::to_string(size) + " -- ";
 

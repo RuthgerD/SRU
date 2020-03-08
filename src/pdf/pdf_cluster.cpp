@@ -168,7 +168,7 @@ auto PdfCluster::export_merged() -> void {
     if (total_pages > cbase_size) {
         sru::qpdf::increase_size(tmp_path, cbase_size, total_pages - cbase_size);
     } else if (total_pages < cbase_size) {
-        sru::qpdf::decrease_size(tmp_path, cbase_size, real_pages - cbase_size);
+        sru::qpdf::decrease_size(tmp_path, cbase_size,  total_pages);
     }
 
     final_pdf.write(out, tmp_path);
